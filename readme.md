@@ -1,0 +1,3 @@
+# Spring Boot version of the Social Network Application
+
+Project is under development...
