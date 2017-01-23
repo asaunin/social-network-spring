@@ -1,1 +1,10 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /console
+  datasource:
+    platform: h2
 debug: true
+
+
