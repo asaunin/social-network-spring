@@ -1,6 +1,7 @@
 package org.asaunin.socialnetwork.domain;
 
 import lombok.*;
+import org.asaunin.socialnetwork.domain.jpa.GenderConverter;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -52,7 +53,7 @@ public class Person {
 	@Getter @Setter
 	private Date birthDate;
 
-	@Enumerated(EnumType.STRING)
+	@Convert(converter = GenderConverter.class)
 	@Getter @Setter
 	private Gender gender = Gender.UNDEFINED;
 
