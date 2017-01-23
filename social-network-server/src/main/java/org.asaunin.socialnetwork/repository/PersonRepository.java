@@ -1,6 +1,6 @@
 package org.asaunin.socialnetwork.repository;
 
-import org.asaunin.socialnetwork.model.Person;
+import org.asaunin.socialnetwork.domain.Person;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

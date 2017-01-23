@@ -1,4 +1,4 @@
-package org.asaunin.socialnetwork.model;
+package org.asaunin.socialnetwork.domain;
 
 public enum Gender {
 	UNDEFINED,

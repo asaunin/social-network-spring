@@ -5,6 +5,6 @@ spring:
       path: /console
   datasource:
     platform: h2
+    data: classpath*:db/h2/data.sql
 debug: true
-
 

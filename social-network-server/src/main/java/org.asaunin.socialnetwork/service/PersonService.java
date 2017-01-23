@@ -1,6 +1,6 @@
 package org.asaunin.socialnetwork.service;
 
-import org.asaunin.socialnetwork.model.Person;
+import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

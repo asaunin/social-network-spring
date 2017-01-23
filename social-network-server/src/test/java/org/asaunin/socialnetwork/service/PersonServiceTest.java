@@ -1,7 +1,7 @@
 package org.asaunin.socialnetwork.service;
 
-import org.asaunin.socialnetwork.model.Gender;
-import org.asaunin.socialnetwork.model.Person;
+import org.asaunin.socialnetwork.domain.Gender;
+import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +48,6 @@ public class PersonServiceTest {
 		assertThat(person).hasFieldOrPropertyWithValue("lastName", "Doe");
 		assertThat(person).hasFieldOrPropertyWithValue("shortName", "johny");
 		assertThat(person).hasFieldOrPropertyWithValue("fullName", "John Doe");
-		assertThat(person).hasFieldOrPropertyWithValue("email", "johndoe@gmail.com");
 		assertThat(person).hasFieldOrPropertyWithValue("email", "johndoe@gmail.com");
 		assertThat(person).hasFieldOrPropertyWithValue("birthDate", new GregorianCalendar(1984,3,23).getTime());
 		assertThat(person).hasFieldOrPropertyWithValue("gender", Gender.UNDEFINED);
