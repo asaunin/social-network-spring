@@ -15,4 +15,65 @@
     <artifactId>social-network-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
+    <properties>
+        <node.version>v4.4.3</node.version>
+        <npm.version>2.15.1</npm.version>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/dist</directory>
+            </resource>
+            <resource>
+                <directory>${basedir}/bower_components</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <configuration>
+                    <installDirectory>target</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>bower install</id>
+                        <goals>
+                            <goal>bower</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>gulp build</id>
+                        <goals>
+                            <goal>gulp</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/classes/public/</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

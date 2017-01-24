@@ -1,0 +1,310 @@
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+.btn-sm {
+    margin: 1px;
+    padding: 1px;
+    font-size: 13px;
+    /*width: 120px;*/
+    /*vertical-align: middle;*/
+    /*float: right;*/
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff
+}
+
+input, textarea {
+    -webkit-font-feature-settings: "liga" 0;
+    font-feature-settings: "liga" 0
+}
+
+fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0
+}
+
+label {
+    font-weight: 600
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.pagination {
+    margin-top: 0;
+}
+
+.view-container {
+    height: 85vh;
+}
+
+.angular-with-newlines {
+    white-space: pre-wrap;
+}
+
+.search-text {
+    width: 70%;
+    float: right;
+    margin-top: -5px;
+}
+
+.link-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: grey;
+}
+
+.table .border-bottom {
+    border-top-style: none;
+    border-bottom: 1px dotted lightgrey;
+}
+
+.table .borderless {
+    border: none;
+}
+
+.table .glyphicon-envelope {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.table .glyphicon-plus-sign {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.table .glyphicon-minus-sign {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.link-gray-dark {
+    color: #333 !important
+}
+
+b, strong {
+    font-weight: 500;
+}
+
+.panel-body.users {
+    overflow-y: auto;
+    max-height: 73vh;
+    min-height: 73vh;
+    padding: 0;
+}
+
+.panel-body.messages {
+    overflow-y: auto;
+    background: #f9f9f9;
+    max-height: 79vh;
+    min-height: 79vh;
+}
+
+.panel-body.dialog {
+    overflow-y: auto;
+    background: #f9f9f9;
+    max-height: 64vh;
+    min-height: 64vh;
+}
+
+.chat ul {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.chat-message {
+    background: #f9f9f9;
+}
+
+.chat li img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50em;
+    -moz-border-radius: 50em;
+    -webkit-border-radius: 50em;
+}
+
+img {
+    max-width: 100%;
+}
+
+.chat-body {
+    padding-bottom: 20px;
+}
+
+.chat li.left .chat-body {
+    margin-left: 70px;
+    background-color: #fff;
+}
+
+.chat li .chat-body {
+    position: relative;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #f1f5fc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.chat li .chat-body .header {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f1f5fc;
+}
+
+.chat li .chat-body p {
+    margin: 0;
+}
+
+.chat li.left .chat-body:before {
+    position: absolute;
+    top: 10px;
+    left: -8px;
+    display: inline-block;
+    background: #fff;
+    width: 16px;
+    height: 16px;
+    border-top: 1px solid #f1f5fc;
+    border-left: 1px solid #f1f5fc;
+    content: '';
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+}
+
+.chat li.right .chat-body:before {
+    position: absolute;
+    top: 10px;
+    right: -8px;
+    display: inline-block;
+    background: #fff;
+    width: 16px;
+    height: 16px;
+    border-top: 1px solid #f1f5fc;
+    border-right: 1px solid #f1f5fc;
+    content: '';
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+}
+
+.chat li {
+    margin: 15px 0;
+}
+
+.chat li.right .chat-body {
+    margin-right: 70px;
+    background-color: #fff;
+}
+
+.chat-box {
+    position: fixed;
+    bottom: 0;
+    left: 444px;
+    right: 0;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    transition: all .5s ease;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    /*noinspection CssUnknownProperty*/
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+}
+
+.friend-list {
+    list-style: none;
+    margin-left: -40px;
+}
+
+.friend-list li {
+    border-bottom: 1px solid #eee;
+}
+
+.friend-list li a img {
+    float: left;
+    width: 45px;
+    height: 45px;
+    margin-right: 0;
+}
+
+.friend-list li a {
+    position: relative;
+    display: block;
+    padding: 10px;
+    transition: all .2s ease;
+    -webkit-transition: all .2s ease;
+    -moz-transition: all .2s ease;
+    /*noinspection CssUnknownProperty*/
+    -ms-transition: all .2s ease;
+    -o-transition: all .2s ease;
+}
+
+.friend-list li.active a {
+    background-color: #f1f5fc;
+}
+
+.friend-list li a .friend-name,
+.friend-list li a .friend-name:hover {
+    color: #777;
+}
+
+.friend-list li a .last-message {
+    width: 65%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.friend-list li a .time {
+    position: absolute;
+    top: 10px;
+    right: 8px;
+}
+
+small, .small {
+    font-size: 85%;
+}
+
+.friend-list li a .chat-alert {
+    position: absolute;
+    right: 8px;
+    top: 27px;
+    font-size: 13px;
+    padding: 3px 5px;
+}
+
+.primary-font {
+    color: #3c8dbc;
+}
+
+a:hover, a:active, a:focus {
+    text-decoration: none;
+    outline: 0;
+}
+
+.round {
+    border-radius: 50%;
+}

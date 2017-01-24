@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html ng-app="socialNetwork" lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -8,9 +8,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimal-ui"/>
 
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}"/>
+
     <title>Welcome to Benchmates</title>
 
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.png}"/>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+    <script th:src="@{/angular/angular.js}"></script>
+    <script th:src="@{/angular-route/angular-route.min.js}"></script>
+    <script th:src="@{/angular-resource/angular-resource.min.js}"></script>
+    <script th:src="@{/angular-animate/angular-animate.min.js}"></script>
+    <script th:src="@{/angular-sanitize/angular-sanitize.min.js}"></script>
+    <script th:src="@{/angular-bootstrap/ui-bootstrap.min.js}"></script>
+    <script th:src="@{/ng-letter-avatar/ngletteravatar.js}"></script>
+
+    <script th:src="@{/scripts/app.js}"></script>
 </head>
 
 <body class="container">
