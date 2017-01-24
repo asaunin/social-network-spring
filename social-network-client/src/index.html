@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html ng-app="socialNetwork" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimal-ui"/>
+
+    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico"/>
+
+    <title>Social Network</title>
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/social-network.css"/>
+
+    <script src="./jquery/jquery.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="./angular/angular.js"></script>
+    <script src="./angular-route/angular-route.min.js"></script>
+    <script src="./angular-resource/angular-resource.min.js"></script>
+    <script src="./angular-animate/angular-animate.min.js"></script>
+    <script src="./angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="./angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="./angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <!--<script src="./ng-letter-avatar/ngletteravatar.js"></script>  //TODO: 24.01.2017 Revert ngLetterAvatar -->
+    <script src="./scripts/ngletteravatar.js"></script>
+
+    <script src="./scripts/app.js"></script>
+    <script src="./scripts/directives.js"></script>
+    <script src="./scripts/controllers.js"></script>
+    <script src="./scripts/filters.js"></script>
+    <script src="./scripts/services.js"></script>
+</head>
+
+<body id="body">
+<div class="container" id="maincont" ng-controller="tabController" ng-hide="isLoadingData">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href=""><strong>Social Network</strong></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-click="onClickTab('profile')"><a href="#/settings"><span
+                            class="glyphicon glyphicon-user"></span><strong> My profile</strong></a></li>
+                    <!--<li><a href="#"><span class="glyphicon glyphicon-log-out"></span><strong> Logout</strong></a></li>-->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="row content">
+        <div class="col-sm-2">
+            <div class="well">
+                <img class="img-rounded img-responsive center-block" alt="user_pic"
+                     ng-src="{{account.getProfileAvatar()}}">
+            </div>
+            <div class="well" id="tabs">
+                <ul class="nav nav-pills nav-stacked">
+                    <li ng-repeat="tab in tabs | filter: { visible : true }" ng-class="tab.name === activeTab.name ? 'active': ''"
+                        ng-click="onClickTab(tab.name)">
+                        <a href=#/{{tab.name}}><strong>{{tab.title}}</strong></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="tab-content">
+                <div ng-view="true"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

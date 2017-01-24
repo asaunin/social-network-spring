@@ -1,6 +1,6 @@
 var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
 
-app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+app.config(['$routeProvider', function ($routeProvider) {
 
     $routeProvider
         .when('/profile', {
@@ -32,17 +32,11 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
             controller: 'settingsController'
         })
         .otherwise(
-            {redirectTo: '/profile'
+            {
+                redirectTo: '/profile'
             }
         )
     ;
-
-    // if (window.history && window.history.pushState) {
-    //     $locationProvider.html5Mode({
-    //         enabled: true,
-    //         requireBase: false
-    //     });
-    // }
 
 }]);
 

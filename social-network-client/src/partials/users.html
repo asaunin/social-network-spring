@@ -1,0 +1,45 @@
+<div class="container-fluid col-sm-12 view-container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>{{activeTab.title}}</strong>
+            <div class="input-group input-group-sm search-text">
+                <input type="text" ng-model="userSearch" name="userSearch" class="form-control" placeholder="Search..."
+                       value='{{searchText}}'>
+                <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body users" id="users">
+        <table class="table">
+            <tr ng-repeat="userProfile in userList | orderBy: '[first_name, last_name]' | filter : userSearch | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                <td class="col-md-1 text-center border-bottom">
+                    <a href="#/profile/{{userProfile.id}}" ng-click="onClickTab('profile')">
+                        <ng-letter-avatar data={{userProfile.getAvatar()}} shape="round"></ng-letter-avatar>
+                    </a>
+                </td>
+                <td class="col-md-9 border-bottom">
+                    <a class="control-label" href="#/profile/{{userProfile.id}}" ng-click="onClickTab('profile')">
+                        <strong class="primary-font">{{userProfile.getName()}}</strong>
+                    </a><br>
+                    <span class="text-muted" ng-show="userProfile.hasFriend(account.id)">{{userProfile.email}}</span>
+                </td>
+                <td class="col-md-2 border-bottom">
+                    <button-send-message profile="userProfile"></button-send-message>
+                    <br>
+                    <button-remove-friend account="account" profile="userProfile" remove="removeFriend(userProfile.id)"></button-remove-friend>
+                    <button-add-friend account="account" profile="userProfile" add="addFriend(userProfile.id)"></button-add-friend>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div align="center">
+        <ul uib-pagination ng-model="currentPage" total-items="totalItems" page="currentPage" max-size="noOfPages"
+            items-per-page="entryLimit" first-text="&laquo;" last-text="&raquo;" direction-links="false"
+            boundary-links="true"></ul>
+    </div>
+</div>
+<!--</div>-->

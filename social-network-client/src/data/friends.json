@@ -1,0 +1,90 @@
+[
+  {
+    "userId": 1,
+    "friendId": 8
+  },
+  {
+    "userId": 2,
+    "friendId": 1
+  },
+  {
+    "userId": 1,
+    "friendId": 9
+  },
+  {
+    "userId": 1,
+    "friendId": 3
+  },
+  {
+    "userId": 1,
+    "friendId": 12
+  },
+  {
+    "userId": 1,
+    "friendId": 10
+  },
+  {
+    "userId": 1,
+    "friendId": 13
+  },
+  {
+    "userId": 1,
+    "friendId": 2
+  },
+  {
+    "userId": 5,
+    "friendId": 1
+  },
+  {
+    "userId": 1,
+    "friendId": 5
+  },
+  {
+    "userId": 15,
+    "friendId": 2
+  },
+  {
+    "userId": 15,
+    "friendId": 5
+  },
+  {
+    "userId": 15,
+    "friendId": 3
+  },
+  {
+    "userId": 16,
+    "friendId": 1
+  },
+  {
+    "userId": 16,
+    "friendId": 13
+  },
+  {
+    "userId": 16,
+    "friendId": 8
+  },
+  {
+    "userId": 16,
+    "friendId": 14
+  },
+  {
+    "userId": 1,
+    "friendId": 16
+  },
+  {
+    "userId": 17,
+    "friendId": 3
+  },
+  {
+    "userId": 17,
+    "friendId": 5
+  },
+  {
+    "userId": 17,
+    "friendId": 1
+  },
+  {
+    "userId": 1,
+    "friendId": 17
+  }
+]

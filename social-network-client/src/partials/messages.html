@@ -1,0 +1,31 @@
+<div class="container-fluid col-sm-12 view-container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Last messages</strong>
+        </div>
+        <div class="panel-body chat messages" id="chat">
+            <div class="chat-message">
+                <ul class="chat" ng-repeat="message in messageList | orderBy: 'date'">
+                    <li ng-class="['clearfix', message.alignment]">
+                        <a href="#/messages/{{message.interlocutor.id}}" title="Send message">
+                            <span ng-class="['chat-img', 'pull-' + message.alignment]">
+                            <ng-letter-avatar data={{message.avatar}} shape="round"></ng-letter-avatar>
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{message.sender.getName()}} to
+                                        {{message.recipient.getName()}}</strong>
+                                    <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                        {{message.date | dateOrTime}}
+                                    </small>
+                                </div>
+                                <div class="last-message text-muted angular-with-newlines" >{{message.body}}</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

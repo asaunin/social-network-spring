@@ -1,0 +1,178 @@
+[
+  {
+    "id": 1,
+    "first_name": "Alex",
+    "last_name": "Saunin",
+    "birth_date": "1984-03-23T00:00:00.000Z",
+    "reg_date": "1984-03-23T00:00:00.000Z",
+    "email": "asaunin@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+79110940457",
+    "sex": 1
+  },
+  {
+    "id": 6,
+    "first_name": "Michael",
+    "last_name": "Corleone",
+    "birth_date": "1920-10-15T00:00:00.000Z",
+    "reg_date": "1920-10-15T00:00:00.000Z",
+    "email": "m_korleone@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 7,
+    "first_name": "Vito",
+    "last_name": "Corleone",
+    "birth_date": "1891-12-07T00:00:00.000Z",
+    "reg_date": "1891-12-07T00:00:00.000Z",
+    "email": "v_korleone@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 8,
+    "first_name": "Tony",
+    "last_name": "Soprano",
+    "birth_date": "1959-08-24T00:00:00.000Z",
+    "reg_date": "1959-08-24T00:00:00.000Z",
+    "email": "tony@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 9,
+    "first_name": "Al",
+    "last_name": "Capone",
+    "birth_date": "1899-01-17T00:00:00.000Z",
+    "reg_date": "1899-01-17T00:00:00.000Z",
+    "email": "kapone@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 10,
+    "first_name": "Pablo",
+    "last_name": "Escobar",
+    "birth_date": "1949-12-01T00:00:00.000Z",
+    "reg_date": "1949-12-01T00:00:00.000Z",
+    "email": "pablo@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 11,
+    "first_name": "Johnie",
+    "last_name": "Dillinger",
+    "birth_date": "1903-06-22T00:00:00.000Z",
+    "reg_date": "1903-06-22T00:00:00.000Z",
+    "email": "jonny@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 3,
+    "first_name": "Малька",
+    "last_name": "Облигация",
+    "birth_date": "1955-04-29T00:00:00.000Z",
+    "reg_date": "1955-04-29T00:00:00.000Z",
+    "email": "zina@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 2
+  },
+  {
+    "id": 12,
+    "first_name": "Mickey",
+    "last_name": "Cohen",
+    "birth_date": "1913-09-04T00:00:00.000Z",
+    "reg_date": "1913-09-04T00:00:00.000Z",
+    "email": "koen@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 13,
+    "first_name": "Carlito",
+    "last_name": "Brigante",
+    "birth_date": "1930-01-01T00:00:00.000Z",
+    "reg_date": "1930-01-01T00:00:00.000Z",
+    "email": "brigante@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 2,
+    "first_name": "Vincent",
+    "last_name": "Gigante",
+    "birth_date": "1928-03-29T00:00:00.000Z",
+    "reg_date": "1928-03-29T00:00:00.000Z",
+    "email": "vinc@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": null,
+    "sex": 1
+  },
+  {
+    "id": 5,
+    "first_name": "Витька",
+    "last_name": "Антибиотик",
+    "birth_date": "1933-12-08T00:00:00.000Z",
+    "reg_date": "1933-12-08T00:00:00.000Z",
+    "email": "vitya@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+79219999999",
+    "sex": 1
+  },
+  {
+    "id": 14,
+    "first_name": "Шарко",
+    "last_name": "Молодой",
+    "birth_date": "1953-03-20T00:00:00.000Z",
+    "reg_date": "1953-03-20T00:00:00.000Z",
+    "email": "sharko@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+79696546546",
+    "sex": 1
+  },
+  {
+    "id": 15,
+    "first_name": "Luky",
+    "last_name": "Luciano",
+    "birth_date": "1897-11-24T00:00:00.000Z",
+    "reg_date": "1897-11-24T00:00:00.000Z",
+    "email": "lucky@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+79696546546",
+    "sex": 1
+  },
+  {
+    "id": 16,
+    "first_name": "Donnie",
+    "last_name": "Brasco",
+    "birth_date": "1940-04-25T00:00:00.000Z",
+    "reg_date": "1940-04-25T00:00:00.000Z",
+    "email": "donny@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76545465465",
+    "sex": 1
+  },
+  {
+    "id": 17,
+    "first_name": "Vega",
+    "last_name": "Vincent",
+    "birth_date": "1954-02-18T00:00:00.000Z",
+    "reg_date": "1954-02-18T00:00:00.000Z",
+    "email": "vega@mail.ru",
+    "password": "202cb962ac59075b964b07152d234b70",
+    "phone": "+76546495165",
+    "sex": 1
+  }
+]

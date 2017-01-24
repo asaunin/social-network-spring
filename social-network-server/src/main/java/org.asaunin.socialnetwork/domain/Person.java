@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "persons")
@@ -61,6 +62,20 @@ public class Person {
 	@Temporal(TemporalType.DATE)
 	@Getter
 	private Date created = new Date();
+
+	@ManyToMany
+	@JoinTable(name = "friends",
+			joinColumns = @JoinColumn(name = "personId"),
+			inverseJoinColumns = @JoinColumn(name = "friendId")
+	)
+	private List<Person> friends;
+
+	@ManyToMany
+	@JoinTable(name = "friends",
+			joinColumns = @JoinColumn(name = "friendId"),
+			inverseJoinColumns = @JoinColumn(name = "personId")
+	)
+	private List<Person> friendOf;
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;

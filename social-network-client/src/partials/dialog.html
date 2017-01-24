@@ -1,0 +1,39 @@
+<div class="container-fluid col-sm-12 view-container" ng-submit="sendMessage()">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Conversation with </strong><a href="#/profile/{{profile.id}}"><strong>{{profile.getName()}}</strong></a>
+        </div>
+        <div class="panel-body chat dialog" id="chat">
+            <div class="chat-message">
+                <ul class="chat"
+                    ng-repeat="message in messageList | orderBy: 'date'">
+                    <li ng-class="['clearfix', message.alignment]">
+                            <span ng-class="['chat-img', 'pull-' + message.alignment]">
+                            <ng-letter-avatar data={{message.avatar}} shape="round"></ng-letter-avatar>
+                            </span>
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong class="text-muted">{{message.sender.getName()}}</strong>
+                                <small class="pull-right text-muted">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    {{message.date | dateOrTime}}
+                                </small>
+                            </div>
+                            <div class="last-message text-muted angular-with-newlines">{{message.body}}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <form name="dialogForm" role="form">
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" ng-required="true" maxlength="255" id="messageBody"
+                              name="messageBody" ng-model="messageText" title="Your test"
+                              ></textarea>
+                </div>
+                <input type="submit" value="Send" ng-class="['btn btn-primary', dialogForm.$valid ? '' : 'disabled']">
+            </form>
+        </div>
+    </div>
+</div>
