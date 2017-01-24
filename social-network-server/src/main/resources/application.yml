@@ -1,18 +1,32 @@
 spring:
+
   h2:
     console:
       enabled: true
       path: /console
+
   datasource:
     platform: h2
     data: classpath*:db/h2/data.sql
+    schema: classpath*:db/h2/schema.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
   resources:
     static-locations: "classpath:/static/,file:social-network-client/src/,file:social-network-client/bower_components/"
+
   devtools:
     restart:
       additional-paths: "social-network-client/src/,social-network-client/bower_components/"
       additional-exclude: "**/*.html,**/*.js,**/*.css"
+
   thymeleaf:
     cache: false
+
 debug: true
+
+
+
 

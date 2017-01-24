@@ -36,7 +36,7 @@ public class Person {
 	@Formula(value = "concat(first_name, ' ', last_name)")
 	private String fullName;
 
-	@Column(unique = true)
+	@Column(unique = true) // TODO: 25.01.2017 Think how to solve initialisation problem
 	@Size(min = 5, max = 50)
 	@Getter @Setter
 	private String shortName;
@@ -65,15 +65,15 @@ public class Person {
 
 	@ManyToMany
 	@JoinTable(name = "friends",
-			joinColumns = @JoinColumn(name = "personId"),
-			inverseJoinColumns = @JoinColumn(name = "friendId")
+			joinColumns = @JoinColumn(name = "person_id"),
+			inverseJoinColumns = @JoinColumn(name = "friend_id")
 	)
 	private List<Person> friends;
 
 	@ManyToMany
 	@JoinTable(name = "friends",
-			joinColumns = @JoinColumn(name = "friendId"),
-			inverseJoinColumns = @JoinColumn(name = "personId")
+			joinColumns = @JoinColumn(name = "friend_id"),
+			inverseJoinColumns = @JoinColumn(name = "person_id")
 	)
 	private List<Person> friendOf;
 
