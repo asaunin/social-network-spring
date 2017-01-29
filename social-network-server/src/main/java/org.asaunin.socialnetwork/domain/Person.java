@@ -1,5 +1,6 @@
 package org.asaunin.socialnetwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.asaunin.socialnetwork.domain.jpa.GenderConverter;
 import org.hibernate.annotations.Formula;
@@ -10,16 +11,17 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "persons")
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"id"})
-@ToString(of = "fullName")
+@EqualsAndHashCode(of = {"email", "created"})
+@ToString(of = {"id", "fullName"})
 public class Person {
 
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter
 	private Long id;
 
 	@NotEmpty
@@ -34,6 +36,7 @@ public class Person {
 
 	@Column(insertable = false)
 	@Formula(value = "concat(first_name, ' ', last_name)")
+	@Getter
 	private String fullName;
 
 	@Column(unique = true) // TODO: 25.01.2017 Think how to solve initialisation problem
@@ -59,23 +62,23 @@ public class Person {
 	private Gender gender = Gender.UNDEFINED;
 
 	@Column(updatable = false, nullable = false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Getter
 	private Date created = new Date();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "person_id"),
-			inverseJoinColumns = @JoinColumn(name = "friend_id")
-	)
-	private List<Person> friends;
+			inverseJoinColumns = @JoinColumn(name = "friend_id"))
+	@Getter @JsonIgnore
+	private Set<Person> friends;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "friend_id"),
-			inverseJoinColumns = @JoinColumn(name = "person_id")
-	)
-	private List<Person> friendOf;
+			inverseJoinColumns = @JoinColumn(name = "person_id"))
+	@Getter @JsonIgnore
+	private Set<Person> followers;
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -122,17 +125,17 @@ public class Person {
 		PersonBuilder() {
 		}
 
-		public PersonBuilder id(Long id) {
+		public PersonBuilder id(@NonNull Long id) {
 			this.id = id;
 			return this;
 		}
 
-		public PersonBuilder firstName(String firstName) {
+		public PersonBuilder firstName(@NonNull String firstName) {
 			this.firstName = firstName;
 			return this;
 		}
 
-		public PersonBuilder lastName(String lastName) {
+		public PersonBuilder lastName(@NonNull String lastName) {
 			this.lastName = lastName;
 			return this;
 		}
@@ -142,7 +145,7 @@ public class Person {
 			return this;
 		}
 
-		public PersonBuilder email(String email) {
+		public PersonBuilder email(@NonNull String email) {
 			this.email = email;
 			return this;
 		}

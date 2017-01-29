@@ -19,8 +19,18 @@ public class PersonController {
 	}
 
 	@GetMapping("/persons")
-	public Collection<Person> findAll() {
-		return this.personService.findAll();
+	public Collection<Person> getPersons() {
+		return personService.getPersons();
+	}
+
+	@GetMapping("/friends")
+	public Collection<Person> getFriends() {
+		return personService.getFriends();
+	}
+
+	@GetMapping("/followers")
+	public Collection<Person> getFollowers() {
+		return personService.getFollowers();
 	}
 
 }
