@@ -24,4 +24,7 @@ public class MessageService {
 		return messageRepository.findByRecipientOrSenderOrderByPostedDesc(person, interlocutor);
 	}
 
+	public Collection<Message> getLastMessages() {
+		return messageRepository.findLastMessagesByPerson(person);
+	}
 }

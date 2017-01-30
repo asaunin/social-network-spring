@@ -47,4 +47,15 @@ public class MessageControllerTest extends AbstractApplicationTest {
 				.andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
 	}
 
+	@Test
+	public void shouldGetAListOfLastMessagesInJSonFormat() throws Exception {
+		final Message message = getDefaultMessage();
+
+		given(messageService.getLastMessages()).willReturn(Arrays.asList(message));
+
+		mvc.perform(get("/messages/last.json").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
+	}
+
 }

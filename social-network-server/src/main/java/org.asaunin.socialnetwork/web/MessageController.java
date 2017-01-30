@@ -29,4 +29,9 @@ public class MessageController {
 		return messageService.getDialogWithPerson(interlocutor);
 	}
 
+	@GetMapping("/messages/last")
+	public Collection<Message> showLastMessages() {
+		return messageService.getLastMessages();
+	}
+
 }

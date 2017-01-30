@@ -10,12 +10,30 @@ import java.util.Collection;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
-	@Query("SELECT m FROM Message m " +
-			"where m.sender = :sender and m.recipient = :recipient " +
-				"or m.sender = :recipient and m.recipient = :sender " +
-			"order by m.posted desc")
+	@Query(
+			"SELECT m " +
+			"FROM Message m " +
+			"WHERE m.sender = :sender AND m.recipient = :recipient " +
+			"   OR m.sender = :recipient AND m.recipient = :sender " +
+			"ORDER BY m.posted DESC")
 	Collection<Message> findByRecipientOrSenderOrderByPostedDesc(
 			@Param("sender") Person sender,
 			@Param("recipient") Person recipient);
 
+	@Query(
+			"SELECT m " +
+			"FROM Message m " +
+			"WHERE m.id IN (" +
+			"   SELECT MAX(l.id) " +
+			"   FROM Message l " +
+			"   WHERE l.sender = :person OR l.recipient = :person " +
+			"   GROUP BY " +
+			"       CASE " +
+			"           WHEN l.recipient =:person THEN l.sender " +
+			"           WHEN l.sender =:person THEN l.recipient " +
+			"           ELSE :person " +
+			"       END) " +
+			"ORDER BY m.posted DESC")
+	Collection<Message>findLastMessagesByPerson(
+			@Param("person") Person person);
 }

@@ -38,14 +38,28 @@ public class MessageServiceTest extends AbstractApplicationTest {
 		final Person interlocutor = Person.builder()
 				.id(6L)
 				.build();
-		final Collection<Message> persons = messageService.getDialogWithPerson(interlocutor);
+		final Collection<Message> messages = messageService.getDialogWithPerson(interlocutor);
 
-		assertThat(persons).hasSize(5);
-		assertThat(persons)
+		assertThat(messages).hasSize(5);
+		assertThat(messages)
 				.extracting("id", "body")
 				.contains(
 						tuple(13L, "Hi geek!"),
 						tuple(15L, "How's old socks?"));
 	}
+
+	@Test
+	@Transactional
+	public void shouldFindAllLastMessagesByPerson() throws Exception {
+		final Collection<Message> messages = messageService.getLastMessages();
+
+		assertThat(messages).hasSize(5);
+		assertThat(messages)
+				.extracting("id", "body")
+				.contains(
+						tuple(19L, "Howdy Antony, long time no seen you!"),
+						tuple(20L, "Buddy, can you add me in your friend list? Thx"));
+	}
+
 
 }
