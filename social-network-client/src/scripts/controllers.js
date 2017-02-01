@@ -213,18 +213,30 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
 app.controller('messagesController', ['UserService', 'MessageService', '$http', '$scope',
     function (UserService, MessageService, $http, $scope) {
 
+        $scope.messageList = [];
+
+        //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
             return;
         }
 
-        $scope.messageList = MessageService.getLastMessages($scope.accountId);
-        MessageService.scrollElement("chat");
+        getLastMessages();
+
+        function getLastMessages() {
+            $http.get('/messages/last').then(function (response) {
+                $scope.messageList = MessageService.updateLastMessages(response.data, $scope.accountId);
+                MessageService.scrollElement("chat");
+            });
+        }
 
     }]);
 
 app.controller('dialogController', ['UserService', 'MessageService', '$http', '$scope', '$routeParams',
     function (UserService, MessageService, $http, $scope, $routeParams) {
 
+        $scope.messageList = [];
+
+        //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
             return;
         }
@@ -232,14 +244,21 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
         var id = $routeParams.profileId === undefined ? $scope.accountId : parseInt($routeParams.profileId);
         $scope.profile = UserService.getUserById(id);
 
-        $scope.messageList = MessageService.getDialogMessages($scope.accountId, $scope.profile.id);
-        MessageService.scrollElement("chat");
+        getDialog();
+
+        function getDialog() {
+            $http.get('/messages/' + $scope.profile.id).then(function (response) {
+                $scope.messageList = MessageService.updateMessages(response.data, $scope.accountId);
+                MessageService.scrollElement("chat");
+            });
+        }
 
         $scope.sendMessage = function () {
             var message = MessageService.addMessage($scope.accountId, $scope.profile.id, $scope.messageText);
-            $scope.messageList.push(message);
-            $scope.messageText = "";
-            MessageService.scrollElement("chat");
+            $http.post('messages/add', message).then(function () {
+                $scope.messageText = "";
+                getDialog();
+            });
         };
 
     }]);

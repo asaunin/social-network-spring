@@ -21,45 +21,62 @@ import static org.assertj.core.api.Assertions.tuple;
 @SpringBootTest
 public class MessageServiceTest extends AbstractApplicationTest {
 
-	@Autowired
-	private MessageService messageService;
+    @Autowired
+    private MessageService messageService;
 
-	@Before
-	public void setDefaultPerson() {
-		ReflectionTestUtils.setField(
-				messageService,
-				"person",
-				getDefaultPerson());
-	}
+    @Before
+    public void setDefaultPerson() {
+        ReflectionTestUtils.setField(
+                messageService,
+                "person",
+                getDefaultPerson());
+    }
 
-	@Test
-	@Transactional
-	public void shouldFindAllDialogMessagesWithPerson() throws Exception {
-		final Person interlocutor = Person.builder()
-				.id(6L)
-				.build();
-		final Collection<Message> messages = messageService.getDialogWithPerson(interlocutor);
+    @Test
+    @Transactional
+    public void shouldFindAllDialogMessagesWithPerson() throws Exception {
+        final Person interlocutor = Person.builder()
+                .id(6L)
+                .build();
+        final Collection<Message> messages = messageService.getDialogWithPerson(interlocutor);
 
-		assertThat(messages).hasSize(5);
-		assertThat(messages)
-				.extracting("id", "body")
-				.contains(
-						tuple(13L, "Hi geek!"),
-						tuple(15L, "How's old socks?"));
-	}
+        assertThat(messages).hasSize(5);
+        assertThat(messages)
+                .extracting("id", "body")
+                .contains(
+                        tuple(13L, "Hi geek!"),
+                        tuple(15L, "How's old socks?"));
+    }
 
-	@Test
-	@Transactional
-	public void shouldFindAllLastMessagesByPerson() throws Exception {
-		final Collection<Message> messages = messageService.getLastMessages();
+    @Test
+    @Transactional
+    public void shouldFindAllLastMessagesByPerson() throws Exception {
+        final Collection<Message> messages = messageService.getLastMessages();
 
-		assertThat(messages).hasSize(5);
-		assertThat(messages)
-				.extracting("id", "body")
-				.contains(
-						tuple(19L, "Howdy Antony, long time no seen you!"),
-						tuple(20L, "Buddy, can you add me in your friend list? Thx"));
-	}
+        assertThat(messages).hasSize(5);
+        assertThat(messages)
+                .extracting("id", "body")
+                .contains(
+                        tuple(19L, "Howdy Antony, long time no seen you!"),
+                        tuple(20L, "Buddy, can you add me in your friend list? Thx"));
+    }
+
+
+    @Test
+    @Transactional
+    public void shouldSaveMessage() throws Exception {
+        final Person person = getDefaultPerson();
+        final Collection<Message> before = messageService.getDialogWithPerson(person);
+
+        messageService.saveMessage(getDefaultMessage());
+
+        final Collection<Message> after = messageService.getDialogWithPerson(person);
+
+        assertThat(before.size()).isEqualTo(after.size() - 1);
+        assertThat(after)
+                .extracting("body")
+                .contains(DEFAULT_MESSAGE_TEXT);
+    }
 
 
 }

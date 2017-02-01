@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS persons (
   phone      VARCHAR(15),
   birth_date DATE,
   gender     INT                NOT NULL,
-  created    DATE               NOT NULL
+  created    DATETIME           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS friends (
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS friends (
 
 CREATE TABLE IF NOT EXISTS messages (
   id           BIGINT IDENTITY PRIMARY KEY,
-  posted       DATE   NOT NULL,
+  posted       DATETIME   NOT NULL,
   sender_id    BIGINT NOT NULL,
   recipient_id BIGINT NOT NULL,
   body         VARCHAR(1000),

@@ -17,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,37 +27,53 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(MessageController.class)
 public class MessageControllerTest extends AbstractApplicationTest {
 
-	@Autowired
-	private MockMvc mvc;
+    @Autowired
+    private MockMvc mvc;
 
-	@MockBean
-	private MessageService messageService;
+    @MockBean
+    private MessageService messageService;
 
-	@MockBean
-	private PersonService personService;
+    @MockBean
+    private PersonService personService;
 
-	@Test
-	public void shouldGetAListOfMessagesInJSonFormat() throws Exception {
-		final Person person = getDefaultPerson();
-		final Message message = getDefaultMessage();
+    @Test
+    public void shouldGetAListOfMessagesInJSonFormat() throws Exception {
+        final Person person = getDefaultPerson();
+        final Message message = getDefaultMessage();
 
-		given(personService.findById(person.getId())).willReturn(person);
-		given(messageService.getDialogWithPerson(person)).willReturn(Arrays.asList(message));
+        given(personService.findById(person.getId())).willReturn(person);
+        given(messageService.getDialogWithPerson(person)).willReturn(Arrays.asList(message));
 
-		mvc.perform(get("/messages/1.json").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
-	}
+        mvc.perform(get("/messages/1.json")
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
+    }
 
-	@Test
-	public void shouldGetAListOfLastMessagesInJSonFormat() throws Exception {
-		final Message message = getDefaultMessage();
+    @Test
+    public void shouldGetAListOfLastMessagesInJSonFormat() throws Exception {
+        final Message message = getDefaultMessage();
 
-		given(messageService.getLastMessages()).willReturn(Arrays.asList(message));
+        given(messageService.getLastMessages()).willReturn(Arrays.asList(message));
 
-		mvc.perform(get("/messages/last.json").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
-	}
+        mvc.perform(get("/messages/last.json")
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
+    }
+
+    @Test
+    public void shouldPostAMessage() throws Exception {
+        final Message message = getDefaultMessage();
+
+        doNothing().when(messageService).saveMessage(message);
+
+        mvc.perform(post("/messages/add.json")
+                .content(convertObjectToJsonBytes(message))
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isCreated());
+    }
+
+
 
 }

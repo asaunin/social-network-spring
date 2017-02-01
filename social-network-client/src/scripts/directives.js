@@ -40,3 +40,7 @@ app.directive('buttonAddFriend', function () {
         replace: true
     };
 });
+
+app.factory('appCache', function($cacheFactory) {
+    return $cacheFactory('avatars');
+});

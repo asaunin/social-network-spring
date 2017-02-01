@@ -35,7 +35,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		given(personService.getPersons()).willReturn(Arrays.asList(person));
 
-		mvc.perform(get("/persons.json").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(get("/persons.json")
+                .contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].id").value(1L))
 				.andExpect(jsonPath("$[0].fullName").value("Alex Saunin"));
@@ -47,7 +48,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		given(personService.getFriends()).willReturn(Arrays.asList(person));
 
-		mvc.perform(get("/friends.json").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(get("/friends.json")
+                .contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].id").value(1L))
 				.andExpect(jsonPath("$[0].fullName").value("Alex Saunin"));
@@ -59,7 +61,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		given(personService.getFollowers()).willReturn(Arrays.asList(person));
 
-		mvc.perform(get("/followers.json").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(get("/followers.json")
+                .contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].id").value(1L))
 				.andExpect(jsonPath("$[0].fullName").value("Alex Saunin"));

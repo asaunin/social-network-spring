@@ -1,7 +1,8 @@
 var app = angular.module('socialNetwork');
 
-app.service('UserService', ['$http', '$location', function ($http, $location) {
+app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFactory) {
 
+    var avatars = $cacheFactory('myCache');
     var users = [];
 
     function getUser(data) {
@@ -82,8 +83,9 @@ app.service('UserService', ['$http', '$location', function ($http, $location) {
             if (user.avatar === undefined) {
                 var url = './images/avatars/' + user.id + '.jpg';
                 user.avatar = './images/avatars/undefined.gif';
-                $http.get(url).then(function () {
+                $http.get(url).then(function (result) {
                     user.avatar = url;
+                    avatars.put(user.id, url);
                 });
             }
         });
@@ -110,13 +112,26 @@ app.service('UserService', ['$http', '$location', function ($http, $location) {
         return friends;
     }
 
+    function getAvatar(person) {
+        var data = avatars.get(person.id);
+        if (!data) {
+            var url = './images/avatars/' + person.id + '.jpg';
+            $http.get(url).then(function(result) {
+                avatars.put(person.id, url);
+            });
+            data = person.fullName;
+        }
+        return data;
+    }
+
     return {
         getUserById: getUserById,
         getFriends: getFriends,
         getUsers: getUsers,
         loadFriends: loadFriends,
         loadUsers: loadUsers,
-        loadAvatars: loadAvatars
+        loadAvatars: loadAvatars,
+        getAvatar: getAvatar
     }
 
 }]);
@@ -124,28 +139,6 @@ app.service('UserService', ['$http', '$location', function ($http, $location) {
 app.service('MessageService', ['UserService', '$http', '$timeout', '$rootScope', function (UserService, $http, $timeout, $rootScope) {
 
     var messages = [];
-
-    function updateLastMessageAvatar(message, accountId) {
-        if (accountId === message.sender.id) {
-            message.alignment = 'right';
-            message.avatar = message.recipient.getAvatar();
-            message.interlocutor = message.recipient;
-        } else {
-            message.avatar = message.sender.getAvatar();
-            message.alignment = 'left';
-            message.interlocutor = message.sender;
-        }
-    }
-
-    function updateDialogAvatar(message, accountId) {
-        if (accountId === message.sender.id) {
-            message.alignment = 'right';
-        } else {
-            message.alignment = 'left';
-        }
-        message.interlocutor = message.sender;
-        message.avatar = message.sender.getAvatar();
-    }
 
     function scrollElement(id) {
         $timeout(function () {
@@ -166,76 +159,50 @@ app.service('MessageService', ['UserService', '$http', '$timeout', '$rootScope',
         });
     }
 
-    function getLastMessages(accountId) {
-        var lastMessages = [];
-        messages.forEach(function (item) {
-            if (item.sender.id === accountId || item.recipient.id === accountId) {
-                var lastMessage = null;
-                lastMessages.forEach(function (message) {
-                    if (message.sender === item.sender && message.recipient === item.recipient
-                        || message.recipient === item.sender && message.sender === item.recipient)
-                        lastMessage = message;
-                });
-                if (lastMessage === null) {
-                    var newMessage = {
-                        "id": item.id,
-                        "date": item.date,
-                        "sender": item.sender,
-                        "recipient": item.recipient,
-                        "body": item.body
-                    };
-                    updateLastMessageAvatar(newMessage, accountId);
-                    lastMessages.push(newMessage);
-                } else {
-                    if (item.date > lastMessage.date) {
-                        lastMessage.id = item.id;
-                        lastMessage.date = item.date;
-                        lastMessage.sender = item.sender;
-                        lastMessage.recipient = item.recipient;
-                        lastMessage.body = item.body;
-                        updateLastMessageAvatar(lastMessage, accountId);
-                    }
-                }
+    function updateMessages(messages, accountId) {
+        messages.forEach(function (message) {
+            message.body =  message.body.replace(/\\n/g, '\n');
+            message.posted = new Date(message.posted);
+            if (accountId === message.sender.id) {
+                message.alignment = 'right';
+            } else {
+                message.alignment = 'left';
             }
+            message.interlocutor = message.sender;
+            message.avatar = UserService.getAvatar(message.sender);
         });
-        return lastMessages;
+        return messages
     }
 
-    function getDialogMessages(accountId, interlocutorId) {
-        var dialogMessages = [];
-        messages.forEach(function (item) {
-            if (item.sender.id === accountId && item.recipient.id === interlocutorId || item.sender.id === interlocutorId && item.recipient.id === accountId) {
-                var message = {
-                    "id": item.id,
-                    "date": item.date,
-                    "sender": item.sender,
-                    "recipient": item.recipient,
-                    "body": item.body
-                };
-                updateDialogAvatar(message, accountId);
-                dialogMessages.push(message);
+    function updateLastMessages(messages, accountId) {
+        messages.forEach(function (message) {
+            message.body =  message.body.replace(/\\n/g, '\n');
+            message.posted = new Date(message.posted);
+            if (accountId === message.sender.id) {
+                message.alignment = 'right';
+                message.interlocutor = message.recipient;
+                message.avatar = UserService.getAvatar(message.recipient);
+            } else {
+                message.alignment = 'left';
+                message.interlocutor = message.sender;
+                message.avatar = UserService.getAvatar(message.sender);
             }
         });
-        return dialogMessages;
+        return messages
     }
 
     function addMessage(senderId, recipientId, text) {
-        var message = {
-            "id": 666,
-            "date": new Date(),
+        return {
             "sender": UserService.getUserById(senderId),
             "recipient": UserService.getUserById(recipientId),
             "body": text
         };
-        messages.push(message);
-        updateDialogAvatar(message, senderId);
-        return message;
     }
 
     return {
         addMessage: addMessage,
-        getDialogMessages: getDialogMessages,
-        getLastMessages: getLastMessages,
+        updateMessages: updateMessages,
+        updateLastMessages: updateLastMessages,
         loadMessages: loadMessages,
         scrollElement: scrollElement
     }

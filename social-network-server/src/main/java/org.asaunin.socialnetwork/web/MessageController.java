@@ -5,10 +5,10 @@ import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.MessageService;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -32,6 +32,12 @@ public class MessageController {
 	@GetMapping("/messages/last")
 	public Collection<Message> showLastMessages() {
 		return messageService.getLastMessages();
+	}
+
+	@PostMapping(value = "/messages/add")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createMessage(@RequestBody Message message) {
+		messageService.saveMessage(message);
 	}
 
 }

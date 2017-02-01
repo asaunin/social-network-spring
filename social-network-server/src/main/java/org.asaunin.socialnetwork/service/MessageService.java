@@ -27,4 +27,9 @@ public class MessageService {
 	public Collection<Message> getLastMessages() {
 		return messageRepository.findLastMessagesByPerson(person);
 	}
+
+	public void saveMessage(Message message) {
+		messageRepository.save(message);
+	}
+
 }
