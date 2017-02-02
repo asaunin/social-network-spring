@@ -58,11 +58,11 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldFindAllPersons() throws Exception {
-		final Page<Person> persons = personService.getPersons(getDefaultPageRequest());
+	public void shouldFindAllPeople() throws Exception {
+		final Page<Person> people = personService.getPeople("", getDefaultPageRequest());
 
-		assertThat(persons).hasSize(16);
-		assertThat(persons)
+		assertThat(people).hasSize(16);
+		assertThat(people)
 				.extracting("id", "fullName")
 				.contains(
 						tuple(1L, "Alex Saunin"),
@@ -73,10 +73,10 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	@Test
 	@Transactional
 	public void shouldFindAllFriends() throws Exception {
-		final Page<Person> persons = personService.getFriends(getDefaultPageRequest());
+		final Page<Person> friends = personService.getFriends("", getDefaultPageRequest());
 
-		assertThat(persons).hasSize(10);
-		assertThat(persons)
+		assertThat(friends).hasSize(10);
+		assertThat(friends)
 				.extracting("id", "fullName")
 				.contains(
 						tuple(8L, "Tony Soprano"),
@@ -86,10 +86,10 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	@Test
 	@Transactional
 	public void shouldFindAllFollowers() throws Exception {
-		final Page<Person> persons = personService.getFollowers(getDefaultPageRequest());
+		final Page<Person> followers = personService.getFollowers("", getDefaultPageRequest());
 
-		assertThat(persons).hasSize(4);
-		assertThat(persons)
+		assertThat(followers).hasSize(4);
+		assertThat(followers)
 				.extracting("id", "fullName")
 				.contains(
 						tuple(16L, "Donnie Brasco"),

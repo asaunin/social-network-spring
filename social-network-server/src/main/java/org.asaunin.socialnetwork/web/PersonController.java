@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,18 +21,24 @@ public class PersonController {
 	}
 
 	@GetMapping("/people")
-	public Page<Person> getPersons(@PageableDefault(size = 20) Pageable pageRequest) {
-		return personService.getPersons(pageRequest);
+	public Page<Person> getPersons(
+			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
+			@PageableDefault(size = 20) Pageable pageRequest) {
+		return personService.getPeople(searchTerm, pageRequest);
 	}
 
 	@GetMapping("/friends")
-	public Page<Person> getFriends(@PageableDefault(size = 20) Pageable pageRequest) {
-		return personService.getFriends(pageRequest);
+	public Page<Person> getFriends(
+			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
+			@PageableDefault(size = 20) Pageable pageRequest) {
+		return personService.getFriends(searchTerm, pageRequest);
 	}
 
 	@GetMapping("/followers")
-	public Page<Person> getFollowers(@PageableDefault(size = 20) Pageable pageRequest) {
-		return personService.getFollowers(pageRequest);
+	public Page<Person> getFollowers(
+			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
+			@PageableDefault(size = 20) Pageable pageRequest) {
+		return personService.getFollowers(searchTerm, pageRequest);
 	}
 
 }

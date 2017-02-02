@@ -56,22 +56,22 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	@Test
 	public void shouldGetAListOfPeopleInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
-		        personService.getPersons(pageRequest),
-                "/people.json?size=1");
+		        personService.getPeople("Alex", pageRequest),
+                "/people.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
 	public void shouldGetAListOfFriendsInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
-		        personService.getFriends(pageRequest),
-                "/friends.json?size=1");
+		        personService.getFriends("Alex", pageRequest),
+                "/friends.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
 	public void shouldGetAListOfFollowersInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
-		        personService.getFollowers(pageRequest),
-                "/followers.json?size=1");
+		        personService.getFollowers("Alex", pageRequest),
+                "/followers.json?size=1&searchTerm=Alex");
 	}
 
 }

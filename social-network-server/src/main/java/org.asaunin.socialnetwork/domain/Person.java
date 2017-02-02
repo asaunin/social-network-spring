@@ -80,6 +80,14 @@ public class Person {
 	@Getter @JsonIgnore
 	private Set<Person> followers;
 
+	public boolean isFriend(Person friend) {
+		return friends.contains(friend);
+	}
+
+	public boolean isFollower(Person follower) {
+		return followers.contains(follower);
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 		setFullName();

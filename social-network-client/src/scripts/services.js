@@ -100,7 +100,7 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
         })
     }
 
-    function updatePersons(people) {
+    function updatePeople(people) {
         people.forEach(function (person) {
             person.avatar = getAvatar(person);
         });
@@ -130,7 +130,7 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
     return {
         getUserById: getUserById,
         getFriends: getFriends,
-        updatePersons: updatePersons,
+        updatePeople: updatePeople,
         loadFriends: loadFriends,
         loadUsers: loadUsers,
         loadAvatars: loadAvatars,

@@ -28,18 +28,18 @@ public class PersonService {
 		return personRepository.findByShortName(shortName);
 	}
 
-	public Page<Person> getPersons(Pageable pageRequest) {
-		return personRepository.findPersons(pageRequest);
+	public Page<Person> getPeople(String searchTerm, Pageable pageRequest) {
+		return personRepository.findPeople(searchTerm, pageRequest);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Person> getFriends(Pageable pageRequest) {
-		return personRepository.findFriends(person, pageRequest);
+	public Page<Person> getFriends(String searchTerm, Pageable pageRequest) {
+		return personRepository.findFriends(person, searchTerm, pageRequest);
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Person> getFollowers(Pageable pageRequest) {
-        return personRepository.findFollowers(person, pageRequest);
+	public Page<Person> getFollowers(String searchTerm, Pageable pageRequest) {
+        return personRepository.findFollowers(person, searchTerm, pageRequest);
 	}
 
 }

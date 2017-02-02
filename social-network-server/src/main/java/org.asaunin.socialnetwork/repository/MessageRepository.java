@@ -10,8 +10,7 @@ import java.util.Collection;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
-	@Query(
-			"SELECT m " +
+	@Query("SELECT m " +
 			"FROM Message m " +
 			"WHERE m.sender = :sender AND m.recipient = :recipient " +
 			"   OR m.sender = :recipient AND m.recipient = :sender " +
@@ -20,8 +19,7 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			@Param("sender") Person sender,
 			@Param("recipient") Person recipient);
 
-	@Query(
-			"SELECT m " +
+	@Query("SELECT m " +
 			"FROM Message m " +
 			"WHERE m.id IN (" +
 			"   SELECT MAX(l.id) " +
@@ -29,11 +27,11 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"   WHERE l.sender = :person OR l.recipient = :person " +
 			"   GROUP BY " +
 			"       CASE " +
-			"           WHEN l.recipient =:person THEN l.sender " +
-			"           WHEN l.sender =:person THEN l.recipient " +
+			"           WHEN l.recipient = :person THEN l.sender " +
+			"           WHEN l.sender = :person THEN l.recipient " +
 			"           ELSE :person " +
 			"       END) " +
 			"ORDER BY m.posted DESC")
-	Collection<Message>findLastMessagesByPerson(@Param("person") Person person);
+	Collection<Message> findLastMessagesByPerson(@Param("person") Person person);
 
 }

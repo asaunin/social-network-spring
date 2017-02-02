@@ -11,13 +11,29 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 
 	Person findByShortName(String shortName);
 
-	@Query("SELECT p FROM Person p ORDER BY p.fullName")
-	Page<Person> findPersons(Pageable pageRequest);
+	@Query("SELECT p FROM Person p " +
+			"WHERE LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+			"ORDER BY p.fullName")
+	Page<Person> findPeople(
+			@Param("searchTerm") String searchTerm,
+			Pageable pageRequest);
 
-	@Query("SELECT p FROM Person p WHERE (:person) MEMBER OF p.followers ORDER BY p.fullName")
-	Page<Person> findFriends(@Param("person") Person person, Pageable pageRequest);
+	@Query("SELECT p FROM Person p " +
+			"WHERE (:person) MEMBER OF p.followers " +
+			"   AND LOWER(p.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+			"ORDER BY p.fullName")
+	Page<Person> findFriends(
+			@Param("person") Person person,
+			@Param("searchTerm") String searchTerm,
+			Pageable pageRequest);
 
-	@Query("SELECT p FROM Person p WHERE (:person) MEMBER OF p.friends ORDER BY p.fullName")
-	Page<Person> findFollowers(@Param("person") Person person, Pageable pageRequest);
+	@Query("SELECT p FROM Person p " +
+			"WHERE (:person) MEMBER OF p.friends " +
+			"   AND LOWER(p.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+			"ORDER BY p.fullName")
+	Page<Person> findFollowers(
+			@Param("person") Person person,
+			@Param("searchTerm") String searchTerm,
+			Pageable pageRequest);
 
 }

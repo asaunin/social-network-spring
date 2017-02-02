@@ -147,12 +147,13 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
 
         $scope.people = [];
 
-        // Pagination controls
+        // Pagination & search controls
         $scope.currentPage = 1;
         $scope.entryLimit = 10;
-        $scope.$watch('currentPage', function () {
+        $scope.personSearch = "";
+        $scope.$watchCollection('[currentPage, personSearch]', function () {
             getPeople();
-        }, true);
+        });
 
         //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
@@ -160,14 +161,15 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         }
 
         function getPeople() {
-            var url = '/friends?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit;
+            var url = '/friends?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
-                $scope.people = UserService.updatePersons(response.data.content);
+                $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
                 $scope.totalPages = response.data.totalPages;
             });
         }
 
+        //TODO: Add friendship functionality
         // $scope.addFriend = function (friendId) {
         //     $scope.account.addFriend(friendId);
         //     $scope.people = UserService.getFriends($scope.account);
@@ -178,14 +180,6 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         //     $scope.people = UserService.getFriends($scope.account);
         // };
 
-        // $watch search to update pagination
-        // $scope.$watch('userSearch', function (newVal) {
-        //     $scope.filtered = filterFilter($scope.people, newVal);
-        //     $scope.totalElements = $scope.filtered.length;
-        //     $scope.totalPages = Math.ceil($scope.totalElements / $scope.entryLimit);
-        //     $scope.currentPage = 1;
-        // }, true);
-
     }]);
 
 app.controller('usersController', ['UserService', 'filterFilter', '$http', '$scope',
@@ -193,12 +187,13 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
 
         $scope.people = [];
 
-        // Pagination controls
+        // Pagination & search controls
         $scope.currentPage = 1;
         $scope.entryLimit = 10;
-        $scope.$watch('currentPage', function () {
+        $scope.personSearch = "";
+        $scope.$watchCollection('[currentPage, personSearch]', function () {
             getPeople();
-        }, true);
+        });
 
         //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
@@ -206,9 +201,9 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         }
 
         function getPeople() {
-            var url = '/people?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit;
+            var url = '/people?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
-                $scope.people = UserService.updatePersons(response.data.content);
+                $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
                 $scope.totalPages = response.data.totalPages;
             });
@@ -224,14 +219,6 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         // };
 
         // Pagination
-
-        //TODO: Add search functionality
-        // $scope.$watch('userSearch', function (newVal) {
-            // $scope.filtered = filterFilter($scope.people, newVal);
-            // $scope.totalElements = $scope.filtered.length;
-            // $scope.totalPages = Math.ceil($scope.totalElements / $scope.entryLimit);
-            // $scope.currentPage = 1;
-        // }, true);
 
     }]);
 

@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <strong>{{activeTab.title}}</strong>
             <div class="input-group input-group-sm search-text">
-                <input type="text" ng-model="userSearch" name="userSearch" class="form-control" placeholder="Search..."
+                <input type="text" ng-model="personSearch" name="personSearch" class="form-control" placeholder="Search..."
                        value='{{searchText}}'>
                 <span class="input-group-btn">
                             <button class="btn btn-default" type="button">
@@ -15,7 +15,7 @@
     </div>
     <div class="panel-body users" id="users">
         <table class="table">
-            <tr ng-repeat="person in people | orderBy: fullName | filter : userSearch ">
+            <tr ng-repeat="person in people | orderBy: fullName | filter : personSearch ">
                 <td class="col-md-1 text-center border-bottom">
                     <a href="#/profile/{{person.id}}" ng-click="onClickTab('profile')">
                         <ng-letter-avatar data={{person.avatar}} shape="round"></ng-letter-avatar>
