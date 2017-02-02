@@ -105,8 +105,8 @@ b, strong {
 
 .panel-body.users {
     overflow-y: auto;
-    max-height: 73vh;
-    min-height: 73vh;
+    max-height: 77vh;
+    min-height: 77vh;
     padding: 0;
 }
 

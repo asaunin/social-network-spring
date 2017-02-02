@@ -145,68 +145,93 @@ app.controller('settingsController', ['UserService', '$http', '$scope',
 app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$scope',
     function (UserService, filterFilter, $http, $scope) {
 
+        $scope.people = [];
+
+        // Pagination controls
+        $scope.currentPage = 1;
+        $scope.entryLimit = 10;
+        $scope.$watch('currentPage', function () {
+            getPeople();
+        }, true);
+
+        //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
             return;
         }
 
-        $scope.userList = UserService.getFriends($scope.account);
+        function getPeople() {
+            var url = '/friends?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit;
+            $http.get(url).then(function (response) {
+                $scope.people = UserService.updatePersons(response.data.content);
+                $scope.totalElements = response.data.totalElements;
+                $scope.totalPages = response.data.totalPages;
+            });
+        }
 
-        $scope.addFriend = function (friendId) {
-            $scope.account.addFriend(friendId);
-            $scope.userList = UserService.getFriends($scope.account);
-        };
-
-        $scope.removeFriend = function (friendId) {
-            $scope.account.removeFriend(friendId);
-            $scope.userList = UserService.getFriends($scope.account);
-        };
-
-        // pagination controls
-        $scope.currentPage = 1;
-        $scope.totalItems = $scope.userList.length;
-        $scope.entryLimit = 10; // items per page
-        $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
+        // $scope.addFriend = function (friendId) {
+        //     $scope.account.addFriend(friendId);
+        //     $scope.people = UserService.getFriends($scope.account);
+        // };
+        //
+        // $scope.removeFriend = function (friendId) {
+        //     $scope.account.removeFriend(friendId);
+        //     $scope.people = UserService.getFriends($scope.account);
+        // };
 
         // $watch search to update pagination
-        $scope.$watch('userSearch', function (newVal) {
-            $scope.filtered = filterFilter($scope.userList, newVal);
-            $scope.totalItems = $scope.filtered.length;
-            $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
-            $scope.currentPage = 1;
-        }, true);
+        // $scope.$watch('userSearch', function (newVal) {
+        //     $scope.filtered = filterFilter($scope.people, newVal);
+        //     $scope.totalElements = $scope.filtered.length;
+        //     $scope.totalPages = Math.ceil($scope.totalElements / $scope.entryLimit);
+        //     $scope.currentPage = 1;
+        // }, true);
 
     }]);
 
 app.controller('usersController', ['UserService', 'filterFilter', '$http', '$scope',
     function (UserService, filterFilter, $http, $scope) {
 
+        $scope.people = [];
+
+        // Pagination controls
+        $scope.currentPage = 1;
+        $scope.entryLimit = 10;
+        $scope.$watch('currentPage', function () {
+            getPeople();
+        }, true);
+
+        //TODO: Delete redundant check after applying RESTfull services
         if ($scope.isLoadingData) {
             return;
         }
 
-        $scope.userList = UserService.getUsers();
+        function getPeople() {
+            var url = '/people?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit;
+            $http.get(url).then(function (response) {
+                $scope.people = UserService.updatePersons(response.data.content);
+                $scope.totalElements = response.data.totalElements;
+                $scope.totalPages = response.data.totalPages;
+            });
+        }
 
-        $scope.addFriend = function (friendId) {
-            $scope.account.addFriend(friendId);
-        };
+        //TODO: Add friendship functionality
+        // $scope.addFriend = function (friendId) {
+        //     $scope.account.addFriend(friendId);
+        // };
+        //
+        // $scope.removeFriend = function (friendId) {
+        //     $scope.account.removeFriend(friendId);
+        // };
 
-        $scope.removeFriend = function (friendId) {
-            $scope.account.removeFriend(friendId);
-        };
+        // Pagination
 
-        // pagination controls
-        $scope.currentPage = 1;
-        $scope.totalItems = $scope.userList.length;
-        $scope.entryLimit = 10; // items per page
-        $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
-
-        // $watch search to update pagination
-        $scope.$watch('userSearch', function (newVal) {
-            $scope.filtered = filterFilter($scope.userList, newVal);
-            $scope.totalItems = $scope.filtered.length;
-            $scope.noOfPages = Math.ceil($scope.totalItems / $scope.entryLimit);
-            $scope.currentPage = 1;
-        }, true);
+        //TODO: Add search functionality
+        // $scope.$watch('userSearch', function (newVal) {
+            // $scope.filtered = filterFilter($scope.people, newVal);
+            // $scope.totalElements = $scope.filtered.length;
+            // $scope.totalPages = Math.ceil($scope.totalElements / $scope.entryLimit);
+            // $scope.currentPage = 1;
+        // }, true);
 
     }]);
 

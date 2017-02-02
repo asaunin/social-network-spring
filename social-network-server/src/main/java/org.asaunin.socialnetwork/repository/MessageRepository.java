@@ -34,7 +34,6 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"           ELSE :person " +
 			"       END) " +
 			"ORDER BY m.posted DESC")
-	Collection<Message>findLastMessagesByPerson(
-			@Param("person") Person person);
+	Collection<Message>findLastMessagesByPerson(@Param("person") Person person);
 
 }

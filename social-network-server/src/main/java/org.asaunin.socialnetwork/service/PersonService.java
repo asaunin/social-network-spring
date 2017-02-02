@@ -3,10 +3,10 @@ package org.asaunin.socialnetwork.service;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
 
 @Service
 public class PersonService {
@@ -28,22 +28,18 @@ public class PersonService {
 		return personRepository.findByShortName(shortName);
 	}
 
-	public Collection<Person> getPersons() {
-		return personRepository.findAll();
+	public Page<Person> getPersons(Pageable pageRequest) {
+		return personRepository.findPersons(pageRequest);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Person> getFriends() {
-		return personRepository
-				.findOne(person.getId())
-				.getFriends();
+	public Page<Person> getFriends(Pageable pageRequest) {
+		return personRepository.findFriends(person, pageRequest);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Person> getFollowers() {
-		return personRepository
-				.findOne(person.getId())
-				.getFollowers();
+	public Page<Person> getFollowers(Pageable pageRequest) {
+        return personRepository.findFollowers(person, pageRequest);
 	}
 
 }

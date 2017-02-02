@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,7 +59,7 @@ public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Test
 	public void shouldFindAllPersons() throws Exception {
-		final Collection<Person> persons = personService.getPersons();
+		final Page<Person> persons = personService.getPersons(getDefaultPageRequest());
 
 		assertThat(persons).hasSize(16);
 		assertThat(persons)
@@ -73,7 +73,7 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	@Test
 	@Transactional
 	public void shouldFindAllFriends() throws Exception {
-		final Collection<Person> persons = personService.getFriends();
+		final Page<Person> persons = personService.getFriends(getDefaultPageRequest());
 
 		assertThat(persons).hasSize(10);
 		assertThat(persons)
@@ -86,7 +86,7 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	@Test
 	@Transactional
 	public void shouldFindAllFollowers() throws Exception {
-		final Collection<Person> persons = personService.getFollowers();
+		final Page<Person> persons = personService.getFollowers(getDefaultPageRequest());
 
 		assertThat(persons).hasSize(4);
 		assertThat(persons)
