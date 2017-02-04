@@ -1,14 +1,18 @@
 package org.asaunin.socialnetwork.web;
 
-import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.NoSuchElementException;
+
+import static org.asaunin.socialnetwork.service.PersonService.PersonDTO;
 
 @RestController
 public class PersonController {
@@ -21,24 +25,40 @@ public class PersonController {
 	}
 
 	@GetMapping("/people")
-	public Page<Person> getPersons(
+	public Page<PersonDTO> getPersons(
 			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
 			@PageableDefault(size = 20) Pageable pageRequest) {
 		return personService.getPeople(searchTerm, pageRequest);
 	}
 
 	@GetMapping("/friends")
-	public Page<Person> getFriends(
+	public Page<PersonDTO> getFriends(
 			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
 			@PageableDefault(size = 20) Pageable pageRequest) {
 		return personService.getFriends(searchTerm, pageRequest);
 	}
 
-	@GetMapping("/followers")
-	public Page<Person> getFollowers(
+	@GetMapping("/friendOf")
+	public Page<PersonDTO> getFriendOf(
 			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,
 			@PageableDefault(size = 20) Pageable pageRequest) {
-		return personService.getFollowers(searchTerm, pageRequest);
+		return personService.getFriendOf(searchTerm, pageRequest);
+	}
+
+	@PutMapping("/friends/add/{personId}")
+	public void addFriend(@PathVariable("personId") Long personId) {
+		personService.addFriend(personId);
+	}
+
+	@PutMapping("/friends/remove/{personId}")
+	public void removeFriend(@PathVariable("personId") Long personId) {
+		personService.removeFriend(personId);
+	}
+
+	// TODO: 04.02.2017 Replace by the global handler
+	@ExceptionHandler(NoSuchElementException.class)
+	public void handlePersonNotFound(NoSuchElementException exception, HttpServletResponse response) throws IOException {
+		response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
 	}
 
 }

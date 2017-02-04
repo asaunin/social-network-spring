@@ -169,16 +169,19 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
             });
         }
 
-        //TODO: Add friendship functionality
-        // $scope.addFriend = function (friendId) {
-        //     $scope.account.addFriend(friendId);
-        //     $scope.people = UserService.getFriends($scope.account);
-        // };
-        //
-        // $scope.removeFriend = function (friendId) {
-        //     $scope.account.removeFriend(friendId);
-        //     $scope.people = UserService.getFriends($scope.account);
-        // };
+        $scope.addFriend = function (friendId) {
+            var url = '/friends/add/' + friendId;
+            $http.put(url, []).then(function () {
+                getPeople();
+            });
+        };
+
+        $scope.removeFriend = function (friendId) {
+            var url = '/friends/remove/' + friendId;
+            $http.put(url, []).then(function () {
+                getPeople();
+            });
+        };
 
     }]);
 
@@ -209,16 +212,19 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
             });
         }
 
-        //TODO: Add friendship functionality
-        // $scope.addFriend = function (friendId) {
-        //     $scope.account.addFriend(friendId);
-        // };
-        //
-        // $scope.removeFriend = function (friendId) {
-        //     $scope.account.removeFriend(friendId);
-        // };
+        $scope.addFriend = function (friendId) {
+            var url = '/friends/add/' + friendId;
+            $http.put(url, []).then(function () {
+                getPeople();
+            });
+        };
 
-        // Pagination
+        $scope.removeFriend = function (friendId) {
+            var url = '/friends/remove/' + friendId;
+            $http.put(url, []).then(function () {
+                getPeople();
+            });
+        };
 
     }]);
 

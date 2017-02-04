@@ -27,20 +27,20 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
                 prototype[key] = user[key];
             });
         };
-        prototype.addFriend = function (id) {
-            if (prototype.id !== id) {
-                prototype.friends.push(id);
-            }
-        };
-        prototype.removeFriend = function (id) {
-            if (prototype.id !== id) {
-                var index = prototype.friends.indexOf(id);
-                prototype.friends.splice(index, 1);
-            }
-        };
-        prototype.hasFriend = function (id) {
-            return (prototype.friends.indexOf(id) !== -1);
-        };
+        // prototype.addFriend = function (id) {
+        //     if (prototype.id !== id) {
+        //         prototype.friends.push(id);
+        //     }
+        // };
+        // prototype.removeFriend = function (id) {
+        //     if (prototype.id !== id) {
+        //         var index = prototype.friends.indexOf(id);
+        //         prototype.friends.splice(index, 1);
+        //     }
+        // };
+        // prototype.hasFriend = function (id) {
+        //     return (prototype.friends.indexOf(id) !== -1);
+        // };
         prototype.getProfileAvatar = function () {
             if (prototype.avatar === undefined) {
                 prototype.avatar = './images/avatars/undefined.gif';
@@ -95,7 +95,7 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
         return $http.get('./data/friends.json').then(function (response) {
             response.data.forEach(function (data) {
                 var user = getUserById(data.userId);
-                user.addFriend(data.friendId);
+                // user.addFriend(data.friendId);
             });
         })
     }

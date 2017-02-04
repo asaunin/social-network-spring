@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -70,22 +71,32 @@ public class Person {
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "person_id"),
 			inverseJoinColumns = @JoinColumn(name = "friend_id"))
-	@Getter @JsonIgnore
-	private Set<Person> friends;
+	@Getter @Setter @JsonIgnore
+	private Set<Person> friends = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "friend_id"),
 			inverseJoinColumns = @JoinColumn(name = "person_id"))
-	@Getter @JsonIgnore
-	private Set<Person> followers;
+	@Getter @Setter @JsonIgnore
+	private Set<Person> friendOf = new HashSet<>();
 
-	public boolean isFriend(Person friend) {
+	public boolean hasFriend(Person friend) {
 		return friends.contains(friend);
 	}
 
-	public boolean isFollower(Person follower) {
-		return followers.contains(follower);
+	public void addFriend(Person friend) {
+		friends.add(friend);
+		friend.friendOf.add(this);
+	}
+
+	public void removeFriend(Person friend) {
+		friends.remove(friend);
+		friend.friendOf.remove(this);
+	}
+
+	public boolean isFriendOf(Person person) {
+		return friendOf.contains(person);
 	}
 
 	public void setFirstName(String firstName) {
@@ -118,7 +129,7 @@ public class Person {
 		return new PersonBuilder();
 	}
 
-	@ToString
+	@ToString(of = {"id", "firstName", "lastName"})
 	public static class PersonBuilder {
 
 		private Long id;

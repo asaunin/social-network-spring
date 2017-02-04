@@ -3,6 +3,7 @@ package org.asaunin.socialnetwork.web;
 import org.asaunin.socialnetwork.AbstractApplicationTest;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService;
+import org.asaunin.socialnetwork.service.PersonService.PersonDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,11 +41,13 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	private PersonService personService;
 	private final Pageable pageRequest = new PageRequest(0, 1);
 
-	private void shouldGetAListInJSonFormat(Page<Person> peoplePage, String urlTemplate) throws Exception {
+	private void shouldGetAListInJSonFormat(Page<PersonDTO> peoplePage, String urlTemplate) throws Exception {
 		final Person person = getDefaultPerson();
 		final List<Person> people = Arrays.asList(person, person);
 		final Pageable pageRequest = new PageRequest(0, 1);
-		final PageImpl<Person> value = new PageImpl<>(people, pageRequest, people.size());
+		final Page<PersonDTO> value =
+				new PageImpl<>(people, pageRequest, people.size())
+						.map(e -> new PersonDTO(e, person));
 
 		given(peoplePage).willReturn(value);
 
@@ -70,8 +77,47 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	@Test
 	public void shouldGetAListOfFollowersInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
-		        personService.getFollowers("Alex", pageRequest),
-                "/followers.json?size=1&searchTerm=Alex");
+		        personService.getFriendOf("Alex", pageRequest),
+                "/friendOf.json?size=1&searchTerm=Alex");
+	}
+
+	@Test
+	public void shouldReturnBadRequestWhenPersonMissing() throws Exception {
+		final Person person = getDefaultPerson();
+
+		doThrow(new NoSuchElementException()).when(personService).addFriend(person.getId());
+		doThrow(new NoSuchElementException()).when(personService).removeFriend(person.getId());
+
+		mvc.perform(put("/friends/add/{personId}.json", person.getId())
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound());
+
+		mvc.perform(put("/friends/remove/{personId}.json", person.getId())
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void shouldAddFriendWhenPersonExists() throws Exception {
+		final Person person = getDefaultPerson();
+
+		doNothing().when(personService).addFriend(person.getId());
+
+		mvc.perform(put("/friends/add/{personId}.json", person.getId())
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void shouldRemoveAFriendWhenPersonExists() throws Exception {
+		final Person person = getDefaultPerson();
+
+		doNothing().when(personService).addFriend(person.getId());
+
+		mvc.perform(put("/friends/remove/{personId}.json", person.getId())
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk());
 	}
 
 }

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
 
 	Person findByShortName(String shortName);
@@ -19,7 +21,7 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 			Pageable pageRequest);
 
 	@Query("SELECT p FROM Person p " +
-			"WHERE (:person) MEMBER OF p.followers " +
+			"WHERE (:person) MEMBER OF p.friendOf " +
 			"   AND LOWER(p.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
 			"ORDER BY p.fullName")
 	Page<Person> findFriends(
@@ -31,9 +33,10 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 			"WHERE (:person) MEMBER OF p.friends " +
 			"   AND LOWER(p.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
 			"ORDER BY p.fullName")
-	Page<Person> findFollowers(
+	Page<Person> findFriendOf(
 			@Param("person") Person person,
 			@Param("searchTerm") String searchTerm,
 			Pageable pageRequest);
 
+	Optional<Person> findById(Long id);
 }

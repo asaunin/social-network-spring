@@ -1,5 +1,7 @@
 package org.asaunin.socialnetwork.service;
 
+import lombok.Getter;
+import org.asaunin.socialnetwork.domain.Gender;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 public class PersonService {
 
@@ -15,31 +21,86 @@ public class PersonService {
 	private PersonRepository personRepository;
 
 	@Autowired
-	public PersonService(Person person, PersonRepository personRepository){
+	public PersonService(Person person, PersonRepository personRepository) {
 		this.person = person;
 		this.personRepository = personRepository;
 	}
 
 	public Person findById(Long id) {
-		return personRepository.findOne(id);
+		final Optional<Person> result = personRepository.findById(id);
+		if (result.isPresent()) {
+			return result.get();
+		}
+		throw new NoSuchElementException(String.format("Person with id number %d is not found", id));
 	}
 
 	public Person findByShortName(String shortName) {
 		return personRepository.findByShortName(shortName);
 	}
 
-	public Page<Person> getPeople(String searchTerm, Pageable pageRequest) {
-		return personRepository.findPeople(searchTerm, pageRequest);
+	@Transactional(readOnly = true)
+	public Page<PersonDTO> getPeople(String searchTerm, Pageable pageRequest) {
+		final Page<Person> people = personRepository.findPeople(searchTerm, pageRequest);
+		return people.map(e -> new PersonDTO(e, person));
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Person> getFriends(String searchTerm, Pageable pageRequest) {
-		return personRepository.findFriends(person, searchTerm, pageRequest);
+	public Page<PersonDTO> getFriends(String searchTerm, Pageable pageRequest) {
+		final Page<Person> friends = personRepository.findFriends(person, searchTerm, pageRequest);
+		return friends.map(e -> new PersonDTO(e, person));
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Person> getFollowers(String searchTerm, Pageable pageRequest) {
-        return personRepository.findFollowers(person, searchTerm, pageRequest);
+	public Page<PersonDTO> getFriendOf(String searchTerm, Pageable pageRequest) {
+		final Page<Person> friendOf = personRepository.findFriendOf(person, searchTerm, pageRequest);
+		return friendOf.map(e -> new PersonDTO(e, person));
+	}
+
+	@Transactional
+	public void addFriend(Long personId) {
+		final Person friend = findById(personId);
+		if (!person.hasFriend(friend)) {
+			person.addFriend(friend);
+		}
+	}
+
+	@Transactional
+	public void removeFriend(Long personId) {
+		final Person friend = findById(personId);
+		if (person.hasFriend(friend)) {
+			person.removeFriend(friend);
+		}
+	}
+
+	@Getter
+	public static class PersonDTO {
+
+		private Long id;
+		private String firstName;
+		private String lastName;
+		private String fullName;
+		private String shortName;
+		private String email;
+		private String phone;
+		private Date birthDate;
+		private Gender gender;
+		private Date created;
+		private boolean isFriend;
+
+		public PersonDTO(Person entity, Person person) {
+			this.id = entity.getId();
+			this.firstName = entity.getFirstName();
+			this.lastName = entity.getLastName();
+			this.fullName = entity.getFullName();
+			this.shortName = entity.getShortName();
+			this.email = entity.getEmail();
+			this.phone = entity.getPhone();
+			this.birthDate = entity.getBirthDate();
+			this.gender = entity.getGender();
+			this.created = entity.getCreated();
+			this.isFriend = entity.isFriendOf(person);
+		}
+
 	}
 
 }

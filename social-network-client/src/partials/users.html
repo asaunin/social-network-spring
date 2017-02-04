@@ -25,7 +25,7 @@
                     <a class="control-label" href="#/profile/{{person.id}}" ng-click="onClickTab('profile')">
                         <strong class="primary-font">{{person.fullName}}</strong>
                     </a><br>
-                    <span class="text-muted" ng-show="person.hasFriend(account.id)">{{person.email}}</span>
+                    <span class="text-muted" ng-show="person.friend">{{person.email}}</span>
                 </td>
                 <td class="col-md-2 border-bottom">
                     <button-send-message profile="person"></button-send-message>
