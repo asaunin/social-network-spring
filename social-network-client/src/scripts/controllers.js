@@ -1,7 +1,7 @@
 var app = angular.module('socialNetwork');
 
-app.controller('tabController', ['$q', '$scope', '$route', '$location', 'UserService', 'MessageService',
-    function ($q, $scope, $route, $location, UserService, MessageService) {
+app.controller('tabController', ['$http', '$scope', '$route', '$location', 'UserService', 'MessageService',
+    function ($http, $scope, $route, $location, UserService, MessageService) {
 
         $scope.accountId = 1;
         $scope.isLoadingData = true;
@@ -39,7 +39,7 @@ app.controller('tabController', ['$q', '$scope', '$route', '$location', 'UserSer
         }];
 
         function findTab(name) {
-            var tab;
+            var tab = $scope.tabs[0];
             $scope.tabs.forEach(function (t) {
                 if (t.name === name) {
                     tab = t;
@@ -56,48 +56,43 @@ app.controller('tabController', ['$q', '$scope', '$route', '$location', 'UserSer
             }
         });
 
-        if ($scope.activeTab === undefined) {
-            $scope.activeTab = findTab('profile');
-        }
-
-        var pm, pf, pa;
-        UserService.loadUsers().then(function () {
-            pa = UserService.loadAvatars();
-            pf = UserService.loadFriends();
-            pm = MessageService.loadMessages();
-            $q.all([pm, pf, pa]).then(function () {
-                $scope.account = UserService.getUserById($scope.accountId);
-                $scope.isLoadingData = false;
-                $route.reload();
-            });
+        $http.get('/person/' + $scope.accountId).then(function (response) {
+            $scope.account = UserService.updatePerson(response.data, true);
+            $scope.account.avatar = './images/avatars/' + $scope.account.id + '.jpg';
+            $scope.isLoadingData = false;
         });
 
         $scope.onClickTab = function (name) {
             $scope.activeTab = findTab(name);
         };
 
-        return {
-            findTab: findTab
-        }
-
     }]);
 
 app.controller('profileController', ['UserService', '$http', '$scope', '$routeParams',
     function (UserService, $http, $scope, $routeParams) {
 
-        if ($scope.isLoadingData) {
-            return;
+        var id = $routeParams.profileId === undefined ? $scope.accountId : parseInt($routeParams.profileId);
+
+        getPerson(id);
+
+        function getPerson(id) {
+            $http.get('/person/' + id).then(function (response) {
+                $scope.profile = UserService.updatePerson(response.data, true);
+            });
         }
 
-        var id = $routeParams.profileId === undefined ? $scope.accountId : parseInt($routeParams.profileId);
-        $scope.profile = UserService.getUserById(id);
-
         $scope.addFriend = function (friendId) {
-            $scope.account.addFriend(friendId);
+            var url = '/friends/add/' + friendId;
+            $http.put(url, []).then(function () {
+                getPerson($scope.profile.id);
+            });
         };
 
         $scope.removeFriend = function (friendId) {
-            $scope.account.removeFriend(friendId);
+            var url = '/friends/remove/' + friendId;
+            $http.put(url, []).then(function () {
+                getPerson($scope.profile.id);
+            });
         };
 
     }]);
@@ -155,13 +150,8 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
             getPeople();
         });
 
-        //TODO: Delete redundant check after applying RESTfull services
-        if ($scope.isLoadingData) {
-            return;
-        }
-
         function getPeople() {
-            var url = '/friends?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = '/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
@@ -198,13 +188,8 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
             getPeople();
         });
 
-        //TODO: Delete redundant check after applying RESTfull services
-        if ($scope.isLoadingData) {
-            return;
-        }
-
         function getPeople() {
-            var url = '/people?page=' + ($scope.currentPage-1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = '/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
@@ -233,11 +218,6 @@ app.controller('messagesController', ['UserService', 'MessageService', '$http', 
 
         $scope.messageList = [];
 
-        //TODO: Delete redundant check after applying RESTfull services
-        if ($scope.isLoadingData) {
-            return;
-        }
-
         getLastMessages();
 
         function getLastMessages() {
@@ -254,15 +234,13 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         $scope.messageList = [];
 
-        //TODO: Delete redundant check after applying RESTfull services
-        if ($scope.isLoadingData) {
-            return;
+        if ($routeParams.profileId != undefined) {
+            var id = parseInt($routeParams.profileId);
+            $http.get('/person/' + id).then(function (response) {
+                $scope.profile = response.data;
+                getDialog();
+            });
         }
-
-        var id = $routeParams.profileId === undefined ? $scope.accountId : parseInt($routeParams.profileId);
-        $scope.profile = UserService.getUserById(id);
-
-        getDialog();
 
         function getDialog() {
             $http.get('/messages/' + $scope.profile.id).then(function (response) {
@@ -272,7 +250,7 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
         }
 
         $scope.sendMessage = function () {
-            var message = MessageService.addMessage($scope.accountId, $scope.profile.id, $scope.messageText);
+            var message = MessageService.addMessage($scope.account, $scope.profile, $scope.messageText);
             $http.post('messages/add', message).then(function () {
                 $scope.messageText = "";
                 getDialog();

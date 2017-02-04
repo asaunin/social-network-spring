@@ -39,6 +39,7 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 	@MockBean
 	private PersonService personService;
+
 	private final Pageable pageRequest = new PageRequest(0, 1);
 
 	private void shouldGetAListInJSonFormat(Page<PersonDTO> peoplePage, String urlTemplate) throws Exception {
@@ -75,14 +76,14 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldGetAListOfFollowersInJSonFormat() throws Exception {
+	public void shouldGetAListOfFriendsOfInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
 		        personService.getFriendOf("Alex", pageRequest),
                 "/friendOf.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
-	public void shouldReturnBadRequestWhenPersonMissing() throws Exception {
+	public void shouldReturnNotFoundResponseWhenPersonIsMissing() throws Exception {
 		final Person person = getDefaultPerson();
 
 		doThrow(new NoSuchElementException()).when(personService).addFriend(person.getId());
@@ -96,6 +97,19 @@ public class PersonControllerTest extends AbstractApplicationTest {
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound());
 
+	}
+
+	@Test
+	public void shouldReturnPersonWhenPersonExists() throws Exception {
+		final Person person = getDefaultPerson();
+
+		given(personService.getPerson(person.getId())).willReturn(new PersonDTO(person, person));
+
+		mvc.perform(get("/person/{personId}.json", person.getId())
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").value(person.getId()))
+				.andExpect(jsonPath("$.fullName").value(person.getFullName()));
 	}
 
 	@Test

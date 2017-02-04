@@ -4,14 +4,12 @@ import org.asaunin.socialnetwork.AbstractApplicationTest;
 import org.asaunin.socialnetwork.domain.Gender;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService.PersonDTO;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.transaction.Transactional;
 import java.util.GregorianCalendar;
@@ -28,14 +26,6 @@ public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Autowired
 	private PersonService personService;
-
-	@Before
-	public void setDefaultPerson() {
-		ReflectionTestUtils.setField(
-				personService,
-				"person",
-				getDefaultPerson());
-	}
 
 	@Test(expected = NoSuchElementException.class)
 	public void shouldReturnAnExceptionWhenThereIsNoPerson() throws Exception {
@@ -95,7 +85,7 @@ public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Test
 	@Transactional
-	public void shouldFindAllFriensOf() throws Exception {
+	public void shouldFindAllFriendOf() throws Exception {
 		final Page<PersonDTO> friendOf = personService.getFriendOf("", getDefaultPageRequest());
 
 		assertThat(friendOf).hasSize(4);
@@ -108,44 +98,39 @@ public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Test
 	@Transactional
+	public void shouldFindAPerson() throws Exception {
+		final PersonDTO person = personService.getPerson(1L);
+
+		assertThat(person)
+				.hasFieldOrPropertyWithValue("id", 1L)
+				.hasFieldOrPropertyWithValue("fullName", "Alex Saunin");
+	}
+
+	@Test
+	@Transactional
 	public void shouldAddAndRemoveAFriend() throws Exception {
-		final Person firstPerson = personService.findById(2L);
-		final Person secondPerson = personService.findById(3L);
+		final Person person = personService.getAuthorizedPerson();
+		final Person anotherPerson = personService.findById(15L);
 
 		// Check preconditions
-		assertFalse(firstPerson.hasFriend(secondPerson));
-		assertFalse(firstPerson.isFriendOf(secondPerson));
-		assertFalse(secondPerson.hasFriend(firstPerson));
-		assertFalse(secondPerson.isFriendOf(firstPerson));
+		assertFalse(person.hasFriend(anotherPerson));
+		assertFalse(person.isFriendOf(anotherPerson));
+		assertFalse(anotherPerson.hasFriend(person));
+		assertFalse(anotherPerson.isFriendOf(person));
 
-		// Check when firstPerson makes friendship with secondPerson
-		firstPerson.addFriend(secondPerson);
-		assertTrue(firstPerson.hasFriend(secondPerson));
-		assertFalse(firstPerson.isFriendOf(secondPerson));
-		assertFalse(secondPerson.hasFriend(firstPerson));
-		assertTrue(secondPerson.isFriendOf(firstPerson));
+		// Check when person makes friendship with anotherPerson
+		personService.addFriend(anotherPerson.getId());
+		assertTrue(person.hasFriend(anotherPerson));
+		assertFalse(person.isFriendOf(anotherPerson));
+		assertFalse(anotherPerson.hasFriend(person));
+		assertTrue(anotherPerson.isFriendOf(person));
 
-		// Check when secondPerson makes friendship with firstPerson
-		secondPerson.addFriend(firstPerson);
-		assertTrue(firstPerson.hasFriend(secondPerson));
-		assertTrue(firstPerson.isFriendOf(secondPerson));
-		assertTrue(secondPerson.hasFriend(firstPerson));
-		assertTrue(secondPerson.isFriendOf(firstPerson));
-
-		// Check when firstPerson severs friendship with secondPerson
-		firstPerson.removeFriend(secondPerson);
-		assertFalse(firstPerson.hasFriend(secondPerson));
-		assertTrue(firstPerson.isFriendOf(secondPerson));
-		assertTrue(secondPerson.hasFriend(firstPerson));
-		assertFalse(secondPerson.isFriendOf(firstPerson));
-
-		// Check when secondPerson severs friendship with firstPerson
-		secondPerson.removeFriend(firstPerson);
-		assertFalse(firstPerson.hasFriend(secondPerson));
-		assertFalse(firstPerson.isFriendOf(secondPerson));
-		assertFalse(secondPerson.hasFriend(firstPerson));
-		assertFalse(secondPerson.isFriendOf(firstPerson));
-
+		// Check when person severs friendship with anotherPerson
+		personService.removeFriend(anotherPerson.getId());
+		assertFalse(person.hasFriend(anotherPerson));
+		assertFalse(person.isFriendOf(anotherPerson));
+		assertFalse(anotherPerson.hasFriend(person));
+		assertFalse(anotherPerson.isFriendOf(person));
 	}
 
 }

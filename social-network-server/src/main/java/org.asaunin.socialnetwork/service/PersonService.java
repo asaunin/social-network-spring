@@ -1,7 +1,6 @@
 package org.asaunin.socialnetwork.service;
 
 import lombok.Getter;
-import org.asaunin.socialnetwork.domain.Gender;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +56,15 @@ public class PersonService {
 	}
 
 	@Transactional
+	public PersonDTO getPerson(Long personId) {
+		return new PersonDTO(findById(personId), person);
+	}
+
+	public Person getAuthorizedPerson() {
+		return person;
+	}
+
+	@Transactional
 	public void addFriend(Long personId) {
 		final Person friend = findById(personId);
 		if (!person.hasFriend(friend)) {
@@ -83,9 +91,10 @@ public class PersonService {
 		private String email;
 		private String phone;
 		private Date birthDate;
-		private Gender gender;
+		private String gender;
 		private Date created;
-		private boolean isFriend;
+		private boolean isMyFriend;
+		private boolean isFriendOfMine;
 
 		public PersonDTO(Person entity, Person person) {
 			this.id = entity.getId();
@@ -96,9 +105,10 @@ public class PersonService {
 			this.email = entity.getEmail();
 			this.phone = entity.getPhone();
 			this.birthDate = entity.getBirthDate();
-			this.gender = entity.getGender();
+			this.gender = entity.getGender().toString();
 			this.created = entity.getCreated();
-			this.isFriend = entity.isFriendOf(person);
+			this.isMyFriend = entity.isFriendOf(person);
+			this.isFriendOfMine = entity.hasFriend(person);
 		}
 
 	}

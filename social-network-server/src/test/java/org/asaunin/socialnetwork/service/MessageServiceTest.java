@@ -3,13 +3,11 @@ package org.asaunin.socialnetwork.service;
 import org.asaunin.socialnetwork.AbstractApplicationTest;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -23,14 +21,6 @@ public class MessageServiceTest extends AbstractApplicationTest {
 
     @Autowired
     private MessageService messageService;
-
-    @Before
-    public void setDefaultPerson() {
-        ReflectionTestUtils.setField(
-                messageService,
-                "person",
-                getDefaultPerson());
-    }
 
     @Test
     @Transactional

@@ -1,7 +1,7 @@
 <div class="container-fluid col-sm-12 view-container">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>{{profile.getName()}}</strong>
+            <strong>{{profile.fullName}}</strong>
         </div>
         <div class="panel-body">
             <div class="row">
@@ -11,14 +11,14 @@
                         <div class="col-lg-6 text-muted">
                             <p>First name:</p>
                             <p>Last name:</p>
-                            <p>Sex:</p>
+                            <p>Gender:</p>
                             <p>Date of birth:</p>
                         </div>
                         <div class="col-lg-3">
-                            <p>{{profile.first_name}}</p>
-                            <p>{{profile.last_name}}</p>
-                            <p>{{profile.getSex()}}</p>
-                            <p>{{profile.birth_date | date:"dd.MM.yyyy"}}</p>
+                            <p>{{profile.firstName}}</p>
+                            <p>{{profile.lastName}}</p>
+                            <p>{{profile.gender}}</p>
+                            <p>{{profile.birthDate | date: "dd.MM.yyyy"}}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -28,9 +28,9 @@
                             <p>Phone:</p>
                         </div>
                         <div class="col-lg-6">
-                            <p ng-show="profile.hasFriend(account.id) || account.id === profile.id">
+                            <p ng-show="profile.friendOfMine || account.id === profile.id">
                                 {{profile.email}}</p>
-                            <p ng-show="profile.hasFriend(account.id) || account.id === profile.id">
+                            <p ng-show="profile.friendOfMine || account.id === profile.id">
                                 {{profile.phone}}</p>
                         </div>
                     </div>
@@ -41,9 +41,9 @@
                     <p>Stock</p>
                     <p>Two smoking barrels</p>
                 </div>
-                <div class="col-lg-3" ng-hide="account === profile" align="center">
+                <div class="col-lg-3" ng-hide="account.id === profile.id" align="center">
                     <img class="img-rounded img-responsive center-block" alt="user_pic" width="150" height="150"
-                         ng-src="{{profile.getProfileAvatar()}}">
+                         ng-src="{{profile.avatar}}">
                     <br>
                     <p>
                         <button-send-message profile="profile"></button-send-message>
@@ -56,7 +56,6 @@
                 <div class="col-lg-5">
                 </div>
             </div>
-
         </div>
     </div>
 </div>

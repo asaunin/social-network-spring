@@ -11,11 +11,11 @@
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input ng-model="editableAccount.first_name" name="first_name" placeholder="First name"
+                            <input ng-model="editableAccount.firstName" name="firstName" placeholder="First name"
                                    class="form-control" type="text" required
-                                   maxlength="255" value='{{editableAccount.first_name}}'>
+                                   maxlength="255" value='{{editableAccount.firstName}}'>
                         </div>
-                        <p ng-show="userForm.first_name.$error.required" class="help-block">First name is required</p>
+                        <p ng-show="userForm.firstName.$error.required" class="help-block">First name is required</p>
                     </div>
                 </div>
                 <div class="form-group" show-errors="{ showSuccess: true }">
@@ -23,11 +23,11 @@
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input ng-model="editableAccount.last_name" name="last_name" placeholder="Last name"
+                            <input ng-model="editableAccount.lastName" name="lastName" placeholder="Last name"
                                    class="form-control" type="text" required maxlength="255"
-                                   value='{{editableAccount.last_name}}'>
+                                   value='{{editableAccount.lastName}}'>
                         </div>
-                        <p ng-show="userForm.last_name.$error.required" class="help-block">Last name is required</p>
+                        <p ng-show="userForm.lastName.$error.required" class="help-block">Last name is required</p>
                     </div>
                 </div>
                 <div class="form-group" show-errors="{ showSuccess: true }">
@@ -51,7 +51,7 @@
                             <input type="tel" ng-model="editableAccount.phone" name="phone" id="phone"
                                    placeholder="+79111234567"
                                    class="form-control" required value='{{editableAccount.phone}}'
-                                   ng-pattern="/^\+7[0-9]{10}$/">
+                                   ng-pattern="/^[0-9]{5,15}$/">
                         </div>
                         <p ng-show="userForm.phone.$error.required" class="help-block">Valid phone number is
                             required</p>
@@ -65,7 +65,7 @@
                                 <button type="button" class="btn btn-default" ng-click="chooseBirthDate()"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
-                            <input type="text" class="form-control" ng-model="editableAccount.birth_date"
+                            <input type="text" class="form-control" ng-model="editableAccount.birthDate"
                                    uib-datepicker-popup="dd.MM.yyyy"
                                    is-open="birthDate.opened" datepicker-options="dateOptions" required
                                    close-text="Close" placeholder="01.01.2001"/>
@@ -73,14 +73,16 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 control-label">Sex</label>
+                    <label class="col-md-4 control-label">Gender</label>
                     <div class="col-md-4">
-                        <label class="radio-inline"><input type="radio" name="sex" ng-model="editableAccount.sex"
-                                                           ng-value='1'>
-                            Male</label>
-                        <label class="radio-inline"><input type="radio" name="sex" ng-model="editableAccount.sex"
-                                                           ng-value='2'>
-                            Female</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" ng-model="editableAccount.gender" value='MALE'>
+                            Male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" ng-model="editableAccount.gender" value='FEMALE'>
+                            Female
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">

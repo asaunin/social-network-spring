@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -35,7 +36,7 @@ public class MessageController {
 
 	@PostMapping("/messages/add")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createMessage(@RequestBody Message message) {
+	public void createMessage(@Valid @RequestBody Message message) {
 		messageService.saveMessage(message);
 	}
 

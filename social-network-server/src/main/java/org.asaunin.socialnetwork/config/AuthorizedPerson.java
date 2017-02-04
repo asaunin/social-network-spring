@@ -10,12 +10,13 @@ import javax.transaction.Transactional;
 // Temporary bean while authentication is not yet implemented
 @Configuration
 @Transactional
-public class DefaultPerson {
+public class AuthorizedPerson {
 
 	@Bean
 	public Person person(PersonRepository personRepository) {
 		final Person person = personRepository.findOne(1L);
 		person.getFriends().isEmpty();
+		person.getFriendOf().isEmpty();
 		return person;
 	}
 

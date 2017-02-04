@@ -9,7 +9,7 @@
                     <li ng-class="['clearfix', message.alignment]">
                         <a href="#/messages/{{message.interlocutor.id}}" title="Send message">
                             <span ng-class="['chat-img', 'pull-' + message.alignment]">
-                            <ng-letter-avatar data={{message.avatar}} shape="round"></ng-letter-avatar>
+                            <ng-letter-avatar data={{message.interlocutor.avatar}} shape="round"></ng-letter-avatar>
                             </span>
                             <div class="chat-body clearfix">
                                 <div class="header">

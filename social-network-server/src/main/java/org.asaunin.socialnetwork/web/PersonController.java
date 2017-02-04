@@ -24,6 +24,11 @@ public class PersonController {
 		this.personService = personService;
 	}
 
+	@GetMapping("/person/{personId}")
+	public PersonDTO getPerson(@PathVariable("personId") Long personId) {
+		return personService.getPerson(personId);
+	}
+
 	@GetMapping("/people")
 	public Page<PersonDTO> getPersons(
 			@RequestParam(name = "searchTerm", defaultValue = "", required = false) String searchTerm,

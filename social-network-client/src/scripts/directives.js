@@ -19,7 +19,7 @@ app.directive('buttonRemoveFriend', function () {
             profile: '=',
             remove: '&'
         },
-        template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="profile.friend" ' +
+        template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="profile.myFriend" ' +
         'ng-class="profile === account ? \'link-disabled\' : \'\'" ng-click="remove()">' +
         '<span class="glyphicon glyphicon-minus-sign" title=""></span> Remove friend</a>',
         replace: true
@@ -34,7 +34,7 @@ app.directive('buttonAddFriend', function () {
             profile: '=',
             add: '&'
         },
-        template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="!profile.friend" ' +
+        template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="!profile.myFriend" ' +
         'ng-class="profile === account ? \'link-disabled\' : \'\'" ng-click="add()">' +
         '<span class="glyphicon glyphicon-minus-sign" title=""></span> Add friend</a>',
         replace: true
