@@ -5,13 +5,18 @@ import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.transaction.Transactional;
+
 // Temporary bean while authentication is not yet implemented
 @Configuration
+@Transactional
 public class DefaultPerson {
 
 	@Bean
-	Person person(PersonRepository personRepository) {
-		return personRepository.findOne(1L);
+	public Person person(PersonRepository personRepository) {
+		final Person person = personRepository.findOne(1L);
+		person.getFriends().isEmpty();
+		return person;
 	}
 
 }

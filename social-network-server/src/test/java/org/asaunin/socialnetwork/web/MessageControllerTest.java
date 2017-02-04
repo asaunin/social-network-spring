@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -44,7 +43,7 @@ public class MessageControllerTest extends AbstractApplicationTest {
         given(personService.findById(person.getId())).willReturn(person);
         given(messageService.getDialogWithPerson(person)).willReturn(Arrays.asList(message));
 
-        mvc.perform(get("/messages/1.json")
+        mvc.perform(get("/messages/{id}.json", person.getId())
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].body").value(DEFAULT_MESSAGE_TEXT));
@@ -73,7 +72,5 @@ public class MessageControllerTest extends AbstractApplicationTest {
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isCreated());
     }
-
-
 
 }
