@@ -39,4 +39,5 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 			Pageable pageRequest);
 
 	Optional<Person> findById(Long id);
+
 }

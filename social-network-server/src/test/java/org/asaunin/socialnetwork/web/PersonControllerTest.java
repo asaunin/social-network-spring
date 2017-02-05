@@ -113,6 +113,18 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
+	public void shouldUpdatePersonInformation() throws Exception {
+		final Person person = getDefaultPerson();
+
+		doNothing().when(personService).updatePerson(person);
+
+		mvc.perform(put("/person/update.json")
+				.content(convertObjectToJsonBytes(person))
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk());
+	}
+
+	@Test
 	public void shouldAddFriendWhenPersonExists() throws Exception {
 		final Person person = getDefaultPerson();
 

@@ -65,7 +65,7 @@ public class MessageControllerTest extends AbstractApplicationTest {
     public void shouldPostAMessage() throws Exception {
         final Message message = getDefaultMessage();
 
-        doNothing().when(messageService).saveMessage(message);
+        doNothing().when(messageService).postMessage(message);
 
         mvc.perform(post("/messages/add.json")
                 .content(convertObjectToJsonBytes(message))

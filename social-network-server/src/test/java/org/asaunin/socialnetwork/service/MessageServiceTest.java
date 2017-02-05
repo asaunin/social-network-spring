@@ -58,7 +58,7 @@ public class MessageServiceTest extends AbstractApplicationTest {
         final Person person = getDefaultPerson();
         final Collection<Message> before = messageService.getDialogWithPerson(person);
 
-        messageService.saveMessage(getDefaultMessage());
+        messageService.postMessage(getDefaultMessage());
 
         final Collection<Message> after = messageService.getDialogWithPerson(person);
 

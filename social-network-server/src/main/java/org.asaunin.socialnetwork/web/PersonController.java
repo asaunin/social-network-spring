@@ -1,5 +1,6 @@
 package org.asaunin.socialnetwork.web;
 
+import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
@@ -27,6 +29,11 @@ public class PersonController {
 	@GetMapping("/person/{personId}")
 	public PersonDTO getPerson(@PathVariable("personId") Long personId) {
 		return personService.getPerson(personId);
+	}
+
+	@PutMapping("/person/update")
+	public void updatePerson(@Valid @RequestBody Person person) {
+		personService.updatePerson(person);
 	}
 
 	@GetMapping("/people")

@@ -37,7 +37,7 @@ public class MessageController {
 	@PostMapping("/messages/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createMessage(@Valid @RequestBody Message message) {
-		messageService.saveMessage(message);
+		messageService.postMessage(message);
 	}
 
 }

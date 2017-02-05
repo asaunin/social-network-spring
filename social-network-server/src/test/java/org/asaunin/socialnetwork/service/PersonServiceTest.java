@@ -108,6 +108,21 @@ public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Test
 	@Transactional
+	public void shouldUpdatePersonInformation() throws Exception {
+		final Person person = personService.getAuthorizedPerson();
+		person.setGender(Gender.UNDEFINED);
+		personService.updatePerson(person);
+
+		final Person result = personService.findById(person.getId());
+
+		assertThat(result)
+				.hasFieldOrPropertyWithValue("id", 1L)
+				.hasFieldOrPropertyWithValue("fullName", "Alex Saunin")
+				.hasFieldOrPropertyWithValue("gender", Gender.UNDEFINED);
+	}
+
+	@Test
+	@Transactional
 	public void shouldAddAndRemoveAFriend() throws Exception {
 		final Person person = personService.getAuthorizedPerson();
 		final Person anotherPerson = personService.findById(15L);

@@ -80,6 +80,14 @@ public class PersonService {
 		}
 	}
 
+	public void updatePerson(Person person) {
+		// TODO: 05.02.2017 Better to write individual update query, that not affect the set's
+		final Person tmpPerson = findById(person.getId());
+		person.setFriends(tmpPerson.getFriends());
+		person.setFriendOf(tmpPerson.getFriendOf());
+		personRepository.save(person);
+	}
+
 	@Getter
 	public static class PersonDTO {
 

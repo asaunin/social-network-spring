@@ -71,14 +71,14 @@ public class Person {
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "person_id"),
 			inverseJoinColumns = @JoinColumn(name = "friend_id"))
-	@Getter @JsonIgnore
+	@Getter @Setter @JsonIgnore
 	private Set<Person> friends = new HashSet<>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "friends",
 			joinColumns = @JoinColumn(name = "friend_id"),
 			inverseJoinColumns = @JoinColumn(name = "person_id"))
-	@Getter @JsonIgnore
+	@Getter @Setter @JsonIgnore
 	private Set<Person> friendOf = new HashSet<>();
 
 	public boolean hasFriend(Person friend) {

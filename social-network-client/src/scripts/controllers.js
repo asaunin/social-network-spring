@@ -41,7 +41,7 @@ app.controller('tabController', ['$http', '$scope', '$route', '$location', 'User
         function findTab(name) {
             var tab = $scope.tabs[0];
             $scope.tabs.forEach(function (t) {
-                if (t.name === name) {
+                if (t.link === name) {
                     tab = t;
                     return t;
                 }
@@ -49,12 +49,7 @@ app.controller('tabController', ['$http', '$scope', '$route', '$location', 'User
             return tab;
         }
 
-        var path = $location.$$path.split('/')[1];
-        $scope.tabs.forEach(function (tab) {
-            if (path === tab.link) {
-                $scope.activeTab = tab;
-            }
-        });
+        $scope.activeTab = findTab($location.$$path.split('/')[1]);
 
         $http.get('/person/' + $scope.accountId).then(function (response) {
             $scope.account = UserService.updatePerson(response.data, true);
@@ -114,9 +109,11 @@ app.controller('settingsController', ['UserService', '$http', '$scope',
         $scope.editableAccount = Object.assign({}, $scope.account);
 
         $scope.updateAccount = function () {
-            $scope.account.update($scope.editableAccount);
-            $scope.userForm.$setPristine();
-            $scope.$broadcast('show-errors-reset');
+            $http.put('/person/update', $scope.editableAccount).then(function () {
+                $scope.account = $scope.editableAccount;
+                $scope.userForm.$setPristine();
+                $scope.$broadcast('show-errors-reset');
+            });
         };
 
         $scope.chooseBirthDate = function () {
