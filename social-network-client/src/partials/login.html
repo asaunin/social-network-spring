@@ -1,0 +1,49 @@
+<div class="container-fluid col-md-6 col-md-offset-3 view-container" ng-submit="loginForm.$valid && doLogin()">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Sign in to social-network.com</strong>
+        </div>
+        <div class="panel-body">
+            <form name="loginForm" autocomplete="off" class="form-signin" novalidate>
+                <div class="col-sm-12 col-md-10 col-md-offset-1 ">
+                    <div class="form-group" show-errors="{ showSuccess: true }">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input ng-model="login" class="form-control" id="email" name="email"
+                                   placeholder="email" type="email" required autocomplete="new-login" maxlength="255"/>
+                        </div>
+                        <p ng-show="loginForm.email.$error.required && loginForm.email.$dirty" class="help-block">The
+                            user's email is required</p>
+                        <p ng-show="loginForm.email.$error.email && loginForm.email.$dirty" class="help-block">The email
+                            address is invalid</p>
+                    </div>
+                    <div class="form-group" show-errors="{ showSuccess: true }">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="password" class="form-control" id="password" name="password"
+                                   placeholder="password" type="password" autocomplete="new-password" required
+                                   maxlength="255"/>
+                        </div>
+                        <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" class="help-block">
+                            Password is required</p>
+                        <p ng-show="loginForm.password.$error.password && loginForm.password.$dirty" class="help-block">
+                            Password is invalid</p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input id="remember-me" name="remember-me" type="checkbox"/> Remember me
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="col-sm-12"
+                               ng-class="['btn btn-primary', loginForm.$valid && loginForm.$dirty ? '' : 'disabled']"
+                               value="Sign-in"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel-footer" align="center">Don't have an account?
+            <a href="#/register">Sign up here...</a>
+        </div>
+    </div>
+</div>

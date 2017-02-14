@@ -255,3 +255,12 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
         };
 
     }]);
+
+app.controller('loginController', ['$scope',
+    function ($scope) {
+
+        $scope.doLogin = function () {
+
+        };
+
+    }]);
