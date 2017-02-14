@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(PersonController.class)
-@EnableSpringDataWebSupport
+@WebMvcTest(value = PersonController.class, secure = false)
+@EnableSpringDataWebSupport //For pagination
 public class PersonControllerTest extends AbstractApplicationTest {
 
 	@Autowired
@@ -58,7 +58,6 @@ public class PersonControllerTest extends AbstractApplicationTest {
 				.andExpect(jsonPath("$.totalPages").value(2))
 				.andExpect(jsonPath("$.content[0].id").value(1L))
 				.andExpect(jsonPath("$.content[0].fullName").value("Alex Saunin"));
-
 	}
 
 	@Test
@@ -96,7 +95,6 @@ public class PersonControllerTest extends AbstractApplicationTest {
 		mvc.perform(put("/friends/remove/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound());
-
 	}
 
 	@Test

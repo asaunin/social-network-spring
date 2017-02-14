@@ -51,7 +51,6 @@ public class MessageServiceTest extends AbstractApplicationTest {
                         tuple(20L, "Buddy, can you add me in your friend list? Thx"));
     }
 
-
     @Test
     @Transactional
     public void shouldSaveMessage() throws Exception {
@@ -67,6 +66,5 @@ public class MessageServiceTest extends AbstractApplicationTest {
                 .extracting("body")
                 .contains(DEFAULT_MESSAGE_TEXT);
     }
-
 
 }

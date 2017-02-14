@@ -6,20 +6,21 @@ import org.asaunin.socialnetwork.domain.jpa.GenderConverter;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name = "persons")
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"email", "created"})
 @ToString(of = {"id", "fullName"})
-public class Person {
+public class Person implements UserDetails, Serializable {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
@@ -127,6 +128,41 @@ public class Person {
 
 	public static PersonBuilder builder() {
 		return new PersonBuilder();
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public String getPassword() {
+		return null;
+	}
+
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 	@ToString(of = {"id", "firstName", "lastName"})

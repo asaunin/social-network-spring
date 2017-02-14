@@ -13,6 +13,10 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 
 	Person findByShortName(String shortName);
 
+	Person findByEmail(String email);
+
+	Optional<Person> findById(Long id);
+
 	@Query("SELECT p FROM Person p " +
 			"WHERE LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
 			"ORDER BY p.fullName")
@@ -37,7 +41,5 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 			@Param("person") Person person,
 			@Param("searchTerm") String searchTerm,
 			Pageable pageRequest);
-
-	Optional<Person> findById(Long id);
 
 }

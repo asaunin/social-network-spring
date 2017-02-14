@@ -1,6 +1,8 @@
 package org.asaunin.socialnetwork.domain;
 
-public enum Gender {
+import java.io.Serializable;
+
+public enum Gender implements Serializable {
 
 	UNDEFINED(0), MALE(1), FEMALE(2);
 

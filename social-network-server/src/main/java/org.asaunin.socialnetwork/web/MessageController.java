@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
+//@RequestMapping(value = Constants.URI_API_PREFIX) // TODO: 15.02.2017 Refactor api mapping
 public class MessageController {
 
 	private final MessageService messageService;

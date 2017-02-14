@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import static org.asaunin.socialnetwork.service.PersonService.PersonDTO;
 
 @RestController
+//@RequestMapping(value = Constants.URI_API_PREFIX) // TODO: 15.02.2017 Refactor api mapping
 public class PersonController {
 
 	private final PersonService personService;

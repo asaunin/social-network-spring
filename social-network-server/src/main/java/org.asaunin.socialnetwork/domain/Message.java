@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"sender", "recipient", "posted"})
 @ToString(of = {"id", "body"})
-public class Message {
+public class Message implements Serializable{
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
