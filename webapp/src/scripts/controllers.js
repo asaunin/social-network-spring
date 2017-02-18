@@ -51,7 +51,7 @@ app.controller('tabController', ['$http', '$scope', '$route', '$location', 'User
 
         $scope.activeTab = findTab($location.$$path.split('/')[1]);
 
-        $http.get('/person/' + $scope.accountId).then(function (response) {
+        $http.get('/api/person/' + $scope.accountId).then(function (response) {
             $scope.account = UserService.updatePerson(response.data, true);
             $scope.account.avatar = './images/avatars/' + $scope.account.id + '.jpg';
             $scope.isLoadingData = false;
@@ -71,20 +71,20 @@ app.controller('profileController', ['UserService', '$http', '$scope', '$routePa
         getPerson(id);
 
         function getPerson(id) {
-            $http.get('/person/' + id).then(function (response) {
+            $http.get('/api/person/' + id).then(function (response) {
                 $scope.profile = UserService.updatePerson(response.data, true);
             });
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/friends/add/' + friendId;
+            var url = '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPerson($scope.profile.id);
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/friends/remove/' + friendId;
+            var url = '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPerson($scope.profile.id);
             });
@@ -109,7 +109,7 @@ app.controller('settingsController', ['UserService', '$http', '$scope',
         $scope.editableAccount = Object.assign({}, $scope.account);
 
         $scope.updateAccount = function () {
-            $http.put('/person/update', $scope.editableAccount).then(function () {
+            $http.put('/api/person/update', $scope.editableAccount).then(function () {
                 $scope.account = $scope.editableAccount;
                 $scope.userForm.$setPristine();
                 $scope.$broadcast('show-errors-reset');
@@ -148,7 +148,7 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         });
 
         function getPeople() {
-            var url = '/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = '/api/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
@@ -157,14 +157,14 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/friends/add/' + friendId;
+            var url = '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/friends/remove/' + friendId;
+            var url = '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
@@ -186,7 +186,7 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         });
 
         function getPeople() {
-            var url = '/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = '/api/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = UserService.updatePeople(response.data.content);
                 $scope.totalElements = response.data.totalElements;
@@ -195,14 +195,14 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/friends/add/' + friendId;
+            var url = '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/friends/remove/' + friendId;
+            var url = '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
@@ -218,7 +218,7 @@ app.controller('messagesController', ['UserService', 'MessageService', '$http', 
         getLastMessages();
 
         function getLastMessages() {
-            $http.get('/messages/last').then(function (response) {
+            $http.get('/api/messages/last').then(function (response) {
                 $scope.messageList = MessageService.updateLastMessages(response.data, $scope.accountId);
                 MessageService.scrollElement("chat");
             });
@@ -233,14 +233,14 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         if ($routeParams.profileId != undefined) {
             var id = parseInt($routeParams.profileId);
-            $http.get('/person/' + id).then(function (response) {
+            $http.get('/api/person/' + id).then(function (response) {
                 $scope.profile = response.data;
                 getDialog();
             });
         }
 
         function getDialog() {
-            $http.get('/messages/' + $scope.profile.id).then(function (response) {
+            $http.get('/api/messages/' + $scope.profile.id).then(function (response) {
                 $scope.messageList = MessageService.updateMessages(response.data, $scope.accountId);
                 MessageService.scrollElement("chat");
             });
@@ -248,7 +248,7 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         $scope.sendMessage = function () {
             var message = MessageService.addMessage($scope.account, $scope.profile, $scope.messageText);
-            $http.post('messages/add', message).then(function () {
+            $http.post('/api/messages/add', message).then(function () {
                 $scope.messageText = "";
                 getDialog();
             });

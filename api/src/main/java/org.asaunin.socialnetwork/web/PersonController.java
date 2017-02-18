@@ -1,5 +1,6 @@
 package org.asaunin.socialnetwork.web;
 
+import org.asaunin.socialnetwork.config.Constants;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 import static org.asaunin.socialnetwork.service.PersonService.PersonDTO;
 
 @RestController
-//@RequestMapping(value = Constants.URI_API_PREFIX) // TODO: 15.02.2017 Refactor api mapping
+@RequestMapping(value = Constants.URI_API_PREFIX)
 public class PersonController {
 
 	private final PersonService personService;

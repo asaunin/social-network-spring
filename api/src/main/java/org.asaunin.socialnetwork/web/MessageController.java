@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 
+import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
+import static org.asaunin.socialnetwork.config.Constants.URI_MESSAGES;
+
 @RestController
-//@RequestMapping(value = Constants.URI_API_PREFIX) // TODO: 15.02.2017 Refactor api mapping
+@RequestMapping(value = URI_API_PREFIX + URI_MESSAGES)
 public class MessageController {
 
 	private final MessageService messageService;
@@ -24,18 +27,18 @@ public class MessageController {
 		this.personService = personService;
 	}
 
-	@GetMapping("/messages/{interlocutorId}")
+	@GetMapping(value = "/{interlocutorId}")
 	public Collection<Message> showDialog(@PathVariable("interlocutorId") Long interlocutorId) {
 		final Person interlocutor = personService.findById(interlocutorId);
 		return messageService.getDialogWithPerson(interlocutor);
 	}
 
-	@GetMapping("/messages/last")
+	@GetMapping(value = "/last")
 	public Collection<Message> showLastMessages() {
 		return messageService.getLastMessages();
 	}
 
-	@PostMapping("/messages/add")
+	@PostMapping(value = "/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createMessage(@Valid @RequestBody Message message) {
 		messageService.postMessage(message);

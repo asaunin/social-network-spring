@@ -52,7 +52,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		given(peoplePage).willReturn(value);
 
-		mvc.perform(get(urlTemplate)
+		mvc.perform(
+				get(urlTemplate)
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.totalPages").value(2))
@@ -64,21 +65,21 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	public void shouldGetAListOfPeopleInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
 		        personService.getPeople("Alex", pageRequest),
-                "/people.json?size=1&searchTerm=Alex");
+                "/api/people.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
 	public void shouldGetAListOfFriendsInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
 		        personService.getFriends("Alex", pageRequest),
-                "/friends.json?size=1&searchTerm=Alex");
+                "/api/friends.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
 	public void shouldGetAListOfFriendsOfInJSonFormat() throws Exception {
 		shouldGetAListInJSonFormat(
 		        personService.getFriendOf("Alex", pageRequest),
-                "/friendOf.json?size=1&searchTerm=Alex");
+                "/api/friendOf.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
@@ -88,11 +89,13 @@ public class PersonControllerTest extends AbstractApplicationTest {
 		doThrow(new NoSuchElementException()).when(personService).addFriend(person.getId());
 		doThrow(new NoSuchElementException()).when(personService).removeFriend(person.getId());
 
-		mvc.perform(put("/friends/add/{personId}.json", person.getId())
+		mvc.perform(
+				put("/api/friends/add/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound());
 
-		mvc.perform(put("/friends/remove/{personId}.json", person.getId())
+		mvc.perform(
+				put("/api/friends/remove/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound());
 	}
@@ -103,7 +106,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		given(personService.getPerson(person.getId())).willReturn(new PersonDTO(person, person));
 
-		mvc.perform(get("/person/{personId}.json", person.getId())
+		mvc.perform(
+				get("/api/person/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(person.getId()))
@@ -116,7 +120,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		doNothing().when(personService).updatePerson(person);
 
-		mvc.perform(put("/person/update.json")
+		mvc.perform(
+				put("/api/person/update.json")
 				.content(convertObjectToJsonBytes(person))
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
@@ -128,7 +133,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		doNothing().when(personService).addFriend(person.getId());
 
-		mvc.perform(put("/friends/add/{personId}.json", person.getId())
+		mvc.perform(
+				put("/api/friends/add/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}
@@ -139,7 +145,8 @@ public class PersonControllerTest extends AbstractApplicationTest {
 
 		doNothing().when(personService).addFriend(person.getId());
 
-		mvc.perform(put("/friends/remove/{personId}.json", person.getId())
+		mvc.perform(
+				put("/api/friends/remove/{personId}.json", person.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk());
 	}

@@ -15,8 +15,8 @@
     </properties>
 
     <modules>
-        <module>social-network-client</module>
-        <module>social-network-server</module>
+        <module>webapp</module>
+        <module>api</module>
     </modules>
 
     <parent>

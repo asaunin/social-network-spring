@@ -15,17 +15,18 @@ spring:
       ddl-auto: update
 
   resources:
-    static-locations: "classpath:/static/,file:social-network-client/src/,file:social-network-client/bower_components/"
+    static-locations: "classpath:/static/,file:webapp/src/,file:webapp/bower_components/"
 
   devtools:
     restart:
-      additional-paths: "social-network-client/src/,social-network-client/bower_components/"
+      additional-paths: "webapp/src/,webapp/bower_components/"
       additional-exclude: "**/*.html,**/*.js,**/*.css"
 
   thymeleaf:
     cache: false
 
 debug: true
+
 
 
 
