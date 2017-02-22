@@ -10,7 +10,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "messages")
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"sender", "recipient", "posted"})
 @ToString(of = {"id", "body"})
 public class Message implements Serializable{

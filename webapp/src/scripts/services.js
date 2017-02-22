@@ -6,19 +6,6 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
 
     avatars.put(0, './images/avatars/undefined.gif');
 
-    // function loadAvatars() {
-    //     users.forEach(function (user) {
-    //         if (user.avatar === undefined) {
-    //             var url = './images/avatars/' + user.id + '.jpg';
-    //             user.avatar = './images/avatars/undefined.gif';
-    //             $http.get(url).then(function (result) {
-    //                 user.avatar = url;
-    //                 avatars.put(user.id, url);
-    //             });
-    //         }
-    //     });
-    // }
-
     function updatePeople(people) {
         people.forEach(function (person) {
             person = updatePerson(person);
@@ -45,9 +32,22 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
         return person;
     }
 
+    function getAvatar(id) {
+        var avatar = avatars.get(id);
+        if (!avatar) {
+            var url = './images/avatars/' + id + '.jpg';
+            $http.get(url).then(function () {
+                avatars.put(id, url);
+            });
+            avatar = avatars.get(0)
+        }
+        return avatar;
+    }
+
     return {
         updatePeople: updatePeople,
-        updatePerson: updatePerson
+        updatePerson: updatePerson,
+        getAvatar: getAvatar
     }
 
 }]);

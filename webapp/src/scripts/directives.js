@@ -6,7 +6,8 @@ app.directive('buttonSendMessage', function () {
         scope: {
             profile: '='
         },
-        template: '<a href="#/messages/{{profile.id}}" role="button" class="btn btn-secondary btn-sm"><span class="glyphicon glyphicon-envelope"></span> Send message</a>',
+        template: '<a href="#/messages/{{profile.id}}" role="button" class="btn btn-secondary btn-sm">' +
+        '<span class="glyphicon glyphicon-envelope"></span> Send message</a>',
         replace: true
     };
 });
@@ -15,12 +16,11 @@ app.directive('buttonRemoveFriend', function () {
     return {
         restrict: 'E',
         scope: {
-            account: '=',
             profile: '=',
             remove: '&'
         },
         template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="profile.myFriend" ' +
-        'ng-class="profile === account ? \'link-disabled\' : \'\'" ng-click="remove()">' +
+        'ng-class="profile.id === $root.profileId ? \'link-disabled\' : \'\'" ng-click="remove()">' +
         '<span class="glyphicon glyphicon-minus-sign" title=""></span> Remove friend</a>',
         replace: true
     };
@@ -30,12 +30,11 @@ app.directive('buttonAddFriend', function () {
     return {
         restrict: 'E',
         scope: {
-            account: '=',
             profile: '=',
             add: '&'
         },
         template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="!profile.myFriend" ' +
-        'ng-class="profile === account ? \'link-disabled\' : \'\'" ng-click="add()">' +
+        'ng-class="profile.id === $root.profileId ? \'link-disabled\' : \'\'" ng-click="add()">' +
         '<span class="glyphicon glyphicon-minus-sign" title=""></span> Add friend</a>',
         replace: true
     };

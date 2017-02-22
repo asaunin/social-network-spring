@@ -1,4 +1,4 @@
-<div class="container-fluid col-sm-12 view-container" ng-submit="userForm.$valid && updateAccount()">
+<div class="container-fluid col-sm-12 view-container" ng-show="authenticated" ng-submit="userForm.$valid && updateAccount()">
     <div class="panel panel-default ">
         <div class="panel-heading">
             <strong>Profile settings</strong>

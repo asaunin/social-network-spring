@@ -5,8 +5,10 @@ import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.MessageService;
 import org.asaunin.socialnetwork.service.PersonService;
+import org.asaunin.socialnetwork.web.dto.MessageDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +30,9 @@ public class MessageControllerTest extends AbstractApplicationTest {
 
 	@Autowired
 	private MockMvc mvc;
+
+	@MockBean
+	private ModelMapper mapper;
 
 	@MockBean
 	private MessageService messageService;
@@ -65,13 +70,15 @@ public class MessageControllerTest extends AbstractApplicationTest {
 
 	@Test
 	public void shouldPostAMessage() throws Exception {
+		final MessageDTO messageDTO = getDefaultMessageDTO();
 		final Message message = getDefaultMessage();
 
+		given(mapper.map(messageDTO, Message.class)).willReturn(message);
 		doNothing().when(messageService).postMessage(message);
 
 		mvc.perform(
 				post("/api/messages/add.json")
-						.content(convertObjectToJsonBytes(message))
+						.content(convertObjectToJsonBytes(messageDTO))
 						.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isCreated());
 	}

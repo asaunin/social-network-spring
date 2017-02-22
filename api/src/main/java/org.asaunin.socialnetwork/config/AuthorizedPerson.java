@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.transaction.Transactional;
 
-// Temporary bean while authentication is not yet implemented
+// TODO: 22.02.2017 Remove this class, when authentication problem will be solved completely
 @Configuration
 @Transactional
 public class AuthorizedPerson {

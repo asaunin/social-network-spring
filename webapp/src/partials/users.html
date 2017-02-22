@@ -1,4 +1,4 @@
-<div class="container-fluid col-sm-12 view-container">
+<div class="container-fluid col-sm-12 view-container" ng-show="authenticated">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>{{activeTab.title}}</strong>
@@ -30,8 +30,8 @@
                 <td class="col-md-2 border-bottom">
                     <button-send-message profile="person"></button-send-message>
                     <br>
-                    <button-remove-friend account="account" profile="person" remove="removeFriend(person.id)"></button-remove-friend>
-                    <button-add-friend account="account" profile="person" add="addFriend(person.id)"></button-add-friend>
+                    <button-remove-friend profile="person" remove="removeFriend(person.id)"></button-remove-friend>
+                    <button-add-friend profile="person" add="addFriend(person.id)"></button-add-friend>
                 </td>
             </tr>
         </table>

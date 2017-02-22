@@ -1,6 +1,9 @@
 var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ui.bootstrap.showErrors', 'ngLetterAvatar']);
 
-app.config(['$routeProvider', function ($routeProvider) {
+app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+
+    $httpProvider.interceptors.push('responseObserver');
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $routeProvider
         .when('/profile', {
@@ -44,3 +47,19 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 }]);
 
+app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($rootScope, $q, $location) {
+
+    return {
+        'responseError': function (errorResponse) {
+            switch (errorResponse.status) {
+                case 403:
+                    if ($location.path() != "login") {
+                        $rootScope.targetUrl = "#" + $location.path();
+                    }
+                    $location.path("/login");
+                    break;
+            }
+            return $q.reject(errorResponse);
+        }
+    };
+}]);

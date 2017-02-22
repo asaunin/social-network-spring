@@ -36,7 +36,7 @@
 </head>
 
 <body id="body">
-<div class="container" id="maincont" ng-controller="tabController" ng-hide="isLoadingData">
+<div class="container" id="maincont" ng-controller="tabController">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -51,9 +51,16 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-click="onClickTab('profile')"><a href="#/settings"><span
-                            class="glyphicon glyphicon-user"></span><strong> My profile</strong></a></li>
-                    <!--<li><a href="#"><span class="glyphicon glyphicon-log-out"></span><strong> Logout</strong></a></li>-->
+                    <li ng-show="authenticated" ng-click="onClickTab('profile')">
+                        <a href="#/settings">
+                            <span class="glyphicon glyphicon-user"></span><strong> My profile</strong>
+                        </a>
+                    </li>
+                    <li ng-show="authenticated" ng-click="logout()">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-log-out"></span><strong> Logout</strong>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -62,11 +69,12 @@
         <div class="col-sm-2">
             <div class="well">
                 <img class="img-rounded img-responsive center-block" alt="user_pic"
-                     ng-src="{{account.avatar}}">
+                     ng-src="{{avatar}}">
             </div>
             <div class="well" id="tabs">
                 <ul class="nav nav-pills nav-stacked">
-                    <li ng-repeat="tab in tabs | filter: { visible : true }" ng-class="tab.name === activeTab.name ? 'active': ''"
+                    <li ng-repeat="tab in tabs | filter: { visible : true }"
+                        ng-class="tab.name === activeTab.name ? 'active': ''"
                         ng-click="onClickTab(tab.name)">
                         <a href=#/{{tab.name}}><strong>{{tab.title}}</strong></a>
                     </li>

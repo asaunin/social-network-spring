@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
+import org.asaunin.socialnetwork.web.dto.MessageDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -31,6 +32,15 @@ public abstract class AbstractApplicationTest {
         msg.setBody(DEFAULT_MESSAGE_TEXT);
         msg.setSender(person);
         msg.setRecipient(person);
+        return msg;
+    }
+
+    protected MessageDTO getDefaultMessageDTO() {
+        final Person person = getDefaultPerson();
+        final MessageDTO msg = new MessageDTO();
+        msg.setBody(DEFAULT_MESSAGE_TEXT);
+        msg.setSender(person.getId());
+        msg.setRecipient(person.getId());
         return msg;
     }
 

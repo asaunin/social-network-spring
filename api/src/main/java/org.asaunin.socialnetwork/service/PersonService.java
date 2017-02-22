@@ -89,6 +89,7 @@ public class PersonService {
 	}
 
 	@Getter
+	// TODO: 22.02.2017 Move to the DTO package
 	public static class PersonDTO {
 
 		private Long id;

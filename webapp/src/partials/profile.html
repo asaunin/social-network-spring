@@ -1,4 +1,4 @@
-<div class="container-fluid col-sm-12 view-container">
+<div class="container-fluid col-sm-12 view-container" ng-show="authenticated">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>{{profile.fullName}}</strong>
@@ -28,9 +28,9 @@
                             <p>Phone:</p>
                         </div>
                         <div class="col-lg-6">
-                            <p ng-show="profile.friendOfMine || account.id === profile.id">
+                            <p ng-show="profile.friendOfMine || profileId === profile.id">
                                 {{profile.email}}</p>
-                            <p ng-show="profile.friendOfMine || account.id === profile.id">
+                            <p ng-show="profile.friendOfMine || profileId === profile.id">
                                 {{profile.phone}}</p>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <p>Stock</p>
                     <p>Two smoking barrels</p>
                 </div>
-                <div class="col-lg-3" ng-hide="account.id === profile.id" align="center">
+                <div class="col-lg-3" ng-hide="profileId === profile.id" align="center">
                     <img class="img-rounded img-responsive center-block" alt="user_pic" width="150" height="150"
                          ng-src="{{profile.avatar}}">
                     <br>

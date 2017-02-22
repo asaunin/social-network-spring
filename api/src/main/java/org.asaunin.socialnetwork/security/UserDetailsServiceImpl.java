@@ -21,13 +21,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final Person profile = personRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO: 22.02.2017 Provide authentication both by login & email
+        final Person profile = personRepository.findByEmail(username);
         if (profile == null) {
-            throw new UsernameNotFoundException("Profile is not found:" + email);
+            throw new UsernameNotFoundException("Profile is not found:" + username);
         }
 
-        log.debug("Profile was found by email @" + email);
+        log.debug("Profile was found by username @" + username);
 
         return profile;
     }

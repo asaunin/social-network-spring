@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
@@ -50,6 +51,12 @@ public class Person implements UserDetails, Serializable {
 	@Column(unique = true)
 	@Getter @Setter
 	private String email;
+
+	@JsonIgnore
+	@NotNull
+	@Size(min = 60, max = 60)
+	@Getter @Setter
+	private String password;
 
 	@Digits(fraction = 0, integer = 15)
 	@Getter @Setter
@@ -133,11 +140,6 @@ public class Person implements UserDetails, Serializable {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.emptyList();
-	}
-
-	@Override
-	public String getPassword() {
-		return null;
 	}
 
 	@Override
