@@ -19,7 +19,7 @@ import java.util.*;
 @Entity
 @Table(name = "persons")
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"email", "created"})
+@EqualsAndHashCode(of = {"email"})
 @ToString(of = {"id", "fullName"})
 public class Person implements UserDetails, Serializable {
 
@@ -121,12 +121,13 @@ public class Person implements UserDetails, Serializable {
 		this.fullName = String.format("%s %s", this.firstName, this.lastName);
 	}
 
-	public Person(Long id, String firstName, String lastName, String shortName, String email, String phone, Date birthDate, Gender gender) {
+	public Person(Long id, String firstName, String lastName, String shortName, String email, String password, String phone, Date birthDate, Gender gender) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.shortName = shortName;
 		this.email = email;
+		this.password = password;
 		this.phone = phone;
 		this.birthDate = birthDate;
 		this.gender = gender;
@@ -175,6 +176,7 @@ public class Person implements UserDetails, Serializable {
 		private String lastName;
 		private String shortName;
 		private String email;
+		private String password;
 		private String phone;
 		private Date birthDate;
 		private Gender gender = Gender.UNDEFINED;
@@ -207,6 +209,11 @@ public class Person implements UserDetails, Serializable {
 			return this;
 		}
 
+		public PersonBuilder password(@NonNull String password) {
+			this.password = password;
+			return this;
+		}
+
 		public PersonBuilder phone(String phone) {
 			this.phone = phone;
 			return this;
@@ -223,7 +230,7 @@ public class Person implements UserDetails, Serializable {
 		}
 
 		public Person build() {
-			return new Person(id, firstName, lastName, shortName, email, phone, birthDate, gender);
+			return new Person(id, firstName, lastName, shortName, email, password, phone, birthDate, gender);
 		}
 
 	}

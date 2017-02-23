@@ -2,6 +2,7 @@ package org.asaunin.socialnetwork.config;
 
 import org.asaunin.socialnetwork.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -36,10 +36,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/images/**").permitAll()
 				.antMatchers("/api/**").authenticated()
 				.and()
-			.formLogin()
-				.loginPage("/api/login")
-				.permitAll()
-				.and()
+//			.formLogin()
+//				.loginPage("/api/login")
+//				.permitAll()
+//				.and()
 			.logout()
 				.logoutUrl("/api/logout")
 				.permitAll()
@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //			.rememberMe()
 //				.disable()
 			.exceptionHandling()
-                .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Access Denied"))
 				.and()
 		// TODO: 22.02.2017 Add remember me
 		// TODO: 22.02.2017 Add tokens

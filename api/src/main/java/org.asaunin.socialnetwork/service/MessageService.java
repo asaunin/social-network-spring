@@ -6,30 +6,28 @@ import org.asaunin.socialnetwork.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @Service
 public class MessageService {
 
-	private final Person person;
 	private MessageRepository messageRepository;
 
 	@Autowired
-	public MessageService(Person person, MessageRepository messageRepository){
-		this.person = person;
+	public MessageService(MessageRepository messageRepository){
 		this.messageRepository = messageRepository;
 	}
 
-	public Collection<Message> getDialogWithPerson(Person interlocutor) {
+	public List<Message> getDialog(Person person, Person interlocutor) {
 		return messageRepository.findByRecipientOrSenderOrderByPostedDesc(person, interlocutor);
 	}
 
-	public Collection<Message> getLastMessages() {
+	public List<Message> getLastMessages(Person person) {
 		return messageRepository.findLastMessagesByPerson(person);
 	}
 
-	public void postMessage(Message message) {
-		messageRepository.save(message);
+	public Message send(Message message) {
+		return messageRepository.save(message);
 	}
 
 }

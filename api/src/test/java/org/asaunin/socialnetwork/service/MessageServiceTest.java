@@ -22,13 +22,15 @@ public class MessageServiceTest extends AbstractApplicationTest {
     @Autowired
     private MessageService messageService;
 
+    private final Person person = getDefaultPerson();
+
     @Test
     @Transactional
     public void shouldFindAllDialogMessagesWithPerson() throws Exception {
         final Person interlocutor = Person.builder()
                 .id(6L)
                 .build();
-        final Collection<Message> messages = messageService.getDialogWithPerson(interlocutor);
+        final Collection<Message> messages = messageService.getDialog(person, interlocutor);
 
         assertThat(messages).hasSize(5);
         assertThat(messages)
@@ -41,7 +43,7 @@ public class MessageServiceTest extends AbstractApplicationTest {
     @Test
     @Transactional
     public void shouldFindAllLastMessagesByPerson() throws Exception {
-        final Collection<Message> messages = messageService.getLastMessages();
+        final Collection<Message> messages = messageService.getLastMessages(person);
 
         assertThat(messages).hasSize(5);
         assertThat(messages)
@@ -54,12 +56,11 @@ public class MessageServiceTest extends AbstractApplicationTest {
     @Test
     @Transactional
     public void shouldSaveMessage() throws Exception {
-        final Person person = getDefaultPerson();
-        final Collection<Message> before = messageService.getDialogWithPerson(person);
+        final Collection<Message> before = messageService.getDialog(person, person);
 
-        messageService.postMessage(getDefaultMessage());
+        messageService.send(getDefaultMessage());
 
-        final Collection<Message> after = messageService.getDialogWithPerson(person);
+        final Collection<Message> after = messageService.getDialog(person, person);
 
         assertThat(before.size()).isEqualTo(after.size() - 1);
         assertThat(after)

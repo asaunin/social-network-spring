@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
@@ -15,7 +16,7 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"WHERE m.sender = :sender AND m.recipient = :recipient " +
 			"   OR m.sender = :recipient AND m.recipient = :sender " +
 			"ORDER BY m.posted DESC")
-	Collection<Message> findByRecipientOrSenderOrderByPostedDesc(
+	List<Message> findByRecipientOrSenderOrderByPostedDesc(
 			@Param("sender") Person sender,
 			@Param("recipient") Person recipient);
 
@@ -32,6 +33,6 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 			"           ELSE :person " +
 			"       END) " +
 			"ORDER BY m.posted DESC")
-	Collection<Message> findLastMessagesByPerson(@Param("person") Person person);
+	List<Message> findLastMessagesByPerson(@Param("person") Person person);
 
 }

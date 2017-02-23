@@ -52,7 +52,7 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
     return {
         'responseError': function (errorResponse) {
             switch (errorResponse.status) {
-                case 403:
+                case 401:
                     if ($location.path() != "login") {
                         $rootScope.targetUrl = "#" + $location.path();
                     }

@@ -2,8 +2,11 @@ package org.asaunin.socialnetwork.web;
 
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.security.CurrentProfile;
-import org.asaunin.socialnetwork.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.asaunin.socialnetwork.web.dto.PersonDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,16 +17,22 @@ import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
 @RequestMapping(value = URI_API_PREFIX)
 public class ProfileController {
 
-	private final PersonService personService;
-
-	@Autowired
-	public ProfileController(PersonService personService) {
-		this.personService = personService;
-	}
+	private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
 	@GetMapping("/login")
-	public PersonService.PersonDTO getPerson(@CurrentProfile Person profile) {
-		return personService.getPerson(profile.getId());
+	public ResponseEntity<PersonDTO> getCurrent(@CurrentProfile Person profile) {
+		log.warn("REST request to get current profile:{}", profile);
+
+		if (null == profile) {
+			log.warn("Attempt getting unauthorised profile information failed");
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.build();
+		}
+
+		return new ResponseEntity<>(
+				new PersonDTO(profile),
+				HttpStatus.OK);
 	}
 
 }

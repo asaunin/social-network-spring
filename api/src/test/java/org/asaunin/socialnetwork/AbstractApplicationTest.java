@@ -16,6 +16,11 @@ public abstract class AbstractApplicationTest {
 
     protected final static String DEFAULT_MESSAGE_TEXT = "Lorem ipsum dolor sit amet...";
 
+    protected static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
+            MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(),
+            Charset.forName("utf8"));
+
     protected Person getDefaultPerson() {
         return Person.builder()
                 .id(1L)
@@ -23,6 +28,7 @@ public abstract class AbstractApplicationTest {
                 .lastName("Saunin")
                 .shortName("maniac")
                 .email("alsaunin@gmail.com")
+                .password("123")
                 .build();
     }
 
@@ -52,13 +58,8 @@ public abstract class AbstractApplicationTest {
 //					    .and(new Sort(Sort.Direction.ASC, "title")));
     }
 
-    protected static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
-
     protected static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
     }
