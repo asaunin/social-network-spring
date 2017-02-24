@@ -125,7 +125,7 @@ nla.directive('ngLetterAvatar', ['defaultSettings', function (defaultSettings) {
                     if (params.shape) {
                         if (params.shape === 'round') {
                             var round_style = defaultSettings.radius + _style;
-                            if (scope.data.indexOf('./images') > -1 || scope.data.indexOf('data:image') > -1) { //TODO: 24.01.2017 Revert ngLetterAvatar
+                            if (scope.data.indexOf('.jpg') > -1 || scope.data.indexOf('.gif') > -1 || scope.data.indexOf('data:image') > -1) {
 
                                 var img_size = 'width:' + params.width + 'px;height:' + params.height + 'px;';
                                 component = "<img src=" + scope.data + " style='" + img_size + round_style + "'  />";
@@ -134,7 +134,7 @@ nla.directive('ngLetterAvatar', ['defaultSettings', function (defaultSettings) {
                             }
                         }
                     } else {
-                        if (scope.data.indexOf('./images') > -1 || scope.data.indexOf('data:image') > -1) { //TODO: 24.01.2017 Revert ngLetterAvatar
+                        if (scope.data.indexOf('.jpg') > -1 || scope.data.indexOf('.gif') > -1 || scope.data.indexOf('data:image') > -1) {
                             var img_size = 'width:' + params.width + 'px;height:' + params.height + 'px;';
                             component = "<img src=" + scope.data + " style='" + img_size + _style + "'  />";
                         } else {

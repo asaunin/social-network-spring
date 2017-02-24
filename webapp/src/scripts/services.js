@@ -6,13 +6,6 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
 
     avatars.put(0, './images/avatars/undefined.gif');
 
-    function updatePeople(people) {
-        people.forEach(function (person) {
-            person = updatePerson(person);
-        });
-        return people
-    }
-
     function updatePerson(person, as_image) {
         person.avatar = avatars.get(person.id);
         person.birthDate = new Date(person.birthDate);
@@ -45,7 +38,6 @@ app.service('UserService', ['$http', '$cacheFactory', function ($http, $cacheFac
     }
 
     return {
-        updatePeople: updatePeople,
         updatePerson: updatePerson,
         getAvatar: getAvatar
     }

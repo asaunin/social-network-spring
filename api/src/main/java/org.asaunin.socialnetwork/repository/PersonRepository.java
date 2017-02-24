@@ -16,7 +16,7 @@ public interface PersonRepository extends PagingAndSortingRepository<Person, Lon
 	Person findByEmail(String email);
 
 	@Query("SELECT p FROM Person p " +
-			"WHERE LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+			"WHERE LOWER(p.fullName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
 			"ORDER BY p.fullName")
 	Page<Person> findPeople(
 			@Param("searchTerm") String searchTerm,

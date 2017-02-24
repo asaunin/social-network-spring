@@ -15,7 +15,7 @@ spring:
       ddl-auto: update
 
   resources:
-    static-locations: "classpath:/static/,file:webapp/src/,file:webapp/bower_components/"
+    static-locations: "file:webapp/src/,file:webapp/bower_components/"
 
   devtools:
     restart:
@@ -25,7 +25,10 @@ spring:
   thymeleaf:
     cache: false
 
-debug: true
+resources:
+  avatar-folder: images/avatars/
+
+#debug: true
 
 
 

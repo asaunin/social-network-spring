@@ -162,7 +162,7 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         function getPeople() {
             var url = '/api/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
-                $scope.people = UserService.updatePeople(response.data.content);
+                $scope.people = response.data.content;
                 $scope.totalElements = response.data.totalElements;
                 $scope.totalPages = response.data.totalPages;
             });
@@ -200,7 +200,7 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         function getPeople() {
             var url = '/api/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
-                $scope.people = UserService.updatePeople(response.data.content);
+                $scope.people = response.data.content;
                 $scope.totalElements = response.data.totalElements;
                 $scope.totalPages = response.data.totalPages;
             });

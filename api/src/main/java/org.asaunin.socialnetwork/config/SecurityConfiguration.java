@@ -9,10 +9,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.asaunin.socialnetwork.config.Constants.AVATAR_FOLDER;
+
 @Configuration
+@EnableWebSecurity
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -24,6 +29,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring()
+				.antMatchers("/**/*.js")
+				.antMatchers("/**/*.css")
+				.antMatchers("/**/*.html")
+				.antMatchers("/bootstrap/**")
+				.antMatchers("/" + AVATAR_FOLDER + "undefined.gif")
+		;
+	}
+
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http
@@ -32,14 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.csrf()
 				.disable()
 			.authorizeRequests()
-				.antMatchers("/**/*.{js,html,css}").permitAll()
-				.antMatchers("/images/**").permitAll()
-				.antMatchers("/api/**").authenticated()
+				.antMatchers("/").permitAll()
+				.antMatchers("/api/login").permitAll()
+				.antMatchers("/api/**").authenticated() //Redundant
+                .anyRequest().authenticated()
 				.and()
-//			.formLogin()
-//				.loginPage("/api/login")
-//				.permitAll()
-//				.and()
 			.logout()
 				.logoutUrl("/api/logout")
 				.permitAll()
@@ -65,7 +78,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder(){
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
