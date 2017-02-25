@@ -7,13 +7,13 @@
             <div class="chat-message">
                 <ul class="chat"
                     ng-repeat="message in messageList | orderBy: posted : true">
-                    <li ng-class="['clearfix', message.alignment]">
-                            <span ng-class="['chat-img', 'pull-' + message.alignment]">
-                            <ng-letter-avatar data={{message.sender.avatar}} shape="round"></ng-letter-avatar>
+                    <li ng-class="['clearfix', profileId===message.senderId ? 'right' : 'left']">
+                            <span ng-class="['chat-img', 'pull-' + (profileId===message.senderId ? 'right' : 'left')]">
+                            <ng-letter-avatar data={{message.avatar}} shape="round"></ng-letter-avatar>
                             </span>
                         <div class="chat-body clearfix">
                             <div class="header">
-                                <strong class="text-muted">{{message.sender.fullName}}</strong>
+                                <strong class="text-muted">{{message.senderName}}</strong>
                                 <small class="pull-right text-muted">
                                     <span class="glyphicon glyphicon-time"></span>
                                     {{message.posted | dateOrTime}}

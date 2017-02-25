@@ -5,8 +5,8 @@ import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.security.CurrentProfile;
 import org.asaunin.socialnetwork.service.MessageService;
 import org.asaunin.socialnetwork.service.PersonService;
-import org.asaunin.socialnetwork.web.dto.MessageDTO;
-import org.modelmapper.ModelMapper;
+import org.asaunin.socialnetwork.web.dto.MessagePost;
+import org.asaunin.socialnetwork.web.dto.MessageView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
 import static org.asaunin.socialnetwork.config.Constants.URI_MESSAGES;
 
@@ -26,19 +27,17 @@ public class MessageController {
 
 	private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 
-	private final ModelMapper mapper;
 	private final MessageService messageService;
 	private final PersonService personService;
 
 	@Autowired
-	public MessageController(ModelMapper mapper, MessageService messageService, PersonService personService) {
-		this.mapper = mapper;
+	public MessageController(MessageService messageService, PersonService personService) {
 		this.messageService = messageService;
 		this.personService = personService;
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<List<Message>> getDialog(
+	@GetMapping(value = "/dialog/{id}")
+	public ResponseEntity<List<MessageView>> getDialog(
 			@CurrentProfile Person profile,
 			@PathVariable("id") Long id) {
 		log.warn("REST request to get dialog between id:{} and id:{} persons", profile.getId(), id);
@@ -49,39 +48,34 @@ public class MessageController {
 		}
 
 		return new ResponseEntity<>(
-				messageService.getDialog(profile,interlocutor),
+				map(messageService.getDialog(profile, interlocutor)),
 				HttpStatus.OK);
-}
+	}
 
 	@GetMapping(value = "/last")
-	public List<Message> getLastMessages(@CurrentProfile Person profile) {
+	public List<MessageView> getLastMessages(@CurrentProfile Person profile) {
 		log.warn("REST request to get profile: {} last messages", profile);
 
-		return messageService.getLastMessages(profile);
+		return map(messageService.getLastMessages(profile));
 	}
 
 	@PostMapping(value = "/add")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void send(@RequestBody @Valid MessageDTO messageDTO) {
-		log.warn("REST request to send message: {}", messageDTO);
+	public void send(@RequestBody @Valid MessagePost messagePost) {
+		log.warn("REST request to send message: {}", messagePost);
 
-		messageService.send(convertFromDTO(messageDTO));
+		final Message message = new Message();
+		message.setBody(messagePost.getBody());
+		message.setSender(personService.findById(messagePost.getSender()));
+		message.setRecipient(personService.findById(messagePost.getRecipient()));
+
+		messageService.send(message);
 	}
 
-	private Message convertFromDTO(final MessageDTO messageDTO) {
-		final Message message = mapper.map(messageDTO, Message.class);
-		message.setSender(personService.findById(messageDTO.getSender()));
-		message.setRecipient(personService.findById(messageDTO.getRecipient()));
-
-		return message;
-	}
-
-	private MessageDTO convertToDTO(final Message message) {
-		final MessageDTO messageDTO = mapper.map(message, MessageDTO.class);
-		messageDTO.setSender(message.getSender().getId());
-		messageDTO.setRecipient(message.getSender().getId());
-
-		return messageDTO;
+	private List<MessageView> map(List<Message> messages) {
+		return messages.stream()
+				.map(MessageView::new)
+				.collect(toList());
 	}
 
 }

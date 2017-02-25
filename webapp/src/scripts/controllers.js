@@ -1,10 +1,7 @@
 var app = angular.module('socialNetwork');
 
-app.controller('tabController', ['$http', '$scope', '$rootScope', '$location', 'UserService',
-    function ($http, $scope, $rootScope, $location, UserService) {
-
-        $scope.avatar = UserService.getAvatar(0);
-        $scope.isLoadingData = true;
+app.controller('tabController', ['AVATAR', '$http', '$scope', '$rootScope', '$location',
+    function (AVATAR, $http, $scope, $rootScope, $location) {
 
         $scope.tabs = [{
             link: 'profile',
@@ -55,9 +52,11 @@ app.controller('tabController', ['$http', '$scope', '$rootScope', '$location', '
         // TODO Attempt to authorize outside login form - refactor
         $http.get('/api/login').success(function (data) {
             $rootScope.authenticated = !!data.fullName;
+            $rootScope.avatar = data.pageAvatar;
             $rootScope.profileId = data.id;
         }).error(function () {
             $rootScope.authenticated = false;
+            $rootScope.avatar = AVATAR;
             $rootScope.profileId = 0;
         });
 
@@ -66,11 +65,10 @@ app.controller('tabController', ['$http', '$scope', '$rootScope', '$location', '
         };
 
         $scope.logout = function () {
-            $http.post('/api/logout', {}).success(function () {
+            $http.post('/api/logout', {}).then(function (response) {
                 $rootScope.authenticated = false;
+                $rootScope.avatar = '/images/avatars/undefined.gif';
                 $location.path("/");
-            }).error(function () {
-                $rootScope.authenticated = false;
             });
         };
 
@@ -84,7 +82,7 @@ app.controller('profileController', ['UserService', '$http', '$scope', '$routePa
 
         function getPerson(id) {
             $http.get('/api/person/' + id).then(function (response) {
-                $scope.profile = UserService.updatePerson(response.data, true);
+                $scope.profile = UserService.convertDate(response.data, true);
             });
         }
 
@@ -106,10 +104,6 @@ app.controller('profileController', ['UserService', '$http', '$scope', '$routePa
 
 app.controller('settingsController', ['UserService', '$http', '$scope',
     function (UserService, $http, $scope) {
-
-        if ($scope.isLoadingData) {
-            return;
-        }
 
         // Disable weekend selection
         function disabled(data) {
@@ -231,7 +225,7 @@ app.controller('messagesController', ['UserService', 'MessageService', '$http', 
 
         function getLastMessages() {
             $http.get('/api/messages/last').then(function (response) {
-                $scope.messageList = MessageService.updateLastMessages(response.data, $scope.profileId);
+                $scope.messageList = MessageService.convertDateAndMultilines(response.data);
                 MessageService.scrollElement("chat");
             });
         }
@@ -252,8 +246,8 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
         }
 
         function getDialog() {
-            $http.get('/api/messages/' + $scope.profile.id).then(function (response) {
-                $scope.messageList = MessageService.updateMessages(response.data, $scope.profileId);
+            $http.get('/api/messages/dialog/' + $scope.profile.id).then(function (response) {
+                $scope.messageList = MessageService.convertDateAndMultilines(response.data);
                 MessageService.scrollElement("chat");
             });
         }
@@ -268,8 +262,8 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
     }]);
 
-app.controller('loginController', ['$scope', '$rootScope', '$http', '$location',
-    function ($scope, $rootScope, $http, $location) {
+app.controller('loginController', ['AVATAR', '$scope', '$route', '$rootScope', '$http', '$location',
+    function (AVATAR, $scope, $route, $rootScope, $http, $location) {
 
         var authenticate = function (credentials, callback) {
 
@@ -280,10 +274,12 @@ app.controller('loginController', ['$scope', '$rootScope', '$http', '$location',
 
             $http.get('/api/login', {headers: headers}).success(function (data) {
                 $rootScope.authenticated = !!data.fullName;
+                $rootScope.avatar = data.pageAvatar;
                 $rootScope.profileId = data.id;
                 callback && callback();
             }).error(function () {
                 $rootScope.authenticated = false;
+                $rootScope.avatar = AVATAR;
                 $rootScope.profileId = 0;
                 callback && callback();
             });
@@ -300,6 +296,7 @@ app.controller('loginController', ['$scope', '$rootScope', '$http', '$location',
                 if ($rootScope.authenticated) {
                     $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                     $scope.error = false;
+                    $route.reload();
                 } else {
                     $location.path("/login");
                     $scope.error = true;

@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
-public class MessageDTO implements Serializable{
+public class MessagePost implements Serializable{
 
 	@NotNull
 	private Long sender;

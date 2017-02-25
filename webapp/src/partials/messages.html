@@ -6,15 +6,15 @@
         <div class="panel-body chat messages" id="chat">
             <div class="chat-message">
                 <ul class="chat" ng-repeat="message in messageList | orderBy: posted: false">
-                    <li ng-class="['clearfix', message.alignment]">
-                        <a href="#/messages/{{message.interlocutor.id}}" title="Send message">
-                            <span ng-class="['chat-img', 'pull-' + message.alignment]">
-                            <ng-letter-avatar data={{message.interlocutor.avatar}} shape="round"></ng-letter-avatar>
+                    <li ng-class="['clearfix', profileId===message.senderId ? 'right' : 'left']">
+                        <a href="#/messages/{{message.interlocutor}}" title="Send message">
+                            <span ng-class="['chat-img', 'pull-' + (profileId===message.senderId ? 'right' : 'left')]">
+                            <ng-letter-avatar data={{message.avatar}} shape="round"></ng-letter-avatar>
                             </span>
                             <div class="chat-body clearfix">
                                 <div class="header">
-                                    <strong class="primary-font">{{message.sender.fullName}} to
-                                        {{message.recipient.fullName}}</strong>
+                                    <strong class="primary-font">{{message.senderName}} to
+                                        {{message.recipientName}}</strong>
                                     <small class="pull-right text-muted">
                                         <span class="glyphicon glyphicon-time"></span>
                                         {{message.posted | dateOrTime}}
