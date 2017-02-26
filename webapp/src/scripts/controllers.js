@@ -74,15 +74,15 @@ app.controller('tabController', ['AVATAR', '$http', '$scope', '$rootScope', '$lo
 
     }]);
 
-app.controller('profileController', ['UserService', '$http', '$scope', '$routeParams', '$rootScope',
-    function (UserService, $http, $scope, $routeParams, $rootScope) {
+app.controller('profileController', ['UserService', '$http', '$scope', '$routeParams',
+    function (UserService, $http, $scope, $routeParams) {
 
         var id = $routeParams.profileId === undefined ? $scope.profileId : parseInt($routeParams.profileId);
         getPerson(id);
 
         function getPerson(id) {
             $http.get('/api/person/' + id).then(function (response) {
-                $scope.profile = UserService.convertDate(response.data, true);
+                $scope.profile = UserService.convertDate(response.data);
             });
         }
 
@@ -102,8 +102,16 @@ app.controller('profileController', ['UserService', '$http', '$scope', '$routePa
 
     }]);
 
-app.controller('settingsController', ['UserService', '$http', '$scope',
-    function (UserService, $http, $scope) {
+app.controller('settingsController', ['UserService', '$http', '$scope', '$rootScope',
+    function (UserService, $http, $scope, $rootScope) {
+
+        getPerson($rootScope.profileId);
+
+        function getPerson(id) {
+            $http.get('/api/person/' + id).then(function (response) {
+                $scope.profile = UserService.convertDate(response.data);
+            });
+        }
 
         // Disable weekend selection
         function disabled(data) {
@@ -112,13 +120,10 @@ app.controller('settingsController', ['UserService', '$http', '$scope',
             return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
         }
 
-        $scope.editableAccount = Object.assign({}, $scope.account);
-
         $scope.updateAccount = function () {
-            $http.put('/api/person/update', $scope.editableAccount).then(function () {
-                $scope.account = $scope.editableAccount;
+            $http.put('/api/updateContact', $scope.profile).then(function () {
+                //TODO: Add response status information
                 $scope.userForm.$setPristine();
-                $scope.$broadcast('show-errors-reset');
             });
         };
 

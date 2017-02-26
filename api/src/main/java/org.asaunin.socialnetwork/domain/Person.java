@@ -4,14 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.asaunin.socialnetwork.domain.jpa.GenderConverter;
 import org.hibernate.annotations.Formula;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
@@ -27,19 +23,17 @@ public class Person implements UserDetails, Serializable {
 	@Getter
 	private Long id;
 
-	@NotEmpty
-	@Size(min = 3, max = 50)
+	@Column(length = 50)
 	@Getter
 	private String firstName;
 
-	@NotEmpty
-	@Size(min = 3, max = 50)
+	@Column(length = 50)
 	@Getter
 	private String lastName;
 
 	@Column(insertable = false)
-	@Formula(value = "concat(first_name, ' ', last_name)")
 	@Getter
+	@Formula(value = "concat(first_name, ' ', last_name)")
 	private String fullName;
 
 	@Column(unique = true) // TODO: 25.01.2017 Think how to solve initialisation problem
@@ -47,18 +41,15 @@ public class Person implements UserDetails, Serializable {
 	@Getter @Setter
 	private String shortName;
 
-	@Email
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	@Getter @Setter
 	private String email;
 
-	@JsonIgnore
-	@NotNull
-	@Size(min = 60, max = 60)
+	@Column(length = 60)
 	@Getter @Setter
 	private String password;
 
-	@Digits(fraction = 0, integer = 15)
+	@Column(length = 15)
 	@Getter @Setter
 	private String phone;
 

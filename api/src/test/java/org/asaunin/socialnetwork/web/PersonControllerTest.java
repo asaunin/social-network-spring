@@ -1,6 +1,7 @@
 package org.asaunin.socialnetwork.web;
 
 import org.asaunin.socialnetwork.AbstractApplicationTest;
+import org.asaunin.socialnetwork.config.Constants;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.junit.Before;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
-@WebMvcTest(value = PersonController.class)
+@WebMvcTest(value = {PersonController.class, Constants.class})
 @EnableSpringDataWebSupport //For pagination
 public class PersonControllerTest extends AbstractApplicationTest {
 
@@ -70,28 +71,50 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldGetAListOfPeopleInJSonFormat() throws Exception {
+	public void getPeopleShouldReturnPageableListOfPersons() throws Exception {
 		getPageablePersonList(
 				personService.getPeople("Alex", pageRequest),
 				"/api/people.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
-	public void shouldGetAListOfFriendsInJSonFormat() throws Exception {
+	public void getFriendsShouldReturnPageableListOfProfileFriends() throws Exception {
 		getPageablePersonList(
 				personService.getFriends(person, "Alex", pageRequest),
 				"/api/friends.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
-	public void shouldGetAListOfFriendsOfInJSonFormat() throws Exception {
+	public void getFriendOfShouldReturnPageableListOfProfileFriendOf() throws Exception {
 		getPageablePersonList(
 				personService.getFriendOf(person, "Alex", pageRequest),
 				"/api/friendOf.json?size=1&searchTerm=Alex");
 	}
 
 	@Test
-	public void shouldReturnNotFoundResponseWhenPersonIsMissing() throws Exception {
+	public void getByExistingIdShouldReturnPerson() throws Exception {
+		given(personService.findById(person.getId())).willReturn(person);
+
+		mvc.perform(
+				get("/api/person/{personId}.json", person.getId())
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").value(person.getId()))
+				.andExpect(jsonPath("$.fullName").value(person.getFullName()));
+	}
+
+	@Test
+	public void getByMissingIdShouldReturnNotFoundStatus() throws Exception {
+		given(personService.findById(Long.MAX_VALUE)).willReturn(null);
+
+		mvc.perform(
+				get("/api/person/{personId}.json", person.getId())
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void addOrRemoveMissingFriendShouldReturnNotFoundStatus() throws Exception {
 		given(personService.findById(Long.MAX_VALUE)).willReturn(null);
 
 		mvc.perform(
@@ -106,31 +129,7 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldReturnPersonWhenPersonExists() throws Exception {
-		given(personService.findById(person.getId())).willReturn(person);
-
-		mvc.perform(
-				get("/api/person/{personId}.json", person.getId())
-						.contentType(APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").value(person.getId()))
-				.andExpect(jsonPath("$.fullName").value(person.getFullName()));
-	}
-
-	@Test
-	public void shouldUpdatePersonInformation() throws Exception {
-		doNothing().when(personService).updatePerson(person);
-
-		// TODO: 23.02.2017 Solve validation problem
-		mvc.perform(
-				put("/api/person/update.json")
-						.content(convertObjectToJsonBytes(person))
-						.contentType(APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk());
-	}
-
-	@Test
-	public void shouldAddFriendWhenPersonExists() throws Exception {
+	public void addExistingFriendShouldReturnOkStatus() throws Exception {
 		given(personService.findById(person.getId())).willReturn(person);
 		doNothing().when(personService).addFriend(person, person);
 
@@ -141,7 +140,7 @@ public class PersonControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldRemoveAFriendWhenPersonExists() throws Exception {
+	public void removeExistingFriendShouldReturnOkStatus() throws Exception {
 		given(personService.findById(person.getId())).willReturn(person);
 		doNothing().when(personService).addFriend(person, person);
 

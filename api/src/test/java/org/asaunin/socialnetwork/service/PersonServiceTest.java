@@ -44,11 +44,11 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldFindPersonWithCorrectShortName() throws Exception {
-		final Person person = personService.findByShortName("maniac");
+	public void shouldFindPersonWithCorrectEmail() throws Exception {
+		final Person person = personService.findByEmail("alsaunin@gmail.com");
 
 		assertThat(person.getId()).isEqualTo(1L);
-		assertThat(person.getShortName()).isEqualTo("maniac");
+		assertThat(person.getEmail()).isEqualTo("alsaunin@gmail.com");
 	}
 
 	@Test

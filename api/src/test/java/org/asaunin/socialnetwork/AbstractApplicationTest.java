@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
-import org.asaunin.socialnetwork.web.dto.MessagePost;
+import org.asaunin.socialnetwork.model.MessagePost;
+import org.asaunin.socialnetwork.model.ProfileContact;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.GregorianCalendar;
 
 public abstract class AbstractApplicationTest {
 
@@ -29,7 +31,21 @@ public abstract class AbstractApplicationTest {
                 .shortName("maniac")
                 .email("alsaunin@gmail.com")
                 .password("123")
+                .birthDate(new GregorianCalendar(1984, 2, 23).getTime())
+                .phone("79211234567")
                 .build();
+    }
+
+    protected ProfileContact getProfileContact(Person person) {
+        final ProfileContact contact = new ProfileContact();
+        contact.setId(person.getId());
+        contact.setFirstName(person.getFirstName());
+        contact.setLastName(person.getLastName());
+        contact.setEmail(person.getEmail());
+        contact.setPhone(person.getPhone());
+        contact.setBirthDate(person.getBirthDate());
+        contact.setGender(person.getGender());
+        return contact;
     }
 
     protected Message getDefaultMessage() {
@@ -41,7 +57,7 @@ public abstract class AbstractApplicationTest {
         return msg;
     }
 
-    protected MessagePost getDefaultMessageDTO() {
+    protected MessagePost getDefaultMessagePost() {
         final Person person = getDefaultPerson();
         final MessagePost msg = new MessagePost();
         msg.setBody(DEFAULT_MESSAGE_TEXT);

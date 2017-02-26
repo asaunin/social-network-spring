@@ -1,4 +1,4 @@
-var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ui.bootstrap.showErrors', 'ngLetterAvatar']);
+var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
 
 app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 

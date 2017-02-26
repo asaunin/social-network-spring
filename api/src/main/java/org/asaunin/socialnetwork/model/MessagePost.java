@@ -1,4 +1,4 @@
-package org.asaunin.socialnetwork.web.dto;
+package org.asaunin.socialnetwork.model;
 
 import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;

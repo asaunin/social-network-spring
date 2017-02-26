@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public interface PersonRepository extends PagingAndSortingRepository<Person, Long> {
 
-	Person findByShortName(String shortName);
-
 	Person findByEmail(String email);
 
 	@Query("SELECT p FROM Person p " +

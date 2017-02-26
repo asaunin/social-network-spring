@@ -1,4 +1,4 @@
-package org.asaunin.socialnetwork.web.dto;
+package org.asaunin.socialnetwork.model;
 
 import lombok.Getter;
 import org.asaunin.socialnetwork.domain.Person;
@@ -11,9 +11,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Getter
-public class PersonDTO implements Serializable {
+public class PersonView implements Serializable {
 
-	private static final Logger log = LoggerFactory.getLogger(PersonDTO.class);
+	private static final Logger log = LoggerFactory.getLogger(PersonView.class);
 
 	private Long id;
 	private String avatar;
@@ -30,7 +30,7 @@ public class PersonDTO implements Serializable {
 	private boolean isMyFriend;
 	private boolean isFriendOfMine;
 
-	public PersonDTO(Person person) {
+	public PersonView(Person person) {
 		final Person profile = SecurityUtils.currentProfile();
 
 		this.id = person.getId();

@@ -5,51 +5,52 @@
         </div>
         <div class="panel-body">
             <form class="form-horizontal" name="userForm" novalidate>
-                <div class="form-group" show-errors="{ showSuccess: true }">
+                <label>Contact information:</label>
+                <div ng-class="['form-group', !userForm.firstName.$dirty ? '' : userForm.firstName.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">First Name</label>
                     <div class="col-md-4 inputGroupContainer">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input ng-model="editableAccount.firstName" name="firstName" placeholder="First name"
+                            <input ng-model="profile.firstName" name="firstName" placeholder="First name"
                                    class="form-control" type="text" required
-                                   maxlength="255" value='{{editableAccount.firstName}}'>
+                                   maxlength="255" value='{{profile.firstName}}'>
                         </div>
                         <p ng-show="userForm.firstName.$error.required" class="help-block">First name is required</p>
                     </div>
                 </div>
-                <div class="form-group" show-errors="{ showSuccess: true }">
+                <div ng-class="['form-group', !userForm.lastName.$dirty ? '' : userForm.lastName.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">Last Name</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input ng-model="editableAccount.lastName" name="lastName" placeholder="Last name"
+                            <input ng-model="profile.lastName" name="lastName" placeholder="Last name"
                                    class="form-control" type="text" required maxlength="255"
-                                   value='{{editableAccount.lastName}}'>
+                                   value='{{profile.lastName}}'>
                         </div>
                         <p ng-show="userForm.lastName.$error.required" class="help-block">Last name is required</p>
                     </div>
                 </div>
-                <div class="form-group" show-errors="{ showSuccess: true }">
+                <div ng-class="['form-group', !userForm.email.$dirty ? '' : userForm.email.$error.required || userForm.email.$error.email ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">E-Mail</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input ng-model="editableAccount.email" name="email" placeholder="E-mail"
+                            <input ng-model="profile.email" name="email" placeholder="E-mail"
                                    class="form-control" type="email" required maxlength="255"
-                                   value='{{editableAccount.email}}'>
+                                   value='{{profile.email}}'>
                         </div>
                         <p ng-show="userForm.email.$error.required" class="help-block">The user's email is required</p>
                         <p ng-show="userForm.email.$error.email" class="help-block">The email address is invalid</p>
                     </div>
                 </div>
-                <div class="form-group" show-errors="{ showSuccess: true }">
+                <div ng-class="['form-group', !userForm.phone.$dirty ? '' : userForm.phone.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">Phone</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                            <input type="tel" ng-model="editableAccount.phone" name="phone" id="phone"
+                            <input type="tel" ng-model="profile.phone" name="phone" id="phone"
                                    placeholder="+79111234567"
-                                   class="form-control" required value='{{editableAccount.phone}}'
+                                   class="form-control" required value='{{profile.phone}}'
                                    ng-pattern="/^[0-9]{5,15}$/">
                         </div>
                         <p ng-show="userForm.phone.$error.required" class="help-block">Valid phone number is
@@ -64,7 +65,7 @@
                                 <button type="button" class="btn btn-default" ng-click="chooseBirthDate()"><i
                                         class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
-                            <input type="text" class="form-control" ng-model="editableAccount.birthDate"
+                            <input type="text" class="form-control" ng-model="profile.birthDate"
                                    uib-datepicker-popup="dd.MM.yyyy"
                                    is-open="birthDate.opened" datepicker-options="dateOptions" required
                                    close-text="Close" placeholder="01.01.2001"/>
@@ -75,11 +76,11 @@
                     <label class="col-md-4 control-label">Gender</label>
                     <div class="col-md-4">
                         <label class="radio-inline">
-                            <input type="radio" name="gender" ng-model="editableAccount.gender" value='MALE'>
+                            <input type="radio" name="gender" ng-model="profile.gender" value='MALE'>
                             Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" ng-model="editableAccount.gender" value='FEMALE'>
+                            <input type="radio" name="gender" ng-model="profile.gender" value='FEMALE'>
                             Female
                         </label>
                     </div>

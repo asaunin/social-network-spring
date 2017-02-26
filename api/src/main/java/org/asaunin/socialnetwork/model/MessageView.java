@@ -1,4 +1,4 @@
-package org.asaunin.socialnetwork.web.dto;
+package org.asaunin.socialnetwork.model;
 
 import lombok.Getter;
 import org.asaunin.socialnetwork.domain.Message;

@@ -1,10 +1,8 @@
 package org.asaunin.socialnetwork.domain;
 
 import lombok.*;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,9 +29,8 @@ public class Message implements Serializable{
 	@Getter @Setter
 	private Person recipient;
 
-	@NotEmpty
-	@Size(min = 1, max = 1000)
 	@Getter @Setter
+	@Column(nullable = false)
 	private String body;
 
 	@Column(updatable = false, nullable = false)

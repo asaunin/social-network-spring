@@ -24,8 +24,8 @@ public class PersonService {
 	}
 
 	@Transactional(readOnly = true)
-	public Person findByShortName(String shortName) {
-		return personRepository.findByShortName(shortName);
+	public Person findByEmail(String email) {
+		return personRepository.findByEmail(email);
 	}
 
 	@Transactional(readOnly = true)
@@ -57,11 +57,8 @@ public class PersonService {
 		}
 	}
 
+	@Transactional
 	public void updatePerson(Person person) {
-		// TODO: 05.02.2017 Better to write individual update query, that not affect the set's
-		final Person tmpPerson = findById(person.getId());
-		person.setFriends(tmpPerson.getFriends());
-		person.setFriendOf(tmpPerson.getFriendOf());
 		personRepository.save(person);
 	}
 

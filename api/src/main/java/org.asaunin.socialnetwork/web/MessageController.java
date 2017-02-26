@@ -5,8 +5,8 @@ import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.security.CurrentProfile;
 import org.asaunin.socialnetwork.service.MessageService;
 import org.asaunin.socialnetwork.service.PersonService;
-import org.asaunin.socialnetwork.web.dto.MessagePost;
-import org.asaunin.socialnetwork.web.dto.MessageView;
+import org.asaunin.socialnetwork.model.MessagePost;
+import org.asaunin.socialnetwork.model.MessageView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,21 +40,19 @@ public class MessageController {
 	public ResponseEntity<List<MessageView>> getDialog(
 			@CurrentProfile Person profile,
 			@PathVariable("id") Long id) {
-		log.warn("REST request to get dialog between id:{} and id:{} persons", profile.getId(), id);
+		log.debug("REST request to get dialog between id:{} and id:{} persons", profile.getId(), id);
 
 		final Person interlocutor = personService.findById(id);
 		if (null == interlocutor) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 
-		return new ResponseEntity<>(
-				map(messageService.getDialog(profile, interlocutor)),
-				HttpStatus.OK);
+		return ResponseEntity.ok(map(messageService.getDialog(profile, interlocutor)));
 	}
 
 	@GetMapping(value = "/last")
 	public List<MessageView> getLastMessages(@CurrentProfile Person profile) {
-		log.warn("REST request to get profile: {} last messages", profile);
+		log.debug("REST request to get profile: {} last messages", profile);
 
 		return map(messageService.getLastMessages(profile));
 	}
@@ -62,7 +60,7 @@ public class MessageController {
 	@PostMapping(value = "/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void send(@RequestBody @Valid MessagePost messagePost) {
-		log.warn("REST request to send message: {}", messagePost);
+		log.debug("REST request to send message: {}", messagePost);
 
 		final Message message = new Message();
 		message.setBody(messagePost.getBody());

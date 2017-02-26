@@ -1,11 +1,12 @@
 package org.asaunin.socialnetwork.web;
 
 import org.asaunin.socialnetwork.AbstractApplicationTest;
+import org.asaunin.socialnetwork.config.Constants;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
+import org.asaunin.socialnetwork.model.MessagePost;
 import org.asaunin.socialnetwork.service.MessageService;
 import org.asaunin.socialnetwork.service.PersonService;
-import org.asaunin.socialnetwork.web.dto.MessagePost;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
-@WebMvcTest(value = MessageController.class)
+@WebMvcTest(value = {MessageController.class, Constants.class})
 public class MessageControllerTest extends AbstractApplicationTest {
 
 	private final static String URI = URI_API_PREFIX + URI_MESSAGES;
@@ -88,7 +89,7 @@ public class MessageControllerTest extends AbstractApplicationTest {
 
 	@Test
 	public void sendMessageShouldReturnCreatedStatus() throws Exception {
-		final MessagePost messagePost = getDefaultMessageDTO();
+		final MessagePost messagePost = getDefaultMessagePost();
 		given(messageService.send(message)).willReturn(message);
 
 		mvc.perform(
