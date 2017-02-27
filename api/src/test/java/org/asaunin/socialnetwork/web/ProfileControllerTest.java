@@ -20,7 +20,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
 
-import static org.asaunin.socialnetwork.config.Constants.*;
+import static org.asaunin.socialnetwork.config.Constants.ERROR_UPDATE_EMAIL;
+import static org.asaunin.socialnetwork.config.Constants.ERROR_UPDATE_PROFILE;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -44,7 +45,6 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 	public void setup() {
 		mvc = MockMvcBuilders
 				.webAppContextSetup(context)
-//				.apply(springSecurity())
 				.build();
 	}
 
@@ -79,7 +79,7 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 						.content(convertObjectToJsonBytes(wrongContact))
 						.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isBadRequest())
-				.andExpect(header().string(ERROR_HEADER, ERROR_UPDATE_PROFILE));
+				.andExpect(content().string(ERROR_UPDATE_PROFILE));
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 						.content(convertObjectToJsonBytes(contact))
 						.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isBadRequest())
-				.andExpect(header().string(ERROR_HEADER, ERROR_UPDATE_EMAIL));
+				.andExpect(content().string(ERROR_UPDATE_EMAIL));
 	}
 
 	@Test

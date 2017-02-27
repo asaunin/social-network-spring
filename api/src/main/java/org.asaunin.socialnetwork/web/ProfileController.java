@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,7 @@ public class ProfileController {
 		if (!profile.getId().equals(contact.getId())) {
 			log.error("Updating profile: {} doesn't match the current one: {}", contact, profile);
 
-			return ResponseEntity.badRequest().header(ERROR_HEADER, ERROR_UPDATE_PROFILE).build();
+			return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_PROFILE);
 		}
 
 		final String oldEmail = profile.getEmail();
@@ -61,7 +62,7 @@ public class ProfileController {
 				log.debug("Attempt to change email value from: {} to  {} failed! " +
 						"Email is already used by another contact : {}", contact, profile);
 
-				return ResponseEntity.badRequest().header(ERROR_HEADER, ERROR_UPDATE_EMAIL).build();
+				return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_EMAIL);
 			}
 		}
 

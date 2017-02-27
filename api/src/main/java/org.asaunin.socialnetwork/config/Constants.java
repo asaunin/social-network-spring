@@ -9,7 +9,6 @@ public final class Constants {
     public static final String URI_API_PREFIX = "/api";
     public static final String URI_MESSAGES = "/messages";
 
-    public static final String ERROR_HEADER = "Failure";
     public static final String ERROR_UPDATE_PROFILE = "Updating profile doesn't match the current one";
     public static final String ERROR_UPDATE_EMAIL = "Email is already used by another person";
 

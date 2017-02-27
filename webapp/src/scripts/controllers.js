@@ -121,9 +121,19 @@ app.controller('settingsController', ['UserService', '$http', '$scope', '$rootSc
         }
 
         $scope.updateAccount = function () {
-            $http.put('/api/updateContact', $scope.profile).then(function () {
-                //TODO: Add response status information
+            $http.put('/api/updateContact', $scope.profile).success(function (response) {
                 $scope.userForm.$setPristine();
+                $scope.success = true;
+                $scope.error = null;
+                $scope.message = 'Settings saved successfully!';
+            }).catch(function (response) {
+                $scope.success = null;
+                $scope.error = true;
+                if (response.status === 400 && !!response.data) {
+                    $scope.message = response.data;
+                } else {
+                    $scope.message = 'An error has occurred! Settings could not be saved.';
+                }
             });
         };
 
