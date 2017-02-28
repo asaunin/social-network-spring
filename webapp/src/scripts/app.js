@@ -1,4 +1,4 @@
-var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
+var app = angular.module('socialNetwork', ['ngRoute', 'ngStorage', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
 
 app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 
@@ -51,17 +51,29 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
 
     return {
         'responseError': function (errorResponse) {
+
+            function handleLogin() {
+                if ($location.path() != "login") {
+                    $rootScope.targetUrl = "#" + $location.path();
+                }
+                $location.path("/login");
+            }
+
             switch (errorResponse.status) {
-                case 401:
-                    if ($location.path() != "login") {
-                        $rootScope.targetUrl = "#" + $location.path();
-                    }
-                    $location.path("/login");
-                    break;
+                case 401: handleLogin(); break;
+                case 403: handleLogin(); break;
+                case 419: handleLogin(); break;
+                case 440: handleLogin(); break;
             }
             return $q.reject(errorResponse);
         }
     };
 }]);
 
-app.constant('AVATAR', '/images/avatars/undefined.gif');
+app.constant('AUTH_EVENTS', {
+    loginSuccess: 'auth-login-success',
+    loginFailed: 'auth-login-failed',
+    logoutSuccess: 'auth-logout-success',
+    sessionTimeout: 'auth-session-timeout',
+    notAuthenticated: 'auth-not-authenticated'
+});

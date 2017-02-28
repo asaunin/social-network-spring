@@ -1,7 +1,14 @@
 var app = angular.module('socialNetwork');
 
-app.controller('tabController', ['AVATAR', '$http', '$scope', '$rootScope', '$location',
-    function (AVATAR, $http, $scope, $rootScope, $location) {
+app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$rootScope', '$location',
+    function (AuthService, $http, $scope, $route, $rootScope, $location) {
+
+        if (!AuthService.authenticated) {
+            AuthService.load();
+        }
+        $rootScope.avatar = AuthService.avatar;
+        $rootScope.profileId = AuthService.profileId;
+        $rootScope.authenticated = AuthService.authenticated;
 
         $scope.tabs = [{
             link: 'profile',
@@ -48,36 +55,27 @@ app.controller('tabController', ['AVATAR', '$http', '$scope', '$rootScope', '$lo
 
         $scope.activeTab = findTab($location.$$path.split('/')[1]);
 
-        //Prevent undefined profile after page refresh
-        // TODO Attempt to authorize outside login form - refactor
-        $http.get('/api/login').success(function (data) {
-            $rootScope.authenticated = !!data.fullName;
-            $rootScope.avatar = data.pageAvatar;
-            $rootScope.profileId = data.id;
-        }).error(function () {
-            $rootScope.authenticated = false;
-            $rootScope.avatar = AVATAR;
-            $rootScope.profileId = 0;
-        });
-
         $scope.onClickTab = function (name) {
             $scope.activeTab = findTab(name);
         };
 
         $scope.logout = function () {
             $http.post('/api/logout', {}).then(function (response) {
-                $rootScope.authenticated = false;
-                $rootScope.avatar = '/images/avatars/undefined.gif';
+                AuthService.destroy();
                 $location.path("/");
+                $rootScope.avatar = AuthService.avatar;
+                $rootScope.profileId = AuthService.profileId;
+                $rootScope.authenticated = AuthService.authenticated;
             });
         };
 
     }]);
 
-app.controller('profileController', ['UserService', '$http', '$scope', '$routeParams',
-    function (UserService, $http, $scope, $routeParams) {
+app.controller('profileController', ['AuthService', 'UserService', '$http', '$scope', '$routeParams',
+    function (AuthService, UserService, $http, $scope, $routeParams) {
 
-        var id = $routeParams.profileId === undefined ? $scope.profileId : parseInt($routeParams.profileId);
+        var id = !$routeParams.profileId ? AuthService.profileId : parseInt($routeParams.profileId);
+
         getPerson(id);
 
         function getPerson(id) {
@@ -102,10 +100,10 @@ app.controller('profileController', ['UserService', '$http', '$scope', '$routePa
 
     }]);
 
-app.controller('settingsController', ['UserService', '$http', '$scope', '$rootScope',
-    function (UserService, $http, $scope, $rootScope) {
+app.controller('settingsController', ['AuthService', 'UserService', '$http', '$scope', '$rootScope',
+    function (AuthService, UserService, $http, $scope, $rootScope) {
 
-        getPerson($rootScope.profileId);
+        getPerson(AuthService.profileId);
 
         function getPerson(id) {
             $http.get('/api/person/' + id).then(function (response) {
@@ -153,7 +151,8 @@ app.controller('settingsController', ['UserService', '$http', '$scope', '$rootSc
             startingDay: 1
         };
 
-    }]);
+    }])
+;
 
 app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$scope',
     function (UserService, filterFilter, $http, $scope) {
@@ -240,7 +239,7 @@ app.controller('messagesController', ['UserService', 'MessageService', '$http', 
 
         function getLastMessages() {
             $http.get('/api/messages/last').then(function (response) {
-                $scope.messageList = MessageService.convertDateAndMultilines(response.data);
+                $scope.messageList = MessageService.convertDateAndMultiLines(response.data);
                 MessageService.scrollElement("chat");
             });
         }
@@ -252,7 +251,7 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         $scope.messageList = [];
 
-        if ($routeParams.profileId != undefined) {
+        if (!!$routeParams.profileId) {
             var id = parseInt($routeParams.profileId);
             $http.get('/api/person/' + id).then(function (response) {
                 $scope.profile = response.data;
@@ -262,7 +261,7 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         function getDialog() {
             $http.get('/api/messages/dialog/' + $scope.profile.id).then(function (response) {
-                $scope.messageList = MessageService.convertDateAndMultilines(response.data);
+                $scope.messageList = MessageService.convertDateAndMultiLines(response.data);
                 MessageService.scrollElement("chat");
             });
         }
@@ -277,8 +276,8 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
     }]);
 
-app.controller('loginController', ['AVATAR', '$scope', '$route', '$rootScope', '$http', '$location',
-    function (AVATAR, $scope, $route, $rootScope, $http, $location) {
+app.controller('loginController', ['AUTH_EVENTS', 'AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
+    function (AUTH_EVENTS, AuthService, $scope, $route, $rootScope, $http, $location) {
 
         var authenticate = function (credentials, callback) {
 
@@ -288,14 +287,10 @@ app.controller('loginController', ['AVATAR', '$scope', '$route', '$rootScope', '
                 } : {};
 
             $http.get('/api/login', {headers: headers}).success(function (data) {
-                $rootScope.authenticated = !!data.fullName;
-                $rootScope.avatar = data.pageAvatar;
-                $rootScope.profileId = data.id;
+                AuthService.create(data.id, data.pageAvatar);
                 callback && callback();
             }).error(function () {
-                $rootScope.authenticated = false;
-                $rootScope.avatar = AVATAR;
-                $rootScope.profileId = 0;
+                AuthService.destroy();
                 callback && callback();
             });
 
@@ -308,10 +303,12 @@ app.controller('loginController', ['AVATAR', '$scope', '$route', '$rootScope', '
                 remember: $scope.remember
             };
             authenticate(credentials, function () {
+                $rootScope.avatar = AuthService.avatar;
+                $rootScope.profileId = AuthService.profileId;
+                $rootScope.authenticated = AuthService.authenticated;
                 if ($rootScope.authenticated) {
                     $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                     $scope.error = false;
-                    $route.reload();
                 } else {
                     $location.path("/login");
                     $scope.error = true;
