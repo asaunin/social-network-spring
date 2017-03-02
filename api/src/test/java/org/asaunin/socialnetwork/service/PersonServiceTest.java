@@ -20,12 +20,11 @@ import static org.assertj.core.api.Assertions.tuple;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class PersonServiceTest extends AbstractApplicationTest {
 
 	@Autowired
 	private PersonService personService;
-
-	private final Person person = getDefaultPerson();
 
 	@Test
 	public void shouldFindPersonWithCorrectIdAndFields() throws Exception {
@@ -52,7 +51,6 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
 	public void shouldFindAllPeople() throws Exception {
 		final Page<Person> people = personService.getPeople("", getDefaultPageRequest());
 
@@ -66,8 +64,8 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
 	public void shouldFindAllFriends() throws Exception {
+		final Person person = personService.findById(1L);
 		final Page<Person> friends = personService.getFriends(person, "", getDefaultPageRequest());
 
 		assertThat(friends).hasSize(10);
@@ -79,8 +77,8 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
 	public void shouldFindAllFriendOf() throws Exception {
+		final Person person = personService.findById(1L);
 		final Page<Person> friendOf = personService.getFriendOf(person, "", getDefaultPageRequest());
 
 		assertThat(friendOf).hasSize(4);
@@ -92,7 +90,6 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
 	public void shouldFindAPerson() throws Exception {
 		final Person person = personService.findById(1L);
 
@@ -102,11 +99,10 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
 	public void shouldUpdatePersonInformation() throws Exception {
 		final Person person = personService.findById(1L);
 		person.setGender(Gender.UNDEFINED);
-		personService.updatePerson(person);
+		personService.update(person);
 
 		final Person result = personService.findById(person.getId());
 
@@ -117,7 +113,22 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@Transactional
+	public void shouldCreateNewPerson() throws Exception {
+		final Person actual = personService.create(
+				"John",
+				"Doe",
+				"john.doe@gmail.com",
+				"johnny");
+
+		final Person expected = personService.findByEmail("john.doe@gmail.com");
+
+		assertThat(actual)
+				.hasFieldOrPropertyWithValue("id", expected.getId())
+				.hasFieldOrPropertyWithValue("fullName", expected.getFullName())
+				.hasFieldOrPropertyWithValue("email", expected.getEmail());
+	}
+
+	@Test
 	public void shouldAddAndRemoveAFriend() throws Exception {
 		final Person person = personService.findById(1L);
 		final Person friend = personService.findById(15L);

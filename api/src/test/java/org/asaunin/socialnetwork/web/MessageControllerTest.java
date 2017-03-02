@@ -89,7 +89,7 @@ public class MessageControllerTest extends AbstractApplicationTest {
 
 	@Test
 	public void sendMessageShouldReturnCreatedStatus() throws Exception {
-		final MessagePost messagePost = getDefaultMessagePost();
+		final MessagePost messagePost = getDefaultMessagePost(person);
 		given(messageService.send(message)).willReturn(message);
 
 		mvc.perform(

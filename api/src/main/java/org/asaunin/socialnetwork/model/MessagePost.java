@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessagePost implements Serializable{
 
 	@NotNull

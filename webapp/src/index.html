@@ -24,7 +24,6 @@
     <script src="./angular-sanitize/angular-sanitize.min.js"></script>
     <script src="./angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="./angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="./ngstorage/ngStorage.min.js"></script>
     <script src="./scripts/ngletteravatar.js"></script>
 
     <script src="./scripts/app.js"></script>
@@ -71,7 +70,7 @@
                      ng-src="{{avatar}}">
             </div>
             <div class="well" id="tabs">
-                <ul class="nav nav-pills nav-stacked">
+                <ul ng-class="['nav nav-pills nav-stacked', authenticated ? '' : 'link-disabled']">
                     <li ng-repeat="tab in tabs | filter: { visible : true }"
                         ng-class="tab.name === activeTab.name ? 'active': ''"
                         ng-click="onClickTab(tab.name)">

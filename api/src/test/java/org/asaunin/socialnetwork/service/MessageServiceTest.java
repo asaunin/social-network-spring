@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.tuple;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class MessageServiceTest extends AbstractApplicationTest {
 
     @Autowired
@@ -25,7 +26,6 @@ public class MessageServiceTest extends AbstractApplicationTest {
     private final Person person = getDefaultPerson();
 
     @Test
-    @Transactional
     public void shouldFindAllDialogMessagesWithPerson() throws Exception {
         final Person interlocutor = Person.builder()
                 .id(6L)
@@ -41,7 +41,6 @@ public class MessageServiceTest extends AbstractApplicationTest {
     }
 
     @Test
-    @Transactional
     public void shouldFindAllLastMessagesByPerson() throws Exception {
         final Collection<Message> messages = messageService.getLastMessages(person);
 
@@ -54,7 +53,6 @@ public class MessageServiceTest extends AbstractApplicationTest {
     }
 
     @Test
-    @Transactional
     public void shouldSaveMessage() throws Exception {
         final Collection<Message> before = messageService.getDialog(person, person);
 

@@ -3,7 +3,8 @@ package org.asaunin.socialnetwork.web;
 import org.asaunin.socialnetwork.AbstractApplicationTest;
 import org.asaunin.socialnetwork.config.Constants;
 import org.asaunin.socialnetwork.domain.Person;
-import org.asaunin.socialnetwork.model.ProfileContact;
+import org.asaunin.socialnetwork.model.ContactInformation;
+import org.asaunin.socialnetwork.model.SignUp;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,13 +20,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
 
-import static org.asaunin.socialnetwork.config.Constants.ERROR_UPDATE_EMAIL;
-import static org.asaunin.socialnetwork.config.Constants.ERROR_UPDATE_PROFILE;
+import static org.asaunin.socialnetwork.config.Constants.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -68,10 +66,9 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@WithMockUser
-	public void updateProfileContactInfoWithInvalidIdShouldReturnBadRequestStatus() throws Exception {
-		final Person wrongPerson = getWrongPerson();
-		final ProfileContact wrongContact = getProfileContact(wrongPerson);
+	public void updateContactInformationWithInvalidIdShouldReturnBadRequestStatus() throws Exception {
+		final Person wrongPerson = getSignedUpPerson();
+		final ContactInformation wrongContact = getContactInformation(wrongPerson);
 
 		mvc.perform(
 				put("/api/updateContact.json")
@@ -83,13 +80,25 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	@WithMockUser
-	public void updateProfileEmailWhichIsAlreadyRegisteredShouldReturnBadRequestStatus() throws Exception {
-		final Person wrongPerson = getWrongPerson();
-		final ProfileContact contact = getProfileContact(person);
-		contact.setEmail(wrongPerson.getEmail());
+	public void updateContactInformationWithInvalidDataShouldReturnBadRequestStatus() throws Exception {
+		final ContactInformation contact = getContactInformation(person);
+		contact.setPhone("");
 
-		given(personService.findByEmail(wrongPerson.getEmail())).willReturn(wrongPerson);
+		mvc.perform(
+				put("/api/updateContact.json")
+						.with(user(person))
+						.content(convertObjectToJsonBytes(contact))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void updateProfileWithNonUniqueEmailShouldReturnBadRequestStatus() throws Exception {
+		final Person signedUpPerson = getSignedUpPerson();
+		final ContactInformation contact = getContactInformation(person);
+		contact.setEmail(signedUpPerson.getEmail());
+
+		given(personService.findByEmail(signedUpPerson.getEmail())).willReturn(signedUpPerson);
 
 		mvc.perform(
 				put("/api/updateContact.json")
@@ -101,26 +110,10 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void updateProfileContactInfoWithInvalidDataShouldReturnBadRequestStatus() throws Exception {
-		final ProfileContact contact = getProfileContact(person);
-		contact.setPhone("");
+	public void updateContactInformationWithValidDataShouldReturnOkStatus() throws Exception {
+		final ContactInformation contact = getContactInformation(person);
 
-		doNothing().when(personService).updatePerson(person);
-
-		mvc.perform(
-				put("/api/updateContact.json")
-						.with(user(person))
-						.content(convertObjectToJsonBytes(contact))
-						.contentType(APPLICATION_JSON_UTF8))
-				.andExpect(status().isBadRequest());
-	}
-
-	@Test
-	@WithMockUser
-	public void updateProfileContactInfoWithValidDataShouldReturnOkStatus() throws Exception {
-		final ProfileContact contact = getProfileContact(person);
-
-		doNothing().when(personService).updatePerson(person);
+		doNothing().when(personService).update(person);
 
 		mvc.perform(
 				put("/api/updateContact.json")
@@ -130,16 +123,92 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 				.andExpect(status().isOk());
 	}
 
-	private Person getWrongPerson() {
+	@Test
+	public void signUpWithInvalidDataShouldReturnBadRequestStatus() throws Exception {
+		final SignUp signUp = getSignUp(person);
+		signUp.setPassword("-");
+
+		mvc.perform(
+				post("/api/signUp.json")
+						.with(user(person))
+						.content(convertObjectToJsonBytes(signUp))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void signUpWithNonUniqueEmailShouldReturnBadRequestStatus() throws Exception {
+		final Person newPerson = getNewPerson();
+		final Person signedUpPerson = getSignedUpPerson();
+		final SignUp signUp = getSignUp(newPerson);
+		signUp.setEmail(signedUpPerson.getEmail());
+
+		given(personService.findByEmail(signedUpPerson.getEmail())).willReturn(signedUpPerson);
+
+		mvc.perform(
+				post("/api/signUp.json")
+						.content(convertObjectToJsonBytes(signUp))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(ERROR_SIGN_UP_EMAIL));
+	}
+
+	@Test
+	public void signUpWithValidDataShouldReturnOkStatus() throws Exception {
+		final Person newPerson = getNewPerson();
+		final SignUp signUp = getSignUp(newPerson);
+
+		given(personService.findByEmail(newPerson.getEmail())).willReturn(null);
+		given(personService.create(
+				newPerson.getFirstName(),
+				newPerson.getLastName(),
+				newPerson.getEmail(),
+				newPerson.getPassword()))
+				.willReturn(newPerson);
+
+		mvc.perform(
+				post("/api/signUp.json")
+						.content(convertObjectToJsonBytes(signUp))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isCreated());
+	}
+
+	private static Person getSignedUpPerson() {
 		return Person.builder()
 				.id(8L)
-				.firstName("'Tony'")
-				.lastName("'Soprano'")
+				.firstName("Tony")
+				.lastName("Soprano")
 				.email("tony@mail.ru")
 				.phone("76545465465")
 				.birthDate(new Date())
 				.build();
 	}
 
+	private static Person getNewPerson() {
+		return Person.builder()
+				.firstName("John")
+				.lastName("Doe")
+				.email("john.doe@gmail.com")
+				.password("johnny")
+				.build();
+	}
 
+	private static ContactInformation getContactInformation(Person person) {
+		return new ContactInformation(
+				person.getId(),
+				person.getFirstName(),
+				person.getLastName(),
+				person.getEmail(),
+				person.getPhone(),
+				person.getBirthDate(),
+				person.getGender());
+	}
+
+	private static SignUp getSignUp(Person person) {
+		return new SignUp(
+				person.getFirstName(),
+				person.getLastName(),
+				person.getEmail(),
+				person.getPassword());
+	}
 }

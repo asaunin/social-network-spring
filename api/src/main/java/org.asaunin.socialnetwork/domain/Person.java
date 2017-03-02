@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
 
@@ -36,8 +35,7 @@ public class Person implements UserDetails, Serializable {
 	@Formula(value = "concat(first_name, ' ', last_name)")
 	private String fullName;
 
-	@Column(unique = true) // TODO: 25.01.2017 Think how to solve initialisation problem
-	@Size(min = 5, max = 50)
+//	@Column(unique = true, length = 50) // TODO: 25.01.2017 Think how provide unique group [shortName + email]
 	@Getter @Setter
 	private String shortName;
 
@@ -45,7 +43,7 @@ public class Person implements UserDetails, Serializable {
 	@Getter @Setter
 	private String email;
 
-	@Column(length = 60)
+	@Column(length = 60, nullable = false)
 	@Getter @Setter
 	private String password;
 
@@ -163,12 +161,12 @@ public class Person implements UserDetails, Serializable {
 	public static class PersonBuilder {
 
 		private Long id;
-		private String firstName;
-		private String lastName;
-		private String shortName;
-		private String email;
-		private String password;
-		private String phone;
+		private String firstName = "";
+		private String lastName = "";
+		private String shortName = "";
+		private String email = "";
+		private String password = "";
+		private String phone = "";
 		private Date birthDate;
 		private Gender gender = Gender.UNDEFINED;
 

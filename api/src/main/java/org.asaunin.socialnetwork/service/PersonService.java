@@ -5,16 +5,20 @@ import org.asaunin.socialnetwork.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PersonService {
 
+	private PasswordEncoder passwordEncoder;
+
 	private PersonRepository personRepository;
 
 	@Autowired
-	public PersonService(PersonRepository personRepository) {
+	public PersonService(PasswordEncoder passwordEncoder, PersonRepository personRepository) {
+		this.passwordEncoder = passwordEncoder;
 		this.personRepository = personRepository;
 	}
 
@@ -58,8 +62,20 @@ public class PersonService {
 	}
 
 	@Transactional
-	public void updatePerson(Person person) {
+	public void update(Person person) {
 		personRepository.save(person);
+	}
+
+	@Transactional
+	public Person create(String firstName, String lastName, String email, String password) {
+		final Person person = Person.builder()
+				.firstName(firstName)
+				.lastName(lastName)
+				.email(email)
+				.password(passwordEncoder.encode(password))
+				.build();
+
+		return personRepository.save(person);
 	}
 
 }

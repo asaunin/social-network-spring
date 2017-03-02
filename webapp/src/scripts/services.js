@@ -45,38 +45,45 @@ app.service('MessageService', ['UserService', '$http', '$timeout', function (Use
 
 }]);
 
-app.service('AuthService', ['$localStorage', function ($localStorage) {
+app.service('AuthService', ['$http', '$rootScope', function ($http, $rootScope) {
 
     var defAvatar = '/images/avatars/undefined.gif';
 
+    this.profileId = 0;
     this.avatar = defAvatar;
+    this.authenticated = false;
+
+    this.load = function () {
+        this.update();
+
+        var context = this;
+
+        // TODO: 01.03.2017 Provide separate REST request
+        $http.get('/api/person/0').then(function (response) {
+            var profile = response.data;
+            context.create(profile.id, profile.pageAvatar);
+            context.update();
+        });
+    };
 
     this.create = function (profileId, avatar) {
         this.profileId = profileId;
-        this.avatar = avatar;
+        this.avatar = !!avatar ? avatar : defAvatar;
         this.authenticated = true;
-        this.save();
+        this.update();
     };
 
     this.destroy = function () {
-        this.profileId = null;
+        this.profileId = 0;
         this.avatar = defAvatar;
         this.authenticated = false;
-        this.save();
+        this.update();
     };
 
-    this.save = function () {
-        $localStorage.profileId = this.profileId;
-        $localStorage.avatar = this.avatar;
-        $localStorage.authenticated = this.authenticated;
-    };
-
-    this.load = function () {
-        if (!!$localStorage.authenticated) {
-            this.profileId = $localStorage.profileId;
-            this.avatar = $localStorage.avatar;
-            this.authenticated = $localStorage.authenticated;
-        }
+    this.update = function () {
+        $rootScope.avatar = this.avatar;
+        $rootScope.profileId = this.profileId;
+        $rootScope.authenticated = this.authenticated;
     };
 
 }]);

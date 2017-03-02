@@ -1,4 +1,4 @@
-var app = angular.module('socialNetwork', ['ngRoute', 'ngStorage', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
+var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
 
 app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 
@@ -38,6 +38,10 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
             templateUrl: 'partials/login.html',
             controller: 'loginController'
         })
+        .when('/signUp', {
+            templateUrl: 'partials/signUp.html',
+            controller: 'signUpController'
+        })
         .otherwise(
             {
                 redirectTo: '/profile'
@@ -69,11 +73,3 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
         }
     };
 }]);
-
-app.constant('AUTH_EVENTS', {
-    loginSuccess: 'auth-login-success',
-    loginFailed: 'auth-login-failed',
-    logoutSuccess: 'auth-logout-success',
-    sessionTimeout: 'auth-session-timeout',
-    notAuthenticated: 'auth-not-authenticated'
-});

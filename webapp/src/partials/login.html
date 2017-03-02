@@ -8,21 +8,24 @@
                 <div class="col-sm-12 col-md-10 col-md-offset-1 ">
                     <div ng-class="['form-group', !loginForm.email.$dirty ? '' : loginForm.email.$error.required || loginForm.email.$error.email ? 'has-error has-feedback' : 'has-success has-feedback']">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <span class="input-group-addon">@</span>
                             <input ng-model="username" class="form-control" id="email" name="email"
-                                   placeholder="E-mail" type="email" required autocomplete="new-login" maxlength="255"/>
+                                   placeholder="E-mail" type="email" required autocomplete="new-login" minlength="5"
+                                   maxlength="50"/>
                         </div>
-                        <p ng-show="loginForm.email.$error.required && loginForm.email.$dirty" class="help-block">The
-                            user's email is required</p>
-                        <p ng-show="loginForm.email.$error.email && loginForm.email.$dirty" class="help-block">The email
-                            address is invalid</p>
+                        <p ng-show="loginForm.email.$error.required && loginForm.email.$dirty" class="help-block">
+                            E-mail required
+                        </p>
+                        <p ng-show="loginForm.email.$error.email && loginForm.email.$dirty" class="help-block">
+                            E-mail invalid
+                        </p>
                     </div>
                     <div ng-class="['form-group', !loginForm.password.$dirty ? '' : loginForm.password.$error.required || loginForm.password.$error.password ? 'has-error has-feedback' : 'has-success has-feedback']">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input ng-model="password" class="form-control" id="password" name="password"
                                    placeholder="Password" type="password" autocomplete="new-password" required
-                                   maxlength="255"/>
+                                   maxlength="50"/>
                         </div>
                         <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" class="help-block">
                             Password is required</p>
@@ -31,7 +34,8 @@
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input id="remember-me" name="remember-me" type="checkbox" ng-model="remember"/> Remember me
+                            <input id="remember-me" name="remember-me" type="checkbox" ng-model="remember"/>
+                            Remember me
                         </label>
                     </div>
                     <div ng-show="error" class="alert alert-danger">
@@ -46,7 +50,7 @@
             </form>
         </div>
         <div class="panel-footer" align="center">Don't have an account?
-            <a href="#/register">Sign up here...</a>
+            <a href="#/signUp">Sign up here...</a>
         </div>
     </div>
 </div>

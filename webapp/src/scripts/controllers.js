@@ -3,12 +3,7 @@ var app = angular.module('socialNetwork');
 app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$rootScope', '$location',
     function (AuthService, $http, $scope, $route, $rootScope, $location) {
 
-        if (!AuthService.authenticated) {
-            AuthService.load();
-        }
-        $rootScope.avatar = AuthService.avatar;
-        $rootScope.profileId = AuthService.profileId;
-        $rootScope.authenticated = AuthService.authenticated;
+        AuthService.load();
 
         $scope.tabs = [{
             link: 'profile',
@@ -63,9 +58,6 @@ app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$r
             $http.post('/api/logout', {}).then(function (response) {
                 AuthService.destroy();
                 $location.path("/");
-                $rootScope.avatar = AuthService.avatar;
-                $rootScope.profileId = AuthService.profileId;
-                $rootScope.authenticated = AuthService.authenticated;
             });
         };
 
@@ -119,7 +111,7 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
         }
 
         $scope.updateAccount = function () {
-            $http.put('/api/updateContact', $scope.profile).success(function (response) {
+            $http.put('/api/updateContact', $scope.profile).then(function (response) {
                 $scope.userForm.$setPristine();
                 $scope.success = true;
                 $scope.error = null;
@@ -127,7 +119,7 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
             }).catch(function (response) {
                 $scope.success = null;
                 $scope.error = true;
-                if (response.status === 400 && !!response.data) {
+                if (response.status === 400 && !!response.data && !angular.isObject(response.data)) {
                     $scope.message = response.data;
                 } else {
                     $scope.message = 'An error has occurred! Settings could not be saved.';
@@ -276,8 +268,8 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
     }]);
 
-app.controller('loginController', ['AUTH_EVENTS', 'AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
-    function (AUTH_EVENTS, AuthService, $scope, $route, $rootScope, $http, $location) {
+app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
+    function (AuthService, $scope, $route, $rootScope, $http, $location) {
 
         var authenticate = function (credentials, callback) {
 
@@ -287,11 +279,9 @@ app.controller('loginController', ['AUTH_EVENTS', 'AuthService', '$scope', '$rou
                 } : {};
 
             $http.get('/api/login', {headers: headers}).success(function (data) {
-                AuthService.create(data.id, data.pageAvatar);
-                callback && callback();
+                callback && callback(true);
             }).error(function () {
-                AuthService.destroy();
-                callback && callback();
+                callback && callback(false);
             });
 
         };
@@ -302,11 +292,9 @@ app.controller('loginController', ['AUTH_EVENTS', 'AuthService', '$scope', '$rou
                 password: $scope.password,
                 remember: $scope.remember
             };
-            authenticate(credentials, function () {
-                $rootScope.avatar = AuthService.avatar;
-                $rootScope.profileId = AuthService.profileId;
-                $rootScope.authenticated = AuthService.authenticated;
-                if ($rootScope.authenticated) {
+            authenticate(credentials, function (authenticated) {
+                if (authenticated) {
+                    AuthService.load();
                     $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                     $scope.error = false;
                 } else {
@@ -314,6 +302,54 @@ app.controller('loginController', ['AUTH_EVENTS', 'AuthService', '$scope', '$rou
                     $scope.error = true;
                 }
             });
+        };
+
+    }]);
+
+app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
+    function (AuthService, $scope, $route, $rootScope, $http, $location) {
+
+        $scope.success = null;
+        $scope.error = null;
+        $scope.doNotMatch = null;
+        $scope.message = null;
+
+        $scope.signUp = function () {
+
+            if ($scope.password !== $scope.confirmPassword) {
+                $scope.error = true;
+                $scope.message = 'The password and its confirmation do not match!';
+                return;
+            }
+
+            var credentials = {
+                firstName: $scope.firstName,
+                lastName: $scope.lastName,
+                email: $scope.username,
+                password: $scope.password
+            };
+
+            var headers = credentials ? {
+                    authorization: "Basic "
+                    + btoa(credentials.email + ":" + credentials.password)
+                } : {};
+
+            $http.post('/api/signUp', credentials).then(function (response) {
+                $scope.success = true;
+                $scope.message = 'Welcome to our community!';
+                $http.get('/api/login', {headers: headers}).success(function (data) {
+                    $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
+                    AuthService.load();
+                });
+            }).catch(function (response) {
+                $scope.error = true;
+                if (response.status === 400 && !!response.data && !angular.isObject(response.data)) {
+                    $scope.message = response.data;
+                } else {
+                    $scope.message = 'An error has occurred! Registration failed.';
+                }
+            });
+
         };
 
     }]);

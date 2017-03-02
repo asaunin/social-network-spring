@@ -1,4 +1,5 @@
-<div class="container-fluid col-sm-12 view-container" ng-show="authenticated" ng-submit="userForm.$valid && updateAccount()">
+<div class="container-fluid col-sm-12 view-container" ng-show="authenticated"
+     ng-submit="userForm.$valid && updateAccount()">
     <div class="panel panel-default ">
         <div class="panel-heading">
             <strong>Profile settings</strong>
@@ -6,55 +7,76 @@
         <div class="panel-body">
             <form class="form-horizontal" name="userForm" novalidate>
                 <label>Contact information:</label>
-                <div ng-class="['form-group', !userForm.firstName.$dirty ? '' : userForm.firstName.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
+                <div ng-class="['form-group', !userForm.firstName.$dirty ? '' : userForm.firstName.$error.required || userForm.firstName.$error.minlength || userForm.firstName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">First Name</label>
-                    <div class="col-md-4 inputGroupContainer">
+                    <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input ng-model="profile.firstName" name="firstName" placeholder="First name"
-                                   class="form-control" type="text" required
-                                   maxlength="255" value='{{profile.firstName}}'>
+                                   class="form-control" type="text" required minlength="2" maxlength="50"
+                                   value='{{profile.firstName}}'>
                         </div>
-                        <p ng-show="userForm.firstName.$error.required" class="help-block">First name is required</p>
+                        <p ng-show="(userForm.firstName.$error.required || userForm.firstName.$error.minlength) && userForm.firstName.$dirty"
+                           class="help-block">
+                            First name is required to be at least 2 characters
+                        </p>
+                        <p ng-show="userForm.firstName.$error.maxlength && userForm.firstName.$dirty"
+                           class="help-block">
+                            First name cannot be longer than 50 characters
+                        </p>
                     </div>
                 </div>
-                <div ng-class="['form-group', !userForm.lastName.$dirty ? '' : userForm.lastName.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
+                <div ng-class="['form-group', !userForm.lastName.$dirty ? '' : userForm.lastName.$error.required || userForm.lastName.$error.minlength || userForm.lastName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">Last Name</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                             <input ng-model="profile.lastName" name="lastName" placeholder="Last name"
-                                   class="form-control" type="text" required maxlength="255"
+                                   class="form-control" type="text" required minlength="2" maxlength="50"
                                    value='{{profile.lastName}}'>
                         </div>
-                        <p ng-show="userForm.lastName.$error.required" class="help-block">Last name is required</p>
+                        <p ng-show="(userForm.lastName.$error.required || userForm.lastName.$error.minlength) && userForm.lastName.$dirty" class="help-block">
+                            Last name is required to be at least 2 characters
+                        </p>
+                        <p ng-show="userForm.lastName.$error.maxlength && userForm.lastName.$dirty" class="help-block">
+                            Last name cannot be longer than 50 characters
+                        </p>
                     </div>
                 </div>
-                <div ng-class="['form-group', !userForm.email.$dirty ? '' : userForm.email.$error.required || userForm.email.$error.email ? 'has-error has-feedback' : 'has-success has-feedback']">
+                <div ng-class="['form-group', !userForm.email.$dirty ? '' : userForm.email.$error.required || userForm.email.$error.email || userForm.email.$error.minlength || userForm.email.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">E-Mail</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                             <input ng-model="profile.email" name="email" placeholder="E-mail"
-                                   class="form-control" type="email" required maxlength="255"
+                                   class="form-control" type="email" required minlength="5" maxlength="50"
                                    value='{{profile.email}}'>
                         </div>
-                        <p ng-show="userForm.email.$error.required" class="help-block">The user's email is required</p>
-                        <p ng-show="userForm.email.$error.email" class="help-block">The email address is invalid</p>
+                        <p ng-show="userForm.email.$error.email && userForm.email.$dirty" class="help-block">
+                            Email is invalid
+                        </p>
+                        <p ng-show="(userForm.email.$error.required || userForm.email.$error.minlength) && userForm.email.$dirty" class="help-block">
+                            Email is required to be at least 5 characters
+                        </p>
+                        <p ng-show="userForm.email.$error.maxlength && userForm.email.$dirty" class="help-block">
+                            Email cannot be longer than 50 characters
+                        </p>
                     </div>
                 </div>
-                <div ng-class="['form-group', !userForm.phone.$dirty ? '' : userForm.phone.$error.required ? 'has-error has-feedback' : 'has-success has-feedback']">
+                <div ng-class="['form-group', !userForm.phone.$dirty ? '' : userForm.phone.$error.required || userForm.phone.$error.pattern ? 'has-error has-feedback' : 'has-success has-feedback']">
                     <label class="col-md-4 control-label">Phone</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
                             <input type="tel" ng-model="profile.phone" name="phone" id="phone"
-                                   placeholder="+79111234567"
+                                   placeholder="79111234567"
                                    class="form-control" required value='{{profile.phone}}'
                                    ng-pattern="/^[0-9]{5,15}$/">
                         </div>
-                        <p ng-show="userForm.phone.$error.required" class="help-block">Valid phone number is
-                            required</p>
+                        <p ng-show="(userForm.phone.$error.required || userForm.phone.$error.pattern) && userForm.phone.$dirty" class="help-block">
+                            Valid phone number is required
+                        </p>
+                        </p>
                     </div>
                 </div>
                 <div class="form-group">

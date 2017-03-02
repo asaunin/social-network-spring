@@ -1,6 +1,8 @@
 package org.asaunin.socialnetwork.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.asaunin.socialnetwork.domain.Gender;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -11,21 +13,24 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class ProfileContact implements Serializable{
+@NoArgsConstructor
+@AllArgsConstructor
+public class ContactInformation implements Serializable{
 
 	@NotNull
 	private Long id;
 
 	@NotEmpty
-	@Size(min = 3, max = 50)
+	@Size(min = 2, max = 50)
 	private String firstName;
 
 	@NotEmpty
-	@Size(min = 3, max = 50)
+	@Size(min = 2, max = 50)
 	private String lastName;
 
 	@NotEmpty
 	@Email
+	@Size(min = 5, max = 50)
 	private String email;
 
 	@NotEmpty

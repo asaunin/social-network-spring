@@ -69,7 +69,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
-            <scope>runtime</scope>
+            <!--<scope>runtime</scope>--> <!--TODO: Enables h2 console - only for development environment-->
         </dependency>
     </dependencies>
 

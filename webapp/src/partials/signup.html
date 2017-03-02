@@ -1,0 +1,115 @@
+<div class="container-fluid col-md-6 col-md-offset-3 view-container" ng-submit="signUpForm.$valid && signUp()">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Sign up to social-network.com</strong>
+        </div>
+        <div class="panel-body">
+            <form name="signUpForm" autocomplete="off" class="form-signup" novalidate>
+                <div class="col-sm-12 col-md-10 col-md-offset-1 ">
+                    <div ng-class="['form-group', !signUpForm.firstName.$dirty ? '' : signUpForm.firstName.$error.required || signUpForm.firstName.$error.minlength || signUpForm.firstName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input ng-model="firstName" id="firstName" name="firstName" placeholder="First name"
+                                   class="form-control" type="text" required autocomplete="new-login" minlength="2"
+                                   maxlength="50">
+                        </div>
+                        <p ng-show="(signUpForm.firstName.$error.required || signUpForm.firstName.$error.minlength) && signUpForm.firstName.$dirty"
+                           class="help-block">
+                            First name is required to be at least 2 characters
+                        </p>
+                        <p ng-show="signUpForm.firstName.$error.maxlength && signUpForm.firstName.$dirty"
+                           class="help-block">
+                            First name cannot be longer than 50 characters
+                        </p>
+                    </div>
+                    <div ng-class="['form-group', !signUpForm.lastName.$dirty ? '' : signUpForm.lastName.$error.required || signUpForm.lastName.$error.minlength || signUpForm.lastName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input ng-model="lastName" id="lastName" name="lastName" placeholder="Last name"
+                                   class="form-control" type="text" required autocomplete="new-login" minlength="2"
+                                   maxlength="50">
+                        </div>
+                         <p ng-show="(signUpForm.lastName.$error.required || signUpForm.lastName.$error.minlength) && signUpForm.lastName.$dirty"
+                           class="help-block">
+                            Last name is required to be at least 2 characters
+                        </p>
+                        <p ng-show="signUpForm.lastName.$error.maxlength && signUpForm.lastName.$dirty"
+                           class="help-block">
+                            Last name cannot be longer than 50 characters
+                        </p>
+                    </div>
+                    <div ng-class="['form-group', !signUpForm.email.$dirty ? '' : signUpForm.email.$error.required || signUpForm.email.$error.email || signUpForm.email.$error.minlength || signUpForm.email.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                        <div class="input-group">
+                            <span class="input-group-addon">@</span>
+                            <input ng-model="username" class="form-control" id="email" name="email"
+                                   placeholder="E-mail" type="email" required autocomplete="new-login" minlength="5"
+                                   maxlength="50"/>
+                        </div>
+                         <p ng-show="signUpForm.email.$error.email && signUpForm.email.$dirty" class="help-block">
+                            E-mail is invalid
+                        </p>
+                        <p ng-show="(signUpForm.email.$error.required || signUpForm.email.$error.minlength) && signUpForm.email.$dirty"
+                           class="help-block">
+                            E-mail is required to be at least 5 characters
+                        </p>
+                        <p ng-show="signUpForm.email.$error.maxlength && signUpForm.email.$dirty"
+                           class="help-block">
+                            E-mail cannot be longer than 50 characters
+                        </p>
+                    </div>
+                    <div ng-class="['form-group', !signUpForm.password.$dirty ? '' : signUpForm.password.$error.required || signUpForm.password.$error.password || signUpForm.password.$error.minlength || signUpForm.password.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="password" class="form-control" id="password" name="password"
+                                   placeholder="Password" type="password" autocomplete="new-password" required
+                                   minlength="5" maxlength="50"/>
+                        </div>
+                        <p ng-show="signUpForm.password.$error.password && signUpForm.password.$dirty"
+                           class="help-block">
+                            Password is invalid</p>
+                        <p ng-show="(signUpForm.password.$error.required || signUpForm.password.$error.minlength) && signUpForm.password.$dirty"
+                           class="help-block">
+                            Password is required to be at least 5 characters
+                        </p>
+                        <p ng-show="signUpForm.password.$error.maxlength && signUpForm.password.$dirty"
+                           class="help-block">
+                            Password cannot be longer than 50 characters
+                        </p>
+                    </div>
+                    <div ng-class="['form-group', !signUpForm.confirmPassword.$dirty ? '' : signUpForm.confirmPassword.$error.required || signUpForm.confirmPassword.$error.password || signUpForm.confirmPassword.$error.minlength || signUpForm.confirmPassword.$error.maxlength? 'has-error has-feedback' : 'has-success has-feedback']">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="confirmPassword" class="form-control" id="confirmPassword" name="confirmPassword"
+                                   placeholder="Confirm password" type="password" autocomplete="new-password" required
+                                   minlength="5" maxlength="50"/>
+                        </div>
+                        <p ng-show="(signUpForm.confirmPassword.$error.confirmPassword || signUpForm.confirmPassword.$error.required) && signUpForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Confirmation password is invalid</p>
+                        <p ng-show="signUpForm.confirmPassword.$error.minlength && signUpForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Confirmation password is required to be at least 5 characters
+                        </p>
+                        <p ng-show="signUpForm.confirmPassword.$error.maxlength && signUpForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Confirmation password cannot be longer than 50 characters
+                        </p>
+                    </div>
+                    <div ng-show="success" class="col-sm-12 alert alert-success">
+                        <div>{{message}}</div>
+                    </div>
+                    <div ng-show="error" class="col-sm-12 alert alert-danger">
+                        <div>{{message}}</div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="col-sm-12" value="Sign-up"
+                               ng-class="['btn btn-primary', signUpForm.$valid && signUpForm.$dirty ? '' : 'disabled']"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel-footer" align="center">Already have an account?
+            <a href="#/login">Sign in here...</a>
+        </div>
+    </div>
+</div>
