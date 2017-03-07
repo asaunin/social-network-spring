@@ -141,7 +141,7 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 		final Person newPerson = getNewPerson();
 		final Person signedUpPerson = getSignedUpPerson();
 		final SignUp signUp = getSignUp(newPerson);
-		signUp.setEmail(signedUpPerson.getEmail());
+		signUp.setUserName(signedUpPerson.getEmail());
 
 		given(personService.findByEmail(signedUpPerson.getEmail())).willReturn(signedUpPerson);
 

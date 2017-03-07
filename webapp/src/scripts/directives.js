@@ -20,7 +20,7 @@ app.directive('buttonRemoveFriend', function () {
             remove: '&'
         },
         template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="profile.myFriend" ' +
-        'ng-class="profile.id === $root.profileId ? \'link-disabled\' : \'\'" ng-click="remove()">' +
+        'ng-class="profile.id === $rootScope.profileId ? \'link-disabled\' : \'\'" ng-click="remove()">' +
         '<span class="glyphicon glyphicon-minus-sign" title=""></span> Remove friend</a>',
         replace: true
     };

@@ -56,8 +56,8 @@ app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$r
 
         $scope.logout = function () {
             $http.post('/api/logout', {}).then(function (response) {
-                AuthService.destroy();
                 $location.path("/");
+                AuthService.destroy();
             });
         };
 
@@ -290,13 +290,12 @@ app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScop
             var credentials = {
                 username: $scope.username,
                 password: $scope.password,
-                remember: $scope.remember
             };
             authenticate(credentials, function (authenticated) {
                 if (authenticated) {
+                    $scope.error = false;
                     AuthService.load();
                     $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
-                    $scope.error = false;
                 } else {
                     $location.path("/login");
                     $scope.error = true;
@@ -325,21 +324,21 @@ app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootSco
             var credentials = {
                 firstName: $scope.firstName,
                 lastName: $scope.lastName,
-                email: $scope.username,
+                username: $scope.username,
                 password: $scope.password
             };
 
             var headers = credentials ? {
                     authorization: "Basic "
-                    + btoa(credentials.email + ":" + credentials.password)
+                    + btoa(credentials.username + ":" + credentials.password)
                 } : {};
 
             $http.post('/api/signUp', credentials).then(function (response) {
                 $scope.success = true;
                 $scope.message = 'Welcome to our community!';
                 $http.get('/api/login', {headers: headers}).success(function (data) {
-                    $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                     AuthService.load();
+                    $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                 });
             }).catch(function (response) {
                 $scope.error = true;

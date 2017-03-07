@@ -26,7 +26,7 @@ public class SignUp implements Serializable {
 	@NotEmpty
 	@Email
 	@Size(min = 5, max = 50)
-	private String email;
+	private String userName;
 
 	@NotNull
 	@Size(min = 5, max = 50)

@@ -45,11 +45,11 @@ app.service('MessageService', ['UserService', '$http', '$timeout', function (Use
 
 }]);
 
-app.service('AuthService', ['$http', '$rootScope', function ($http, $rootScope) {
+app.service('AuthService', ['$http', '$route', '$rootScope', function ($http, $route, $rootScope) {
 
     var defAvatar = '/images/avatars/undefined.gif';
 
-    this.profileId = 0;
+    this.profileId = null;
     this.avatar = defAvatar;
     this.authenticated = false;
 
@@ -58,8 +58,7 @@ app.service('AuthService', ['$http', '$rootScope', function ($http, $rootScope) 
 
         var context = this;
 
-        // TODO: 01.03.2017 Provide separate REST request
-        $http.get('/api/person/0').then(function (response) {
+        $http.get('/api/login').then(function (response) {
             var profile = response.data;
             context.create(profile.id, profile.pageAvatar);
             context.update();
@@ -74,7 +73,7 @@ app.service('AuthService', ['$http', '$rootScope', function ($http, $rootScope) 
     };
 
     this.destroy = function () {
-        this.profileId = 0;
+        this.profileId = null;
         this.avatar = defAvatar;
         this.authenticated = false;
         this.update();
@@ -84,6 +83,7 @@ app.service('AuthService', ['$http', '$rootScope', function ($http, $rootScope) 
         $rootScope.avatar = this.avatar;
         $rootScope.profileId = this.profileId;
         $rootScope.authenticated = this.authenticated;
+        $route.reload();
     };
 
 }]);

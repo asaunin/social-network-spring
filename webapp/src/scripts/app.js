@@ -72,4 +72,5 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
             return $q.reject(errorResponse);
         }
     };
+    
 }]);

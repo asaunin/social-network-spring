@@ -28,7 +28,11 @@ spring:
 resources:
   avatar-folder: images/avatars/
 
-#debug: true
+remember-me:
+  token: SN_REMEMBER_TOKEN
+  cookie: SN_REMEMBER_ME_COOKIE
+
+debug: true
 
 
 

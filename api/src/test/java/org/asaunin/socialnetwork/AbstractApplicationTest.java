@@ -29,7 +29,7 @@ public abstract class AbstractApplicationTest {
 				.lastName("Saunin")
 				.shortName("maniac")
 				.email("alsaunin@gmail.com")
-				.password("123")
+				.password("12345")
 				.birthDate(new GregorianCalendar(1984, 2, 23).getTime())
 				.phone("79211234567")
 				.build();

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,81 +25,81 @@ import static org.asaunin.socialnetwork.config.Constants.*;
 @RequestMapping(value = URI_API_PREFIX)
 public class ProfileController {
 
-	private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
+    private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
-	private final PersonService personService;
+    private final PersonService personService;
 
-	@Autowired
-	public ProfileController(PersonService personService) {
-		this.personService = personService;
-	}
+    @Autowired
+    public ProfileController(PersonService personService) {
+        this.personService = personService;
+    }
 
-	@GetMapping("/login")
-	public ResponseEntity<PersonView> login(@CurrentProfile Person profile) {
-		log.debug("REST request to get current profile:{}", profile);
+    @GetMapping("/login")
+    public ResponseEntity<PersonView> login(@CurrentProfile Person profile) {
+        log.debug("REST request to get current profile:{}", profile);
 
-		if (null == profile) {
-			log.warn("Attempt getting unauthorised profile information failed");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
+        if (null == profile) {
+            log.warn("Attempt getting unauthorised profile information failed");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-		return ResponseEntity.ok(new PersonView(profile));
-	}
+        return ResponseEntity.ok(new PersonView(profile));
+    }
 
-	@PostMapping("/signUp")
-	public ResponseEntity<String> signUp(@Valid @RequestBody SignUp person)  throws URISyntaxException {
-		log.debug("REST request to sign up a new profile", person);
+    @PostMapping("/signUp")
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUp person) throws URISyntaxException {
+        log.debug("REST request to sign up a new profile", person);
 
-		final Person result = personService.findByEmail(person.getEmail());
-		if (null != result) {
-			log.debug("Attempt sign up email {} failed! E-mail is already used by another contact : {}",
-					person.getEmail(), result);
+        final Person result = personService.findByEmail(person.getUserName());
+        if (null != result) {
+            log.debug("Attempt sign up email {} failed! E-mail is already used by another contact : {}",
+                    person.getUserName(), result);
 
-			return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_SIGN_UP_EMAIL);
-		}
+            return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_SIGN_UP_EMAIL);
+        }
 
-		final Person profile = personService.create(
-				person.getFirstName(),
-				person.getLastName(),
-				person.getEmail(),
-				person.getPassword());
+        final Person profile = personService.create(
+                person.getFirstName(),
+                person.getLastName(),
+                person.getUserName(),
+                person.getPassword());
 
-		return ResponseEntity.created(new URI(URI_API_PREFIX + "/person/" + profile.getId())).build();
-	}
+        return ResponseEntity.created(new URI(URI_API_PREFIX + "/person/" + profile.getId())).build();
+    }
 
-	@PutMapping("/updateContact")
-	public ResponseEntity<String> updatePerson(
-			@CurrentProfile Person profile,
-			@Valid @RequestBody ContactInformation contact) {
-		log.debug("REST request to update current profile:{} contact information", profile);
+    @PutMapping("/updateContact")
+    public ResponseEntity<String> updatePerson(
+            @CurrentProfile Person profile,
+            @Valid @RequestBody ContactInformation contact) {
+        log.debug("REST request to update current profile:{} contact information", profile);
 
-		if (!profile.getId().equals(contact.getId())) {
-			log.error("Updating profile: {} doesn't match the current one: {}", contact, profile);
+        if (!profile.getId().equals(contact.getId())) {
+            log.error("Updating profile: {} doesn't match the current one: {}", contact, profile);
 
-			return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_PROFILE);
-		}
+            return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_PROFILE);
+        }
 
-		final String oldEmail = profile.getEmail();
-		final String newEmail = contact.getEmail();
-		if (!oldEmail.equals(newEmail)) {
-			final Person result = personService.findByEmail(newEmail);
-			if (null != result) {
-				log.debug("Attempt to change email value from: {} to  {} failed! " +
-						"E-mail is already used by another contact : {}", result);
+        final String oldEmail = profile.getEmail();
+        final String newEmail = contact.getEmail();
+        if (!oldEmail.equals(newEmail)) {
+            final Person result = personService.findByEmail(newEmail);
+            if (null != result) {
+                log.debug("Attempt to change email value from: {} to  {} failed! " +
+                        "E-mail is already used by another contact : {}", result);
 
-				return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_EMAIL);
-			}
-		}
+                return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_UPDATE_EMAIL);
+            }
+        }
 
-		profile.setFirstName(contact.getFirstName());
-		profile.setLastName(contact.getLastName());
-		profile.setEmail(contact.getEmail());
-		profile.setPhone(contact.getPhone());
-		profile.setBirthDate(contact.getBirthDate());
-		profile.setGender(contact.getGender());
-		personService.update(profile);
+        profile.setFirstName(contact.getFirstName());
+        profile.setLastName(contact.getLastName());
+        profile.setEmail(contact.getEmail());
+        profile.setPhone(contact.getPhone());
+        profile.setBirthDate(contact.getBirthDate());
+        profile.setGender(contact.getGender());
+        personService.update(profile);
 
-		return ResponseEntity.ok().build();
-	}
+        return ResponseEntity.ok().build();
+    }
 
 }

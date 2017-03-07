@@ -29,14 +29,8 @@ public class PersonController {
 
 	@GetMapping("/person/{id}")
 	public ResponseEntity<PersonView> getPerson(
-			@CurrentProfile Person profile,
 			@PathVariable("id") Long id) {
 		log.debug("REST request to get person id:{}", id);
-
-		// TODO: 01.03.2017 Provide separate REST request
-		if (0==id && null!=profile) {
-			return ResponseEntity.ok(new PersonView(profile));
-		}
 
 		final Person person = personService.findById(id);
 		if (null == person) {

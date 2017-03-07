@@ -15,9 +15,22 @@ public final class Constants {
 
     public static String AVATAR_FOLDER;
 
+    public static String REMEMBER_ME_TOKEN;
+    public static String REMEMBER_ME_COOKIE;
+
     @Value("${resources.avatar-folder}")
     public void setImageFolder(String path) {
         AVATAR_FOLDER = path;
+    }
+
+    @Value("${remember-me.token}")
+    public void setRememberMeToken(String token) {
+        REMEMBER_ME_TOKEN = token;
+    }
+
+    @Value("${remember-me.cookie}")
+    public void setRememberMeCookie(String cookie) {
+        REMEMBER_ME_COOKIE = cookie;
     }
 
     private Constants() {}
