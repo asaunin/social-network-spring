@@ -127,6 +127,37 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
             });
         };
 
+        $scope.changePassword = function () {
+            if ($scope.password !== $scope.confirmPassword) {
+                $scope.pwdError = true;
+                $scope.pwdMessage = 'The password and its confirmation do not match!';
+                return;
+            }
+
+            var credentials = {
+                currentPassword: $scope.currentPassword,
+                password: $scope.password
+            };
+
+            $http.post('/api/changePassword', credentials).then(function (response) {
+                $scope.passwordForm.$setPristine();
+                $scope.pwdSuccess = true;
+                $scope.pwdError = null;
+                $scope.pwdMessage = 'Password changed successfully!';
+                $scope.currentPassword = '';
+                $scope.password = '';
+                $scope.confirmPassword = '';
+            }).catch(function (response) {
+                $scope.pwdSuccess = null;
+                $scope.pwdError = true;
+                if (response.status === 400 && !!response.data && !angular.isObject(response.data)) {
+                    $scope.pwdMessage = response.data;
+                } else {
+                    $scope.pwdMessage = 'An error has occurred! Password could not be changed.';
+                }
+            });
+        };
+
         $scope.chooseBirthDate = function () {
             $scope.birthDate.opened = true;
         };
@@ -143,8 +174,7 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
             startingDay: 1
         };
 
-    }])
-;
+    }]);
 
 app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$scope',
     function (UserService, filterFilter, $http, $scope) {
@@ -324,13 +354,13 @@ app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootSco
             var credentials = {
                 firstName: $scope.firstName,
                 lastName: $scope.lastName,
-                username: $scope.username,
+                userName: $scope.username,
                 password: $scope.password
             };
 
             var headers = credentials ? {
                     authorization: "Basic "
-                    + btoa(credentials.username + ":" + credentials.password)
+                    + btoa(credentials.userName + ":" + credentials.password)
                 } : {};
 
             $http.post('/api/signUp', credentials).then(function (response) {

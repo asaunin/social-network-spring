@@ -1,14 +1,13 @@
-<div class="container-fluid col-sm-12 view-container" ng-show="authenticated"
-     ng-submit="userForm.$valid && updateAccount()">
+<div class="container-fluid col-sm-12 view-container" ng-show="authenticated">
     <div class="panel panel-default ">
         <div class="panel-heading">
             <strong>Profile settings</strong>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal" name="userForm" novalidate>
-                <label>Contact information:</label>
+            <form class="form-horizontal" name="userForm" ng-submit="userForm.$valid && updateAccount()" novalidate>
+                <strong>Contact information:</strong>
                 <div ng-class="['form-group', !userForm.firstName.$dirty ? '' : userForm.firstName.$error.required || userForm.firstName.$error.minlength || userForm.firstName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
-                    <label class="col-md-4 control-label">First Name</label>
+                    <label class="col-md-4 control-label">Tony</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -27,7 +26,7 @@
                     </div>
                 </div>
                 <div ng-class="['form-group', !userForm.lastName.$dirty ? '' : userForm.lastName.$error.required || userForm.lastName.$error.minlength || userForm.lastName.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
-                    <label class="col-md-4 control-label">Last Name</label>
+                    <label class="col-md-4 control-label">Stark</label>
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -35,7 +34,8 @@
                                    class="form-control" type="text" required minlength="2" maxlength="50"
                                    value='{{profile.lastName}}'>
                         </div>
-                        <p ng-show="(userForm.lastName.$error.required || userForm.lastName.$error.minlength) && userForm.lastName.$dirty" class="help-block">
+                        <p ng-show="(userForm.lastName.$error.required || userForm.lastName.$error.minlength) && userForm.lastName.$dirty"
+                           class="help-block">
                             Last name is required to be at least 2 characters
                         </p>
                         <p ng-show="userForm.lastName.$error.maxlength && userForm.lastName.$dirty" class="help-block">
@@ -48,14 +48,15 @@
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input ng-model="profile.email" name="email" placeholder="E-mail"
+                            <input ng-model="profile.email" name="email" placeholder="tony@stark.com"
                                    class="form-control" type="email" required minlength="5" maxlength="50"
                                    value='{{profile.email}}'>
                         </div>
                         <p ng-show="userForm.email.$error.email && userForm.email.$dirty" class="help-block">
                             Email is invalid
                         </p>
-                        <p ng-show="(userForm.email.$error.required || userForm.email.$error.minlength) && userForm.email.$dirty" class="help-block">
+                        <p ng-show="(userForm.email.$error.required || userForm.email.$error.minlength) && userForm.email.$dirty"
+                           class="help-block">
                             Email is required to be at least 5 characters
                         </p>
                         <p ng-show="userForm.email.$error.maxlength && userForm.email.$dirty" class="help-block">
@@ -73,9 +74,9 @@
                                    class="form-control" required value='{{profile.phone}}'
                                    ng-pattern="/^[0-9]{5,15}$/">
                         </div>
-                        <p ng-show="(userForm.phone.$error.required || userForm.phone.$error.pattern) && userForm.phone.$dirty" class="help-block">
+                        <p ng-show="(userForm.phone.$error.required || userForm.phone.$error.pattern) && userForm.phone.$dirty"
+                           class="help-block">
                             Valid phone number is required
-                        </p>
                         </p>
                     </div>
                 </div>
@@ -121,59 +122,94 @@
                     </div>
                 </div>
             </form>
-            <!--<form class="form-horizontal" action="/contact" method="post" id="password_form">-->
-            <!--<hr>-->
-            <!--<label>Change password:</label>-->
-            <!--<div class="form-group">-->
-            <!--<label class="col-md-4 control-label">Old password</label>-->
-            <!--<div class="col-md-4 inputGroupContainer">-->
-            <!--<div class="input-group">-->
-            <!--<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>-->
-            <!--<input type="password" name="old_password" id="old_password" autocomplete="off"-->
-            <!--class="form-control" required-->
-            <!--maxlength="255">-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<label class="col-md-4 control-label">New password</label>-->
-            <!--<div class="col-md-4 inputGroupContainer">-->
-            <!--<div class="input-group">-->
-            <!--<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>-->
-            <!--<input type="password" name="password" id="password" autocomplete="off" class="form-control"-->
-            <!--required-->
-            <!--maxlength="255">-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<label class="col-md-4 control-label">Confirm password</label>-->
-            <!--<div class="col-md-4 inputGroupContainer">-->
-            <!--<div class="input-group">-->
-            <!--<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>-->
-            <!--<input type="password" name="confirm_password" id="confirm_password" autocomplete="off"-->
-            <!--class="form-control"-->
-            <!--required maxlength="255">-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<c:if test="${not empty requestScope.changePasswordMessage}">-->
-            <!--<label class="col-md-4 control-label"></label>-->
-            <!--<div class="col-md-4 alert ${requestScope.alertType}">-->
-            <!--<strong>${requestScope.changePasswordMessage}</strong>-->
-            <!--</div>-->
-            <!--</c:if>-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-            <!--<label class="col-md-4 control-label"></label>-->
-            <!--<div class="col-md-4">-->
-            <!--<button type="submit" class="btn btn-primary" name="action" value="changePassword">Submit new-->
-            <!--password-->
-            <!--</button>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</form>-->
+            <br/>
+            <form class="form-horizontal" name="passwordForm" ng-submit="passwordForm.$valid && changePassword()"
+                  novalidate>
+                <div>
+                    <strong>Change password:</strong>
+                </div>
+                <div ng-class="['form-group', !passwordForm.currentPassword.$dirty ? '' : passwordForm.currentPassword.$error.required || passwordForm.currentPassword.$error.password || passwordForm.currentPassword.$error.minlength || passwordForm.currentPassword.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                    <label class="col-md-4 control-label">Current password</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="currentPassword" class="form-control" id="currentPassword"
+                                   name="currentPassword"
+                                   type="password" autocomplete="new-password" required
+                                   minlength="5" maxlength="50"/>
+                        </div>
+                        <p ng-show="passwordForm.currentPassword.$error.password && passwordForm.currentPassword.$dirty"
+                           class="help-block">
+                            Password is invalid</p>
+                        <p ng-show="(passwordForm.currentPassword.$error.required || passwordForm.currentPassword.$error.minlength) && passwordForm.currentPassword.$dirty"
+                           class="help-block">
+                            Password is required to be at least 5 characters
+                        </p>
+                        <p ng-show="passwordForm.currentPassword.$error.maxlength && passwordForm.currentPassword.$dirty"
+                           class="help-block">
+                            Password cannot be longer than 50 characters
+                        </p>
+                    </div>
+                </div>
+                <div ng-class="['form-group', !passwordForm.password.$dirty ? '' : passwordForm.password.$error.required || passwordForm.password.$error.password || passwordForm.password.$error.minlength || passwordForm.password.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                    <label class="col-md-4 control-label">New password</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="password" class="form-control" id="password" name="password"
+                                   type="password" autocomplete="new-password" required
+                                   minlength="5" maxlength="50"/>
+                        </div>
+                        <p ng-show="passwordForm.password.$error.password && passwordForm.password.$dirty"
+                           class="help-block">
+                            Password is invalid</p>
+                        <p ng-show="(passwordForm.password.$error.required || passwordForm.password.$error.minlength) && passwordForm.password.$dirty"
+                           class="help-block">
+                            Password is required to be at least 5 characters
+                        </p>
+                        <p ng-show="passwordForm.password.$error.maxlength && passwordForm.password.$dirty"
+                           class="help-block">
+                            Password cannot be longer than 50 characters
+                        </p>
+                    </div>
+                </div>
+                <div ng-class="['form-group', !passwordForm.confirmPassword.$dirty ? '' : passwordForm.confirmPassword.$error.required || passwordForm.confirmPassword.$error.password || passwordForm.confirmPassword.$error.minlength || passwordForm.confirmPassword.$error.maxlength ? 'has-error has-feedback' : 'has-success has-feedback']">
+                    <label class="col-md-4 control-label">Confirm password</label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input ng-model="confirmPassword" class="form-control" id="confirmPassword"
+                                   name="confirmPassword"
+                                   type="password" autocomplete="new-password" required
+                                   minlength="5" maxlength="50"/>
+                        </div>
+                        <p ng-show="passwordForm.confirmPassword.$error.password && passwordForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Password is invalid</p>
+                        <p ng-show="(passwordForm.confirmPassword.$error.required || passwordForm.confirmPassword.$error.minlength) && passwordForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Password is required to be at least 5 characters
+                        </p>
+                        <p ng-show="passwordForm.confirmPassword.$error.maxlength && passwordForm.confirmPassword.$dirty"
+                           class="help-block">
+                            Password cannot be longer than 50 characters
+                        </p>
+                    </div>
+                </div>
+                <div ng-show="pwdSuccess" class="col-md-8 col-md-offset-2 alert alert-success">
+                    <div>{{pwdMessage}}</div>
+                </div>
+                <div ng-show="pwdError" class="col-md-8 col-md-offset-2 alert alert-danger">
+                    <div>{{pwdMessage}}</div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="col-md-4 col-md-offset-4">
+                        <input type="submit"
+                               ng-class="['btn btn-primary btn-block', passwordForm.$valid && passwordForm.$dirty ? '' : 'disabled']"
+                               value="Submit password">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

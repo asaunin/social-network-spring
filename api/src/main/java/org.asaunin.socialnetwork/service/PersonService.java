@@ -2,6 +2,9 @@ package org.asaunin.socialnetwork.service;
 
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
+import org.asaunin.socialnetwork.web.ProfileController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PersonService {
 
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
 	private PersonRepository personRepository;
 
@@ -58,7 +61,7 @@ public class PersonService {
 	public void removeFriend(Person person, Person friend) {
 		if (person.hasFriend(friend)) {
 			person.removeFriend(friend);
-		}
+        }
 	}
 
 	@Transactional
@@ -77,5 +80,14 @@ public class PersonService {
 
 		return personRepository.save(person);
 	}
+
+	public boolean hasValidPassword(Person person, String pwd) {
+	    return passwordEncoder.matches(pwd, person.getPassword());
+	}
+
+    public void changePassword(Person person, String pwd) {
+	    person.setPassword(passwordEncoder.encode(pwd));
+        personRepository.save(person);
+    }
 
 }

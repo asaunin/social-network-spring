@@ -3,6 +3,7 @@ package org.asaunin.socialnetwork.web;
 import org.asaunin.socialnetwork.AbstractApplicationTest;
 import org.asaunin.socialnetwork.config.Constants;
 import org.asaunin.socialnetwork.domain.Person;
+import org.asaunin.socialnetwork.model.ChangePassword;
 import org.asaunin.socialnetwork.model.ContactInformation;
 import org.asaunin.socialnetwork.model.SignUp;
 import org.asaunin.socialnetwork.service.PersonService;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -173,6 +175,48 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 				.andExpect(status().isCreated());
 	}
 
+	@Test
+	public void changePasswordWithInvalidDataShouldReturnBadRequestStatus() throws Exception {
+		final ChangePassword pwd = new ChangePassword("12345", "12");
+
+		mvc.perform(
+				post("/api/changePassword.json")
+						.with(user(person))
+						.content(convertObjectToJsonBytes(pwd))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void changePasswordWithInvalidCurrentOneShouldReturnBadRequestStatus() throws Exception {
+		final ChangePassword pwd = new ChangePassword("54321", "11111");
+
+		given(personService.hasValidPassword(person, pwd.getCurrentPassword())).willReturn(false);
+
+		mvc.perform(
+				post("/api/changePassword.json")
+						.with(user(person))
+						.content(convertObjectToJsonBytes(pwd))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().string(ERROR_PASSWORD_CONFIRMATION));
+	}
+
+	@Test
+	public void changePasswordWithValidDataShouldReturnOkStatus() throws Exception {
+		final ChangePassword pwd = new ChangePassword("12345", "54321");
+
+		given(personService.hasValidPassword(person, pwd.getCurrentPassword())).willReturn(true);
+		doNothing().when(personService).changePassword(person, pwd.getPassword());
+
+		mvc.perform(
+				post("/api/changePassword.json")
+						.with(user(person))
+						.content(convertObjectToJsonBytes(pwd))
+						.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk());
+	}
+
 	private static Person getSignedUpPerson() {
 		return Person.builder()
 				.id(8L)
@@ -211,4 +255,5 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 				person.getEmail(),
 				person.getPassword());
 	}
+
 }

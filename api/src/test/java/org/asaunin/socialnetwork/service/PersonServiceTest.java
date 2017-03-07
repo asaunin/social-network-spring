@@ -99,36 +99,6 @@ public class PersonServiceTest extends AbstractApplicationTest {
 	}
 
 	@Test
-	public void shouldUpdatePersonInformation() throws Exception {
-		final Person person = personService.findById(1L);
-		person.setGender(Gender.UNDEFINED);
-		personService.update(person);
-
-		final Person result = personService.findById(person.getId());
-
-		assertThat(result)
-				.hasFieldOrPropertyWithValue("id", 1L)
-				.hasFieldOrPropertyWithValue("fullName", "Alex Saunin")
-				.hasFieldOrPropertyWithValue("gender", Gender.UNDEFINED);
-	}
-
-	@Test
-	public void shouldCreateNewPerson() throws Exception {
-		final Person actual = personService.create(
-				"John",
-				"Doe",
-				"john.doe@gmail.com",
-				"johnny");
-
-		final Person expected = personService.findByEmail("john.doe@gmail.com");
-
-		assertThat(actual)
-				.hasFieldOrPropertyWithValue("id", expected.getId())
-				.hasFieldOrPropertyWithValue("fullName", expected.getFullName())
-				.hasFieldOrPropertyWithValue("email", expected.getEmail());
-	}
-
-	@Test
 	public void shouldAddAndRemoveAFriend() throws Exception {
 		final Person person = personService.findById(1L);
 		final Person friend = personService.findById(15L);
@@ -152,6 +122,51 @@ public class PersonServiceTest extends AbstractApplicationTest {
 		assertFalse(person.isFriendOf(friend));
 		assertFalse(friend.hasFriend(person));
 		assertFalse(friend.isFriendOf(person));
+	}
+
+	@Test
+	public void shouldUpdatePersonInformation() throws Exception {
+		final Person person = personService.findById(1L);
+		person.setGender(Gender.UNDEFINED);
+		personService.update(person);
+
+		final Person result = personService.findById(person.getId());
+
+		assertThat(result)
+				.hasFieldOrPropertyWithValue("id", 1L)
+				.hasFieldOrPropertyWithValue("fullName", "Alex Saunin")
+				.hasFieldOrPropertyWithValue("gender", Gender.UNDEFINED);
+	}
+
+	@Test
+	public void shouldChangePassword() throws Exception {
+		final Person person = personService.findById(1L);
+		final String currentPwd = "12345";
+		final String newPwd = "54321";
+
+		assertTrue(personService.hasValidPassword(person, currentPwd));
+		assertFalse(personService.hasValidPassword(person, newPwd));
+
+		personService.changePassword(person, newPwd);
+
+		assertFalse(personService.hasValidPassword(person, currentPwd));
+		assertTrue(personService.hasValidPassword(person, newPwd));
+	}
+
+	@Test
+	public void shouldCreateNewPerson() throws Exception {
+		final Person actual = personService.create(
+				"John",
+				"Doe",
+				"john.doe@gmail.com",
+				"johnny");
+
+		final Person expected = personService.findByEmail("john.doe@gmail.com");
+
+		assertThat(actual)
+				.hasFieldOrPropertyWithValue("id", expected.getId())
+				.hasFieldOrPropertyWithValue("fullName", expected.getFullName())
+				.hasFieldOrPropertyWithValue("email", expected.getEmail());
 	}
 
 }

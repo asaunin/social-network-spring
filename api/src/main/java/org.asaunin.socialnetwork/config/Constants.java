@@ -12,6 +12,7 @@ public final class Constants {
     public static final String ERROR_UPDATE_PROFILE = "Updating profile doesn't match the current one";
     public static final String ERROR_UPDATE_EMAIL = "E-mail is already used by another person";
     public static final String ERROR_SIGN_UP_EMAIL = ERROR_UPDATE_EMAIL;
+    public static final String ERROR_PASSWORD_CONFIRMATION = "Current password is invalid";
 
     public static String AVATAR_FOLDER;
 
