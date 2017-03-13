@@ -14,7 +14,7 @@ app.service('UserService', function () {
 
 });
 
-app.service('MessageService', ['UserService', '$http', '$timeout', function (UserService, $http, $timeout) {
+app.service('MessageService', ['$timeout', function ($timeout) {
 
     var msgService = {};
 
@@ -45,9 +45,9 @@ app.service('MessageService', ['UserService', '$http', '$timeout', function (Use
 
 }]);
 
-app.service('AuthService', ['$http', '$route', '$rootScope', function ($http, $route, $rootScope) {
+app.service('AuthService', ['$http', '$route', '$rootScope', 'URL', function ($http, $route, $rootScope, URL) {
 
-    var defAvatar = '/images/avatars/undefined.gif';
+    var defAvatar = URL +'/images/avatars/undefined.gif';
 
     this.profileId = null;
     this.avatar = defAvatar;
@@ -58,7 +58,7 @@ app.service('AuthService', ['$http', '$route', '$rootScope', function ($http, $r
 
         var context = this;
 
-        $http.get('/api/login').then(function (response) {
+        $http.get(URL + '/api/login').then(function (response) {
             var profile = response.data;
             context.create(profile.id, profile.pageAvatar);
             context.update();

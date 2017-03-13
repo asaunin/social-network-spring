@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.debug("Authenticating request {}", username);
+        log.info("Authenticating request {}", username);
 
         // TODO: 22.02.2017 Provide authentication both by login & email
         final Person profile = personRepository.findByEmail(username);
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Profile is not found:" + username);
         }
 
-        log.debug("Profile was found by username @" + username);
+        log.info("Profile was found by username @" + username);
 
         profile.getFriends().isEmpty();
         profile.getFriendOf().isEmpty();

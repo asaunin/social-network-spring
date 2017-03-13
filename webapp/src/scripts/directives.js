@@ -35,7 +35,7 @@ app.directive('buttonAddFriend', function () {
         },
         template: '<a role="button" class="btn btn-secondary btn-sm" ng-show="!profile.myFriend" ' +
         'ng-class="profile.id === $root.profileId ? \'link-disabled\' : \'\'" ng-click="add()">' +
-        '<span class="glyphicon glyphicon-minus-sign" title=""></span> Add friend</a>',
+        '<span class="glyphicon glyphicon-plus-sign" title=""></span> Add friend</a>',
         replace: true
     };
 });

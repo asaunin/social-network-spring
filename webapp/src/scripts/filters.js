@@ -10,7 +10,8 @@ app.filter('startFrom', function () {
     };
 });
 
-app.filter('dateOrTime', function ($filter) {
+app.filter('dateOrTime', ['$filter',
+    function ($filter) {
     return function (input) {
         if (input === null) {
             return "";
@@ -22,5 +23,5 @@ app.filter('dateOrTime', function ($filter) {
         }
         return $filter('date')(new Date(input), "dd.MM.yyyy");
     };
-});
+}]);
 

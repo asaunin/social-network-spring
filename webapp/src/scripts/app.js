@@ -3,6 +3,8 @@ var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstra
 app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 
     $httpProvider.interceptors.push('responseObserver');
+    $httpProvider.defaults.withCredentials = true;
+    $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $routeProvider
@@ -39,7 +41,7 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
             controller: 'loginController'
         })
         .when('/signUp', {
-            templateUrl: 'partials/signUp.html',
+            templateUrl: 'partials/signup.html',
             controller: 'signUpController'
         })
         .otherwise(
@@ -57,7 +59,7 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
         'responseError': function (errorResponse) {
 
             function handleLogin() {
-                if ($location.path() != "login") {
+                if ($location.path() != "login" && $location.path() != "signUp") {
                     $rootScope.targetUrl = "#" + $location.path();
                 }
                 $location.path("/login");
@@ -74,3 +76,5 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
     };
     
 }]);
+
+app.constant('URL', 'http://localhost:8080');

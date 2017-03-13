@@ -28,16 +28,36 @@
 - Pagination
 - Search
 
+##Build & Run application using Intellij IDEA
+
+```
+git clone https://github.com/ASaunin/social-network-spring.git
+cd social-network-spring
+```
+Start Spring boot application from the classpath: `org.asaunin.socialnetwork.SocialNetworkApplication`
+
+Open [http://localhost:8080](http://localhost:8080) browser location
+
+##Deploy separate application parts
+
+###Deploy backend (REST API)
+```
+git clone https://github.com/ASaunin/social-network-spring.git
+cd social-network-spring
+mvnw clean install
+cd api
+..\mvnw spring-boot:run
+```
+###Deploy frontend (Web GUI)
+Configure web-server host & port. They should differ from the API ones. Set `resources.web-url` property for production environement.
+
+Deploy **war-file** from `webapp\target` folder on the web-server
+
+Open browser location matchin for deployed application
+
+NB: **URI** constant in `webapp/srs/scripts/app.js` defines API url (by default it matches to http://localhost:8080)
+
 ##Credentials
 
 - E-mail:   m_korleone@mail.ru
 - Password: 12345
-
-##Build & Run
-
-```
-git clone https://github.com/ASaunin/social-network-spring.git
-mvn clean install
-mvn spring-boot:run
-```
-Then go to [http://localhost:8080](http://localhost:8080)

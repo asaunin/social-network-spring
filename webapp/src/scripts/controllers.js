@@ -1,7 +1,7 @@
 var app = angular.module('socialNetwork');
 
-app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$rootScope', '$location',
-    function (AuthService, $http, $scope, $route, $rootScope, $location) {
+app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$rootScope', '$location', 'URL',
+    function (AuthService, $http, $scope, $route, $rootScope, $location, URL) {
 
         AuthService.load();
 
@@ -55,36 +55,36 @@ app.controller('tabController', ['AuthService', '$http', '$scope', '$route', '$r
         };
 
         $scope.logout = function () {
-            $http.post('/api/logout', {}).then(function (response) {
-                $location.path("/");
+            $http.post(URL + '/api/logout', {}).finally(function () {
+                $location.path("/login");
                 AuthService.destroy();
             });
         };
 
     }]);
 
-app.controller('profileController', ['AuthService', 'UserService', '$http', '$scope', '$routeParams',
-    function (AuthService, UserService, $http, $scope, $routeParams) {
+app.controller('profileController', ['AuthService', 'UserService', '$http', '$scope', '$routeParams', 'URL',
+    function (AuthService, UserService, $http, $scope, $routeParams, URL) {
 
         var id = !$routeParams.profileId ? AuthService.profileId : parseInt($routeParams.profileId);
 
         getPerson(id);
 
         function getPerson(id) {
-            $http.get('/api/person/' + id).then(function (response) {
+            $http.get(URL + '/api/person/' + id).then(function (response) {
                 $scope.profile = UserService.convertDate(response.data);
             });
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/api/friends/add/' + friendId;
+            var url = URL + '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPerson($scope.profile.id);
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/api/friends/remove/' + friendId;
+            var url = URL + '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPerson($scope.profile.id);
             });
@@ -92,13 +92,13 @@ app.controller('profileController', ['AuthService', 'UserService', '$http', '$sc
 
     }]);
 
-app.controller('settingsController', ['AuthService', 'UserService', '$http', '$scope', '$rootScope',
-    function (AuthService, UserService, $http, $scope, $rootScope) {
+app.controller('settingsController', ['AuthService', 'UserService', '$http', '$scope', '$rootScope', 'URL',
+    function (AuthService, UserService, $http, $scope, $rootScope, URL) {
 
         getPerson(AuthService.profileId);
 
         function getPerson(id) {
-            $http.get('/api/person/' + id).then(function (response) {
+            $http.get(URL + '/api/person/' + id).then(function (response) {
                 $scope.profile = UserService.convertDate(response.data);
             });
         }
@@ -111,7 +111,7 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
         }
 
         $scope.updateAccount = function () {
-            $http.put('/api/updateContact', $scope.profile).then(function (response) {
+            $http.put(URL + '/api/updateContact', $scope.profile).then(function (response) {
                 $scope.userForm.$setPristine();
                 $scope.success = true;
                 $scope.error = null;
@@ -139,7 +139,7 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
                 password: $scope.password
             };
 
-            $http.post('/api/changePassword', credentials).then(function (response) {
+            $http.post(URL + '/api/changePassword', credentials).then(function (response) {
                 $scope.passwordForm.$setPristine();
                 $scope.pwdSuccess = true;
                 $scope.pwdError = null;
@@ -176,8 +176,8 @@ app.controller('settingsController', ['AuthService', 'UserService', '$http', '$s
 
     }]);
 
-app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$scope',
-    function (UserService, filterFilter, $http, $scope) {
+app.controller('friendsController', ['UserService', '$http', '$scope', 'URL',
+    function (UserService, $http, $scope, URL) {
 
         $scope.people = [];
 
@@ -190,7 +190,7 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         });
 
         function getPeople() {
-            var url = '/api/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = URL + '/api/friends?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = response.data.content;
                 $scope.totalElements = response.data.totalElements;
@@ -199,14 +199,14 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/api/friends/add/' + friendId;
+            var url = URL + '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/api/friends/remove/' + friendId;
+            var url = URL + '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
@@ -214,8 +214,8 @@ app.controller('friendsController', ['UserService', 'filterFilter', '$http', '$s
 
     }]);
 
-app.controller('usersController', ['UserService', 'filterFilter', '$http', '$scope',
-    function (UserService, filterFilter, $http, $scope) {
+app.controller('usersController', ['UserService', '$http', '$scope', 'URL',
+    function (UserService, $http, $scope, URL) {
 
         $scope.people = [];
 
@@ -228,7 +228,7 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         });
 
         function getPeople() {
-            var url = '/api/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
+            var url = URL + '/api/people?page=' + ($scope.currentPage - 1) + "&size=" + $scope.entryLimit + "&searchTerm=" + $scope.personSearch;
             $http.get(url).then(function (response) {
                 $scope.people = response.data.content;
                 $scope.totalElements = response.data.totalElements;
@@ -237,14 +237,14 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
         }
 
         $scope.addFriend = function (friendId) {
-            var url = '/api/friends/add/' + friendId;
+            var url = URL + '/api/friends/add/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
         };
 
         $scope.removeFriend = function (friendId) {
-            var url = '/api/friends/remove/' + friendId;
+            var url = URL + '/api/friends/remove/' + friendId;
             $http.put(url, []).then(function () {
                 getPeople();
             });
@@ -252,15 +252,15 @@ app.controller('usersController', ['UserService', 'filterFilter', '$http', '$sco
 
     }]);
 
-app.controller('messagesController', ['UserService', 'MessageService', '$http', '$scope',
-    function (UserService, MessageService, $http, $scope) {
+app.controller('messagesController', ['MessageService', '$http', '$scope', 'URL',
+    function (MessageService, $http, $scope, URL) {
 
         $scope.messageList = [];
 
         getLastMessages();
 
         function getLastMessages() {
-            $http.get('/api/messages/last').then(function (response) {
+            $http.get(URL + '/api/messages/last').then(function (response) {
                 $scope.messageList = MessageService.convertDateAndMultiLines(response.data);
                 MessageService.scrollElement("chat");
             });
@@ -268,21 +268,21 @@ app.controller('messagesController', ['UserService', 'MessageService', '$http', 
 
     }]);
 
-app.controller('dialogController', ['UserService', 'MessageService', '$http', '$scope', '$routeParams',
-    function (UserService, MessageService, $http, $scope, $routeParams) {
+app.controller('dialogController', ['MessageService', '$http', '$scope', '$routeParams', 'URL',
+    function (MessageService, $http, $scope, $routeParams, URL) {
 
         $scope.messageList = [];
 
         if (!!$routeParams.profileId) {
             var id = parseInt($routeParams.profileId);
-            $http.get('/api/person/' + id).then(function (response) {
+            $http.get(URL + '/api/person/' + id).then(function (response) {
                 $scope.profile = response.data;
                 getDialog();
             });
         }
 
         function getDialog() {
-            $http.get('/api/messages/dialog/' + $scope.profile.id).then(function (response) {
+            $http.get(URL + '/api/messages/dialog/' + $scope.profile.id).then(function (response) {
                 $scope.messageList = MessageService.convertDateAndMultiLines(response.data);
                 MessageService.scrollElement("chat");
             });
@@ -290,7 +290,7 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
         $scope.sendMessage = function () {
             var message = MessageService.addMessage($scope.profileId, $scope.profile.id, $scope.messageText);
-            $http.post('/api/messages/add', message).then(function () {
+            $http.post(URL + '/api/messages/add', message).then(function () {
                 $scope.messageText = "";
                 getDialog();
             });
@@ -298,17 +298,18 @@ app.controller('dialogController', ['UserService', 'MessageService', '$http', '$
 
     }]);
 
-app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
-    function (AuthService, $scope, $route, $rootScope, $http, $location) {
+app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location', 'URL',
+    function (AuthService, $scope, $route, $rootScope, $http, $location, URL) {
 
         var authenticate = function (credentials, callback) {
 
             var headers = credentials ? {
                     authorization: "Basic "
-                    + btoa(credentials.username + ":" + credentials.password)
+                    + btoa(credentials.username + ":" + credentials.password),
+                    withCredentials: "true"
                 } : {};
 
-            $http.get('/api/login', {headers: headers}).success(function (data) {
+            $http.get(URL + '/api/login', {headers: headers}).success(function (data) {
                 callback && callback(true);
             }).error(function () {
                 callback && callback(false);
@@ -319,7 +320,7 @@ app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScop
         $scope.login = function () {
             var credentials = {
                 username: $scope.username,
-                password: $scope.password,
+                password: $scope.password
             };
             authenticate(credentials, function (authenticated) {
                 if (authenticated) {
@@ -335,8 +336,8 @@ app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScop
 
     }]);
 
-app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location',
-    function (AuthService, $scope, $route, $rootScope, $http, $location) {
+app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location', 'URL',
+    function (AuthService, $scope, $route, $rootScope, $http, $location, URL) {
 
         $scope.success = null;
         $scope.error = null;
@@ -360,13 +361,14 @@ app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootSco
 
             var headers = credentials ? {
                     authorization: "Basic "
-                    + btoa(credentials.userName + ":" + credentials.password)
+                    + btoa(credentials.userName + ":" + credentials.password),
+                    withCredentials: "true"
                 } : {};
 
-            $http.post('/api/signUp', credentials).then(function (response) {
+            $http.post(URL + '/api/signUp', credentials).then(function (response) {
                 $scope.success = true;
                 $scope.message = 'Welcome to our community!';
-                $http.get('/api/login', {headers: headers}).success(function (data) {
+                $http.get(URL + '/api/login', {headers: headers}).success(function (data) {
                     AuthService.load();
                     $location.path($rootScope.targetUrl ? $rootScope.targetUrl : "/profile");
                 });

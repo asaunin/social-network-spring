@@ -1,9 +1,7 @@
 spring:
 
-  h2:
-    console:
-      enabled: true
-      path: /console
+  profiles:
+    active: prod
 
   datasource:
     platform: h2
@@ -17,11 +15,6 @@ spring:
   resources:
     static-locations: "file:webapp/src/,file:webapp/bower_components/"
 
-  devtools:
-    restart:
-      additional-paths: "webapp/src/,webapp/bower_components/"
-      additional-exclude: "**/*.html,**/*.js,**/*.css"
-
   thymeleaf:
     cache: false
 
@@ -31,10 +24,4 @@ resources:
 remember-me:
   token: SN_REMEMBER_TOKEN
   cookie: SN_REMEMBER_ME_COOKIE
-
-debug: true
-
-
-
-
 

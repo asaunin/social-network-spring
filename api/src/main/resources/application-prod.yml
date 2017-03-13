@@ -1,0 +1,3 @@
+resources:
+  api-url: http://localhost:8080
+  web-url: http://localhost:8081

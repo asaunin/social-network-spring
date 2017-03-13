@@ -14,10 +14,22 @@ public final class Constants {
     public static final String ERROR_SIGN_UP_EMAIL = ERROR_UPDATE_EMAIL;
     public static final String ERROR_PASSWORD_CONFIRMATION = "Current password is invalid";
 
+    public static String API_URL;
+    public static String WEB_URL;
     public static String AVATAR_FOLDER;
 
     public static String REMEMBER_ME_TOKEN;
     public static String REMEMBER_ME_COOKIE;
+
+    @Value("${resources.api-url}")
+    public void setApiUrl(String path) {
+        API_URL = path;
+    }
+
+    @Value("${resources.web-url}")
+    public void setWebUrl(String path) {
+        WEB_URL = path;
+    }
 
     @Value("${resources.avatar-folder}")
     public void setImageFolder(String path) {

@@ -1,6 +1,7 @@
 package org.asaunin.socialnetwork.model;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.security.SecurityUtils;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Getter
+@ToString
 public class MessageView implements Serializable {
 
 	private Long senderId;

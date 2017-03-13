@@ -1,6 +1,7 @@
 package org.asaunin.socialnetwork.model;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.security.SecurityUtils;
 import org.asaunin.socialnetwork.service.AvatarService;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Getter
+@ToString
 public class PersonView implements Serializable {
 
 	private static final Logger log = LoggerFactory.getLogger(PersonView.class);

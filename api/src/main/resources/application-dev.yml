@@ -1,0 +1,17 @@
+spring:
+
+  h2:
+    console:
+      enabled: true
+      path: /console
+
+  devtools:
+    restart:
+      additional-paths: "webapp/src/,webapp/bower_components/"
+      additional-exclude: "**/*.html,**/*.js,**/*.css"
+
+resources:
+  api-url: http://localhost:8080
+  web-url: http://localhost:8080
+
+debug: true

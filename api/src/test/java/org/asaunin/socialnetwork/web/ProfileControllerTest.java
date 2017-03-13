@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -77,8 +76,7 @@ public class ProfileControllerTest extends AbstractApplicationTest {
 						.with(user(person))
 						.content(convertObjectToJsonBytes(wrongContact))
 						.contentType(APPLICATION_JSON_UTF8))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().string(ERROR_UPDATE_PROFILE));
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
