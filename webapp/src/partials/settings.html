@@ -108,13 +108,13 @@
                         </label>
                     </div>
                 </div>
-                <div ng-show="success" class="col-md-8 col-md-offset-2 alert alert-success">
-                    <div>{{message}}</div>
-                </div>
-                <div ng-show="error" class="col-md-8 col-md-offset-2 alert alert-danger">
-                    <div>{{message}}</div>
-                </div>
                 <div class="form-group col-md-12">
+                    <div ng-show="success" class="col-md-8 col-md-offset-2 alert alert-success">
+                        <div>{{message}}</div>
+                    </div>
+                    <div ng-show="error" class="col-md-8 col-md-offset-2 alert alert-danger">
+                        <div>{{message}}</div>
+                    </div>
                     <div class="col-md-4 col-md-offset-4">
                         <input type="submit"
                                ng-class="['btn btn-primary btn-block', userForm.$valid && userForm.$dirty ? '' : 'disabled']"
@@ -196,13 +196,13 @@
                         </p>
                     </div>
                 </div>
-                <div ng-show="pwdSuccess" class="col-md-8 col-md-offset-2 alert alert-success">
-                    <div>{{pwdMessage}}</div>
-                </div>
-                <div ng-show="pwdError" class="col-md-8 col-md-offset-2 alert alert-danger">
-                    <div>{{pwdMessage}}</div>
-                </div>
                 <div class="form-group col-md-12">
+                    <div ng-show="pwdSuccess" class="col-md-8 col-md-offset-2 alert alert-success">
+                        <div>{{pwdMessage}}</div>
+                    </div>
+                    <div ng-show="pwdError" class="col-md-8 col-md-offset-2 alert alert-danger">
+                        <div>{{pwdMessage}}</div>
+                    </div>
                     <div class="col-md-4 col-md-offset-4">
                         <input type="submit"
                                ng-class="['btn btn-primary btn-block', passwordForm.$valid && passwordForm.$dirty ? '' : 'disabled']"

@@ -23,16 +23,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Authenticating request {}", username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        log.info("Authenticating request: {}", email);
 
         // TODO: 22.02.2017 Provide authentication both by login & email
-        final Person profile = personRepository.findByEmail(username);
+        final Person profile = personRepository.findByEmail(email);
         if (profile == null) {
-            throw new UsernameNotFoundException("Profile is not found:" + username);
+            throw new UsernameNotFoundException("Profile is not found:" + email);
         }
 
-        log.info("Profile was found by username @" + username);
+        log.info("Profile was found by e-mail: {}", email);
 
         profile.getFriends().isEmpty();
         profile.getFriendOf().isEmpty();

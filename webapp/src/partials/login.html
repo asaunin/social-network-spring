@@ -32,10 +32,10 @@
                         <p ng-show="loginForm.password.$error.password && loginForm.password.$dirty" class="help-block">
                             Password is invalid</p>
                     </div>
-                    <div ng-show="error" class="alert alert-danger">
-                        <p>Login or password is incorrect</p>
-                    </div>
                     <div class="form-group">
+                        <div ng-show="error" class="alert alert-danger">
+                            <p>Login or password is incorrect</p>
+                        </div>
                         <input type="submit" class="col-sm-12"
                                ng-class="['btn btn-primary', loginForm.$valid && loginForm.$dirty ? '' : 'disabled']"
                                value="Sign-in"/>

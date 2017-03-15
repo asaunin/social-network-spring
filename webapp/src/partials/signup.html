@@ -95,13 +95,13 @@
                             Confirmation password cannot be longer than 50 characters
                         </p>
                     </div>
-                    <div ng-show="success" class="col-sm-12 alert alert-success">
-                        <div>{{message}}</div>
-                    </div>
-                    <div ng-show="error" class="col-sm-12 alert alert-danger">
-                        <div>{{message}}</div>
-                    </div>
                     <div class="form-group">
+                        <div ng-show="success" class="col-sm-12 alert alert-success">
+                            <div>{{message}}</div>
+                        </div>
+                        <div ng-show="error" class="col-sm-12 alert alert-danger">
+                            <div>{{message}}</div>
+                        </div>
                         <input type="submit" class="col-sm-12" value="Sign-up"
                                ng-class="['btn btn-primary', signUpForm.$valid && signUpForm.$dirty ? '' : 'disabled']"/>
                     </div>

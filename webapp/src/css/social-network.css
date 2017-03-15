@@ -4,6 +4,10 @@ html {
     -webkit-text-size-adjust: 100%
 }
 
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
 .btn-sm {
     margin: 1px;
     padding: 1px;

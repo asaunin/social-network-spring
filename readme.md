@@ -38,7 +38,7 @@ Start Spring boot application from the classpath: `org.asaunin.socialnetwork.Soc
 
 Open [http://localhost:8080](http://localhost:8080) browser location
 
-##Deploy separate application parts
+##Deploy cross-domain application
 
 ###Deploy backend (REST API)
 ```
