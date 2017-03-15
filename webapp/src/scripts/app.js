@@ -1,8 +1,9 @@
-var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ui.bootstrap', 'ngLetterAvatar']);
+var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ngCookies', 'ui.bootstrap', 'ngLetterAvatar']);
 
 app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
 
     $httpProvider.interceptors.push('responseObserver');
+    $httpProvider.interceptors.push('XSRFInterceptor');
     $httpProvider.defaults.withCredentials = true;
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -74,7 +75,21 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
             return $q.reject(errorResponse);
         }
     };
-    
+
+}]);
+
+app.factory('XSRFInterceptor', ['$cookies', function ($cookies) {
+
+    return {
+        request: function (config) {
+            var token = $cookies.get('XSRF-TOKEN');
+            if (token) {
+                config.headers['X-XSRF-TOKEN'] = token;
+            }
+            return config;
+        }
+    };
+
 }]);
 
 app.constant('URL', 'http://localhost:8080');

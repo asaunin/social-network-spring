@@ -21,6 +21,7 @@
     "angular-resource": "1.5.8",
     "angular-sanitize": "1.5.8",
     "angular-animate": "1.5.8",
+    "angular-cookies": "1.5.8",
     "angular-bootstrap": "2.4.0",
     "bootstrap": "components/bootstrap#~3.3.7",
     "jquery": "components/jquery#~3.1.0",

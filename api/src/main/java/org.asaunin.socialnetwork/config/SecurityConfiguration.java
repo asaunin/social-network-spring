@@ -11,8 +11,13 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import static org.asaunin.socialnetwork.config.Constants.*;
 
@@ -22,12 +27,12 @@ import static org.asaunin.socialnetwork.config.Constants.*;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsService;
-	private CorsFilter corsFilter;
+    private CsrfHeaderFilter csrfFilter;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, CorsFilter corsFilter) {
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, CsrfHeaderFilter csrfFilter) {
         this.userDetailsService = userDetailsService;
-	    this.corsFilter = corsFilter;
+        this.csrfFilter = csrfFilter;
     }
 
     @Override
@@ -46,11 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
 		http
-			.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
 			.httpBasic()
 				.and()
-			.csrf()
-				.disable()
 			.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/console/**").permitAll() // TODO: Enables h2 console - only for development environment
@@ -75,6 +77,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Access Denied"))
 				.and()
+			.csrf()
+        		.csrfTokenRepository(csrfTokenRepository())
+				.and()
+            .cors()
+                .and()
+            .addFilterAfter(csrfFilter, CsrfFilter.class)
 		;
 		// @formatter:on
     }
@@ -84,6 +92,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    @Bean
+    public CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName(XSRF_TOKEN_HEADER_NAME);
+        return repository;
     }
 
     @Bean
@@ -101,6 +116,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         services.setAlwaysRemember(true);
 
         return services;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("OPTIONS");
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
 
 }
