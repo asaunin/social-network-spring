@@ -2,7 +2,7 @@
 
 ![Spring Boot version of the Social Network Application](https://cloud.githubusercontent.com/assets/19559375/23728361/73745b58-046d-11e7-8849-c8e9140d3e6e.png)
 
-##Stack
+## Stack
 
 **Spring:** Boot, RESTful WS, Data, Security
 
@@ -15,7 +15,7 @@
 **Third-party libraries:** [Letter avatar](https://agentejo.com/blog/tired-of-gravatar-try-letter-avatar) (by Artur Heinze)
 
 
-##Functionality
+## Functionality
 
 - Sign-In / Sign-Up
 - Send messages
@@ -28,7 +28,7 @@
 - Pagination
 - Search
 
-##Build & Run application using Intellij IDEA
+## Build & Run application using Intellij IDEA
 
 ```
 git clone https://github.com/ASaunin/social-network-spring.git
@@ -38,9 +38,14 @@ Start Spring boot application from the classpath: `org.asaunin.socialnetwork.Soc
 
 Open [http://localhost:8080](http://localhost:8080) browser location
 
-##Deploy cross-domain application
+## Credentials
 
-###Deploy backend (REST API)
+- E-mail:   m_korleone@mail.ru
+- Password: 12345
+
+## Cross-domain application deployment
+
+### Backend REST API deployment
 ```
 git clone https://github.com/ASaunin/social-network-spring.git
 cd social-network-spring
@@ -48,16 +53,11 @@ mvnw clean install
 cd api
 ..\mvnw spring-boot:run
 ```
-###Deploy frontend (Web GUI)
-Configure web-server host & port. They should differ from the API ones. Set `resources.web-url` property for production environement.
+### Frontend Web GUI deployment
+Configure web-server host & port (for ex: `http://localhost:8080`). They should differ from the API ones. Set `resources.web-url` appropriate property for production environment.
 
 Deploy **war-file** from `webapp\target` folder on the web-server
 
-Open browser location matchin for deployed application
+Open browser's corresponding location 
 
-NB: **URI** constant in `webapp/srs/scripts/app.js` defines API url (by default it matches to http://localhost:8080)
-
-##Credentials
-
-- E-mail:   m_korleone@mail.ru
-- Password: 12345
+NB: **URL** constant in `webapp/srs/scripts/app.js` defines API url (by default it matches to `http://localhost:8080`)
