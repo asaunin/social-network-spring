@@ -1,7 +1,7 @@
 package org.asaunin.socialnetwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import groovy.transform.EqualsAndHashCode;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
