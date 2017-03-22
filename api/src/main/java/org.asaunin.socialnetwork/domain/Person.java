@@ -5,11 +5,13 @@ import lombok.*;
 import org.asaunin.socialnetwork.domain.jpa.GenderConverter;
 import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "persons")
@@ -78,6 +80,13 @@ public class Person implements UserDetails, Serializable {
 	@Getter @Setter @JsonIgnore
 	private Set<Person> friendOf = new HashSet<>();
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@Getter @Setter @JsonIgnore
+	@JoinTable(name = "user_roles",
+			joinColumns = @JoinColumn(name = "person_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
+
 	public boolean hasFriend(Person friend) {
 		return friends.contains(friend);
 	}
@@ -110,7 +119,8 @@ public class Person implements UserDetails, Serializable {
 		this.fullName = String.format("%s %s", this.firstName, this.lastName);
 	}
 
-	public Person(Long id, String firstName, String lastName, String shortName, String email, String password, String phone, Date birthDate, Gender gender) {
+	public Person(Long id, String firstName, String lastName, String shortName, String email, String password,
+				  String phone, Date birthDate, Gender gender, Set<Role> roles) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -120,6 +130,7 @@ public class Person implements UserDetails, Serializable {
 		this.phone = phone;
 		this.birthDate = birthDate;
 		this.gender = gender;
+		this.roles = roles;
 		setFullName();
 	}
 
@@ -129,7 +140,9 @@ public class Person implements UserDetails, Serializable {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptyList();
+		return getRoles().stream()
+				.map(r -> new SimpleGrantedAuthority(r.getName()))
+				.collect(Collectors.toSet());
 	}
 
 	@Override
@@ -169,6 +182,7 @@ public class Person implements UserDetails, Serializable {
 		private String phone = "";
 		private Date birthDate;
 		private Gender gender = Gender.UNDEFINED;
+		private Set<Role> roles = Collections.singleton(Role.USER);
 
 		PersonBuilder() {
 		}
@@ -218,10 +232,14 @@ public class Person implements UserDetails, Serializable {
 			return this;
 		}
 
-		public Person build() {
-			return new Person(id, firstName, lastName, shortName, email, password, phone, birthDate, gender);
+		public PersonBuilder roles(Set<Role> roles) {
+			this.roles = roles;
+			return this;
 		}
 
+		public Person build() {
+			return new Person(id, firstName, lastName, shortName, email, password, phone, birthDate, gender, roles);
+		}
 	}
 
 }

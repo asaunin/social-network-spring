@@ -36,6 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         profile.getFriends().isEmpty();
         profile.getFriendOf().isEmpty();
+        profile.getRoles().isEmpty();
 
         return profile;
     }
