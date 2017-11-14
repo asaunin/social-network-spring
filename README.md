@@ -2,9 +2,9 @@
 
 ![Spring Boot version of the Social Network Application](https://cloud.githubusercontent.com/assets/19559375/23728361/73745b58-046d-11e7-8849-c8e9140d3e6e.png)
 
-## Stack
+## Stack of technologies
 
-**Spring:** Boot, RESTful WS, Data, Security
+**Spring:** Boot, MVC, Data, Security
 
 **Web:** AngularJS, Bootstrap, Bower, Gulp
 
@@ -13,7 +13,6 @@
 **CI:** Travis
 
 **Third-party libraries:** [Letter avatar](https://agentejo.com/blog/tired-of-gravatar-try-letter-avatar) (by Artur Heinze)
-
 
 ## Functionality
 
@@ -28,20 +27,25 @@
 - Pagination
 - Search
 
-## Build & Run application using Intellij IDEA
+## How to Build & Run application from Intellij IDEA
 
 ```
 git clone https://github.com/ASaunin/social-network-spring.git
 cd social-network-spring
+mvn clean install
 ```
-Start Spring boot application from the classpath: `org.asaunin.socialnetwork.SocialNetworkApplication`
+Start Spring boot application from the main class: `org.asaunin.socialnetwork.SocialNetworkApplication`
 
-Open [http://localhost:8080](http://localhost:8080) browser location
+Open [http://localhost:8080](http://localhost:8080) in your browser
 
 ## Credentials
 
 - E-mail:   m_korleone@mail.ru
 - Password: 12345
+
+## Swagger support
+
+Use [Swagger-UI endpoint](http://localhost:8080/swagger-ui.html) to get a server-side API description
 
 ## Cross-domain application deployment
 
@@ -53,11 +57,12 @@ mvnw clean install
 cd api
 ..\mvnw spring-boot:run
 ```
-### Frontend Web GUI deployment
-Configure web-server host & port (for ex: `http://localhost:8080`). They should differ from the API ones. Set `resources.web-url` appropriate property for production environment.
+### Frontend UI deployment
 
-Deploy **war-file** from `webapp\target` folder on the web-server
+Configure web-server host & port (for ex: `http://localhost:8080`). They should differ from the API ones. Set `resources.web-url` property for production environment.
+
+Deploy **war-file** from `webapp\target` folder to the web-server
 
 Open browser's corresponding location 
 
-NB: **URL** constant in `webapp/srs/scripts/app.js` defines API url (by default it matches to `http://localhost:8080`)
+NB: **URL** constant in `webapp/srs/scripts/app.js` defines API url (by default it's `http://localhost:8080`)
