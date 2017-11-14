@@ -49,11 +49,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        final String[] swagger = {
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/v2/api-docs",
+                "/webjars/**"
+        };
+
         // @formatter:off
 		http
 			.httpBasic()
 				.and()
 			.authorizeRequests()
+				.antMatchers(swagger).permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/console/**").permitAll() // TODO: Enables h2 console - only for development environment
 				.antMatchers("/api/login").permitAll()

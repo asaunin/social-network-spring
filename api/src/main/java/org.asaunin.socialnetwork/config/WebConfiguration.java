@@ -22,6 +22,11 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler(AVATAR_FOLDER + "**").addResourceLocations(AVATAR_FOLDER);
+
+		registry.addResourceHandler("swagger-ui.html")
+				.addResourceLocations("classpath:/META-INF/resources/");
+//		registry.addResourceHandler("/webjars/**")
+//				.addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
 
 }

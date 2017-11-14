@@ -1,9 +1,11 @@
 package org.asaunin.socialnetwork.web;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.model.ChangePassword;
-import org.asaunin.socialnetwork.model.PersonView;
 import org.asaunin.socialnetwork.model.ContactInformation;
+import org.asaunin.socialnetwork.model.PersonView;
 import org.asaunin.socialnetwork.model.SignUp;
 import org.asaunin.socialnetwork.security.CurrentProfile;
 import org.asaunin.socialnetwork.service.PersonService;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -21,8 +24,12 @@ import java.net.URISyntaxException;
 
 import static org.asaunin.socialnetwork.config.Constants.*;
 
+@Api(tags = "Profile", description = "User settings")
 @RestController
-@RequestMapping(value = URI_API_PREFIX)
+@RequestMapping(
+        value = URI_API_PREFIX,
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
@@ -34,8 +41,9 @@ public class ProfileController {
         this.personService = personService;
     }
 
+    @ApiOperation(value = "Sign-In")
     @GetMapping("/login")
-    public ResponseEntity<PersonView> login(@CurrentProfile Person profile) {
+    public ResponseEntity<PersonView> login(@ApiIgnore @CurrentProfile Person profile) {
         log.debug("REST request to get current profile: {}", profile);
 
         if (null == profile) {
@@ -46,6 +54,7 @@ public class ProfileController {
         return ResponseEntity.ok(new PersonView(profile));
     }
 
+    @ApiOperation(value = "Sign-Up")
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@Valid @RequestBody SignUp person) throws URISyntaxException {
         log.debug("REST request to sign up a new profile: {}", person);
@@ -67,9 +76,10 @@ public class ProfileController {
         return ResponseEntity.created(new URI(URI_API_PREFIX + "/person/" + profile.getId())).build();
     }
 
+    @ApiOperation(value = "Change contact information")
     @PutMapping("/updateContact")
     public ResponseEntity<String> updatePerson(
-            @CurrentProfile Person profile,
+            @ApiIgnore @CurrentProfile Person profile,
             @Valid @RequestBody ContactInformation contact) {
         log.debug("REST request to update current profile: {} contact information", profile);
 
@@ -102,9 +112,10 @@ public class ProfileController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Change password")
     @PostMapping("/changePassword")
     public ResponseEntity<?> changePassword(
-            @CurrentProfile Person profile,
+            @ApiIgnore @CurrentProfile Person profile,
             @Valid @RequestBody ChangePassword pwd) throws URISyntaxException {
         log.debug("REST request to change pwd: {}", pwd);
 
@@ -115,7 +126,7 @@ public class ProfileController {
 
         final String currentPwd = pwd.getCurrentPassword();
         final String newPwd = pwd.getPassword();
-        if(!personService.hasValidPassword(profile, currentPwd)) {
+        if (!personService.hasValidPassword(profile, currentPwd)) {
             log.warn("Current password: {} doesn't match profile's one: {}", currentPwd, profile);
             return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(ERROR_PASSWORD_CONFIRMATION);
         }

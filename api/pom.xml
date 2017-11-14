@@ -11,14 +11,16 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>Social network :: Spring MVC REST server</name>
+    <name>Social network - Spring RESTful Server API</name>
     <artifactId>api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <description>Spring Boot version of the Social Network Application</description>
 
     <properties>
         <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <h2.version>1.4.193</h2.version>
         <lombook.version>1.16.12</lombook.version>
+        <swagger.version>2.7.0</swagger.version>
     </properties>
 
     <dependencies>
@@ -72,6 +74,18 @@
         </dependency>
 
         <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
@@ -81,7 +95,7 @@
     </dependencies>
 
     <build>
-        <finalName>sosial-network-spring</finalName>
+        <finalName>social-network-spring</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

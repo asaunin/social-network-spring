@@ -1,3 +1,8 @@
+api:
+  name: @project.name@
+  description: @project.description@
+  version: @project.version@
+
 resources:
   api-url: http://localhost:8080
   web-url: http://localhost:8081
