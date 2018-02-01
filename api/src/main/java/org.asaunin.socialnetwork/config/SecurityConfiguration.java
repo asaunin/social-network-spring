@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -32,11 +33,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers("/**/*.js")
                 .antMatchers("/**/*.ico")
                 .antMatchers("/**/*.css")
+                .antMatchers("/**/*.otf")
+                .antMatchers("/**/*.eot")
+                .antMatchers("/**/*.svg")
+                .antMatchers("/**/*.ttf")
+                .antMatchers("/**/*.woff")
+                .antMatchers("/**/*.woff2")
                 .antMatchers("/**/*.html")
                 .antMatchers("/bootstrap/**")
                 .antMatchers("/" + AVATAR_FOLDER + "undefined.gif")
@@ -64,9 +71,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(swagger).permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/console/**").permitAll() // TODO: Enables h2 console - only for development environment
-				.antMatchers("/api/login").permitAll()
-				.antMatchers("/api/signUp").permitAll()
-				.antMatchers("/api/**").authenticated() //Redundant
+				.antMatchers(HttpMethod.GET,"/api/login").permitAll()
+				.antMatchers(HttpMethod.POST,"/api/signUp").permitAll()
+				.antMatchers("/signin/**").permitAll()
                 .anyRequest().authenticated()
 				.and()
 			.logout()

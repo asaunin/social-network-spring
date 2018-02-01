@@ -2,7 +2,7 @@ package org.asaunin.socialnetwork.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.asaunin.socialnetwork.config.Constants;
+import lombok.RequiredArgsConstructor;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.model.PersonView;
 import org.asaunin.socialnetwork.security.CurrentProfile;
@@ -18,19 +18,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
+
 @Api(tags = "Person", description = "Operations about persons")
 @RestController
-@RequestMapping(value = Constants.URI_API_PREFIX, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = URI_API_PREFIX, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class PersonController {
 
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 
     private final PersonService personService;
-
-    @Autowired
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @ApiOperation(value = "Find a person by Id")
     @GetMapping("/person/{id}")

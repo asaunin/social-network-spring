@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 public final class Constants {
 
     public static final String URI_API_PREFIX = "/api";
-    public static final String URI_MESSAGES = "/messages";
+    public static final String URI_MESSAGES = URI_API_PREFIX + "/messages";
+    public static final String URI_SOCIAL = URI_API_PREFIX + "/social";
 
     public static final String ERROR_UPDATE_PROFILE = "Updating profile doesn't match the current one";
     public static final String ERROR_UPDATE_EMAIL = "E-mail is already used by another person";

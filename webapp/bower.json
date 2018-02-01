@@ -26,6 +26,7 @@
     "bootstrap": "components/bootstrap#~3.3.7",
     "jquery": "components/jquery#~3.1.0",
     "ng-letter-avatar": "uttesh/ngletteravatar#~4.0.4",
-    "angular-bootstrap-pagination": "*"
+    "angular-bootstrap-pagination": "*",
+    "bootstrap-social": "5.1.1"
   }
 }

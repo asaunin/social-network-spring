@@ -21,7 +21,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 
-import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
 import static org.asaunin.socialnetwork.config.Constants.URI_MESSAGES;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -35,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(value = {MessageController.class, Constants.class})
 public class MessageControllerTest extends AbstractApplicationTest {
 
-	private final static String URI = URI_API_PREFIX + URI_MESSAGES;
+	private final static String URI = URI_MESSAGES;
 	
 	private MockMvc mvc;
 

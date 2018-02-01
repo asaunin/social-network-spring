@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @Setter
-public class SwaggerConfig {
+public class SwaggerConfiguration {
 
     @Value("${api.version}")
     private String version;

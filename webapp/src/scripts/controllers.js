@@ -298,16 +298,16 @@ app.controller('dialogController', ['MessageService', '$http', '$scope', '$route
 
     }]);
 
-app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location', 'URL',
-    function (AuthService, $scope, $route, $rootScope, $http, $location, URL) {
+app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScope', '$http', '$location', '$cookies', 'URL',
+    function (AuthService, $scope, $route, $rootScope, $http, $location, $cookies, URL) {
 
         var authenticate = function (credentials, callback) {
 
             var headers = credentials ? {
-                    authorization: "Basic "
-                    + btoa(credentials.username + ":" + credentials.password),
-                    withCredentials: "true"
-                } : {};
+                authorization: "Basic "
+                + btoa(credentials.username + ":" + credentials.password),
+                withCredentials: "true"
+            } : {};
 
             $http.get(URL + '/api/login', {headers: headers}).success(function (data) {
                 callback && callback(true);
@@ -333,6 +333,10 @@ app.controller('loginController', ['AuthService', '$scope', '$route', '$rootScop
                 }
             });
         };
+
+        $scope.facebookURL = URL + '/signin/facebook';
+        $scope.googleURL = URL + '/signin/google';
+        $scope.csrf = $cookies.get('XSRF-TOKEN');
 
     }]);
 
@@ -360,10 +364,10 @@ app.controller('signUpController', ['AuthService', '$scope', '$route', '$rootSco
             };
 
             var headers = credentials ? {
-                    authorization: "Basic "
-                    + btoa(credentials.userName + ":" + credentials.password),
-                    withCredentials: "true"
-                } : {};
+                authorization: "Basic "
+                + btoa(credentials.userName + ":" + credentials.password),
+                withCredentials: "true"
+            } : {};
 
             $http.post(URL + '/api/signUp', credentials).then(function (response) {
                 $scope.success = true;

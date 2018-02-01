@@ -2,6 +2,7 @@ package org.asaunin.socialnetwork.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.model.ChangePassword;
 import org.asaunin.socialnetwork.model.ContactInformation;
@@ -11,7 +12,6 @@ import org.asaunin.socialnetwork.security.CurrentProfile;
 import org.asaunin.socialnetwork.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +27,12 @@ import static org.asaunin.socialnetwork.config.Constants.*;
 @Api(tags = "Profile", description = "User settings")
 @RestController
 @RequestMapping(value = URI_API_PREFIX, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class ProfileController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
 
     private final PersonService personService;
-
-    @Autowired
-    public ProfileController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @ApiOperation(value = "Sign-In")
     @GetMapping("/login")

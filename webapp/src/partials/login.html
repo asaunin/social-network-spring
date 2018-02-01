@@ -1,10 +1,11 @@
-<div class="container-fluid col-md-6 col-md-offset-3 view-container" ng-submit="loginForm.$valid && login()">
+<div class="container-fluid col-md-6 col-md-offset-3 view-container">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Sign in to social-network.com</strong>
         </div>
         <div class="panel-body">
-            <form name="loginForm" autocomplete="off" class="form-signin" novalidate>
+            <form class="form-horizontal" name="loginForm" autocomplete="off" novalidate
+                  ng-submit="loginForm.$valid && login()">
                 <div class="col-sm-12 col-md-10 col-md-offset-1 ">
                     <div ng-class="['form-group', !loginForm.email.$dirty ? '' : loginForm.email.$error.required || loginForm.email.$error.email ? 'has-error has-feedback' : 'has-success has-feedback']">
                         <div class="input-group">
@@ -39,6 +40,33 @@
                         <input type="submit" class="col-sm-12"
                                ng-class="['btn btn-primary', loginForm.$valid && loginForm.$dirty ? '' : 'disabled']"
                                value="Sign-in"/>
+                    </div>
+                </div>
+            </form>
+            <div></div>
+            <form class="form-horizontal" name="signInWithFacebookForm" autocomplete="off" novalidate
+                  action={{facebookURL}} method="POST">
+                <div class="col-sm-12 col-md-10 col-md-offset-1">
+                    <div class="form-group">
+                        <div class="input-group col-sm-12">
+                            <button type="submit" class="btn btn-block btn-social btn-facebook">
+                                <span class="fa fa-facebook"></span>Continue with Facebook
+                            </button>
+                            <input name="_csrf" type="hidden" value={{csrf}}>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="form-horizontal" name="signInWithGoogleForm" autocomplete="off" novalidate
+                  action={{googleURL}} method="POST">
+                <div class="col-sm-12 col-md-10 col-md-offset-1">
+                    <div class="form-group">
+                        <div class="input-group col-sm-12">
+                            <button type="submit" class="btn btn-block btn-social btn-google">
+                                <span class="fa fa-google"></span>Continue with Google
+                            </button>
+                            <input name="_csrf" type="hidden" value={{csrf}}>
+                        </div>
                     </div>
                 </div>
             </form>

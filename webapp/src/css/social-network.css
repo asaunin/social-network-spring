@@ -17,6 +17,10 @@ html {
     /*float: right;*/
 }
 
+.btn-social {
+    text-align: center;
+}
+
 input, select, textarea, button {
     font-family: inherit;
     font-size: inherit;

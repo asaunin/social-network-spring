@@ -1,7 +1,8 @@
-api:
-  name: @project.name@
-  description: @project.description@
-  version: @project.version@
+logging:
+  level:
+    org.springframework.web.client.RestTemplate: debug
+    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+    org.apache.http: debug
 
 spring:
 
@@ -15,8 +16,4 @@ spring:
       additional-paths: "webapp/src/,webapp/bower_components/"
       additional-exclude: "**/*.html,**/*.js,**/*.css"
 
-resources:
-  api-url: http://localhost:8080
-  web-url: http://localhost:8080
-
-debug: true
+#debug: true

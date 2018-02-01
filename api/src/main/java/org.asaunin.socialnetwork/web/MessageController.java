@@ -2,6 +2,7 @@ package org.asaunin.socialnetwork.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.asaunin.socialnetwork.domain.Message;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.model.MessagePost;
@@ -22,24 +23,18 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.asaunin.socialnetwork.config.Constants.URI_API_PREFIX;
 import static org.asaunin.socialnetwork.config.Constants.URI_MESSAGES;
 
 @Api(tags = "Message", description = "Messaging operations")
 @RestController
-@RequestMapping(value = URI_API_PREFIX + URI_MESSAGES, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = URI_MESSAGES, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class MessageController {
 
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);
 
     private final MessageService messageService;
     private final PersonService personService;
-
-    @Autowired
-    public MessageController(MessageService messageService, PersonService personService) {
-        this.messageService = messageService;
-        this.personService = personService;
-    }
 
     @ApiOperation(value = "Dialog with a person")
     @GetMapping(value = "/dialog/{id}")

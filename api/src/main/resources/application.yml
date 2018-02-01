@@ -6,7 +6,7 @@ api:
 spring:
 
   profiles:
-    active: prod
+    active: dev
 
   datasource:
     platform: h2
@@ -23,10 +23,22 @@ spring:
   thymeleaf:
     cache: false
 
+  social:
+    # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
+    google:
+      client-id: ${GOOGLE_APPLICATION_ID}
+      client-secret: ${GOOGLE_APPLICATION_SECRET}
+
+    # see https://developers.facebook.com/docs/facebook-login/v2.2
+    facebook:
+      client-id: ${FACEBOOK_APPLICATION_ID}
+      client-secret: ${FACEBOOK_APPLICATION_SECRET}
+
 resources:
   avatar-folder: images/avatars/
+  api-url: http://localhost:8080
+  web-url: http://localhost:8081
 
 remember-me:
   token: SN_REMEMBER_TOKEN
   cookie: SN_REMEMBER_ME_COOKIE
-

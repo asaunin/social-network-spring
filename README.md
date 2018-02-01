@@ -47,6 +47,15 @@ Open [http://localhost:8080](http://localhost:8080) in your browser
 
 Use [Swagger-UI endpoint](http://localhost:8080/swagger-ui.html) to get a server-side API description
 
+## Social sign-in feature
+
+To enable Google & Facebook sing-in feature, register appropriate application and set it's credentials in [application.properties](api/src/main/resources/application.yml) file    
+
+The links below to get an application ids and secrets:
+
+- Google: [https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret](https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret)
+- Facebook: [https://developers.facebook.com/docs/facebook-login/v2.2](https://developers.facebook.com/docs/facebook-login/v2.2)
+
 ## Cross-domain application deployment
 
 ### Backend REST API deployment

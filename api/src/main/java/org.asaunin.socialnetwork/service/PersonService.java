@@ -1,11 +1,8 @@
 package org.asaunin.socialnetwork.service;
 
+import lombok.RequiredArgsConstructor;
 import org.asaunin.socialnetwork.domain.Person;
 import org.asaunin.socialnetwork.repository.PersonRepository;
-import org.asaunin.socialnetwork.web.ProfileController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,17 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class PersonService {
 
-    private PasswordEncoder passwordEncoder;
-
-	private PersonRepository personRepository;
-
-	@Autowired
-	public PersonService(PasswordEncoder passwordEncoder, PersonRepository personRepository) {
-		this.passwordEncoder = passwordEncoder;
-		this.personRepository = personRepository;
-	}
+    private final PasswordEncoder passwordEncoder;
+	private final PersonRepository personRepository;
 
 	@Transactional(readOnly = true)
 	public Person findById(Long id) {
