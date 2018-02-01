@@ -20,9 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Person", description = "Operations about persons")
 @RestController
-@RequestMapping(value = Constants.URI_API_PREFIX,
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = Constants.URI_API_PREFIX, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PersonController {
 
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);

@@ -20,8 +20,6 @@ public final class Constants {
 
     static String REMEMBER_ME_TOKEN;
     static String REMEMBER_ME_COOKIE;
-    static final String XSRF_TOKEN_COOKIE_NAME = "XSRF-TOKEN";
-    static final String XSRF_TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
 
     @Value("${resources.api-url}")
     public void setApiUrl(String path) {

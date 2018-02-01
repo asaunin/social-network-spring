@@ -27,9 +27,7 @@ import static org.asaunin.socialnetwork.config.Constants.URI_MESSAGES;
 
 @Api(tags = "Message", description = "Messaging operations")
 @RestController
-@RequestMapping(value = URI_API_PREFIX + URI_MESSAGES,
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = URI_API_PREFIX + URI_MESSAGES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MessageController {
 
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);

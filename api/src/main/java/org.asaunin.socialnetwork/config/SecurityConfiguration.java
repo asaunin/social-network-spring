@@ -12,9 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -27,12 +25,10 @@ import static org.asaunin.socialnetwork.config.Constants.*;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsServiceImpl userDetailsService;
-    private CsrfHeaderFilter csrfFilter;
 
     @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService, CsrfHeaderFilter csrfFilter) {
+    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.csrfFilter = csrfFilter;
     }
 
     @Override
@@ -58,9 +54,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         };
 
         // @formatter:off
-		http
-			.httpBasic()
-				.and()
+        http
+            .httpBasic()
+                .and()
+            .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
 			.authorizeRequests()
 				.antMatchers(swagger).permitAll()
 				.antMatchers("/").permitAll()
@@ -86,12 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Access Denied"))
 				.and()
-			.csrf()
-        		.csrfTokenRepository(csrfTokenRepository())
-				.and()
             .cors()
-                .and()
-            .addFilterAfter(csrfFilter, CsrfFilter.class)
 		;
 		// @formatter:on
     }
@@ -101,13 +95,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder());
-    }
-
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-        repository.setHeaderName(XSRF_TOKEN_HEADER_NAME);
-        return repository;
     }
 
     @Bean

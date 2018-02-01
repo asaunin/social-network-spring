@@ -26,10 +26,7 @@ import static org.asaunin.socialnetwork.config.Constants.*;
 
 @Api(tags = "Profile", description = "User settings")
 @RestController
-@RequestMapping(
-        value = URI_API_PREFIX,
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = URI_API_PREFIX, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController {
 
     private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
