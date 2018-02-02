@@ -61,8 +61,12 @@ public class SocialConfiguration implements SocialConfigurer {
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
         // Facebook configuration
-        final String facebookClientId = environment.getProperty("spring.social.facebook.client-id");
-        final String facebookClientSecret = environment.getProperty("spring.social.facebook.client-secret");
+        String facebookClientId = null;
+        String facebookClientSecret = null;
+        try {
+            facebookClientId = environment.getProperty("spring.social.facebook.client-id");
+            facebookClientSecret = environment.getProperty("spring.social.facebook.client-secret");
+        } catch (Exception ignored) {}
         if (facebookClientId != null && facebookClientSecret != null) {
             log.debug("Configuring FacebookConnectionFactory...");
             final FacebookConnectionFactory facebookConnectionFactory =
@@ -74,8 +78,12 @@ public class SocialConfiguration implements SocialConfigurer {
         }
 
         // Google configuration
-        final String googleClientId = environment.getProperty("spring.social.google.client-id");
-        final String googleClientSecret = environment.getProperty("spring.social.google.client-secret");
+        String googleClientId = null;
+        String googleClientSecret = null;
+        try {
+            googleClientId = environment.getProperty("spring.social.google.client-id");
+            googleClientSecret = environment.getProperty("spring.social.google.client-secret");
+        } catch (Exception ignored) {}
         if (googleClientId != null && googleClientSecret != null) {
             log.debug("Configuring GoogleConnectionFactory");
             final GoogleConnectionFactory googleConnectionFactory =
