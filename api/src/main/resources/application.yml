@@ -36,8 +36,8 @@ spring:
 
 resources:
   avatar-folder: images/avatars/
-  api-url: http://localhost:8080
-  web-url: http://localhost:8081
+  api-url: ${SOCIAL_NETWORK_API_URL}
+  web-url: ${SOCIAL_NETWORK_WEB_URL}
 
 remember-me:
   token: SN_REMEMBER_TOKEN

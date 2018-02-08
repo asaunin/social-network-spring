@@ -32,7 +32,7 @@
 ```
 git clone https://github.com/ASaunin/social-network-spring.git
 cd social-network-spring
-mvn clean install
+./mvnw clean install
 ```
 Start Spring boot application from the main class: `org.asaunin.socialnetwork.SocialNetworkApplication`
 
@@ -56,22 +56,37 @@ The links below to get an application ids and secrets:
 - Google: [https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret](https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret)
 - Facebook: [https://developers.facebook.com/docs/facebook-login/v2.2](https://developers.facebook.com/docs/facebook-login/v2.2)
 
-## Cross-domain application deployment
+## Deployment
 
-### Backend REST API deployment
+Clone repository
+
 ```
 git clone https://github.com/ASaunin/social-network-spring.git
 cd social-network-spring
-mvnw clean install
-cd api
-..\mvnw spring-boot:run
 ```
-### Frontend UI deployment
 
-Configure web-server host & port (for ex: `http://localhost:8080`). They should differ from the API ones. Set `resources.web-url` property for production environment.
+Configure `${SOCIAL_NETWORK_API_URL}` and `${SOCIAL_NETWORK_WEB_URL}` system variables according to your deployment urls
+
+Configure `URL` constant in [app.js](webapp/src/scripts/app.js) to be equal to `${SOCIAL_NETWORK_API_URL}` value
+
+NB: It is considered to be `http://localhost:8080` by default both for api & web components
+
+Build your application:
+```
+./mvnw clean install
+```
+
+Deploy **jar-file** from `api\target` folder to the backend-server
 
 Deploy **war-file** from `webapp\target` folder to the web-server
 
-Open browser's corresponding location 
+Open `${SOCIAL_NETWORK_WEB_URL}` in your browser and enjoy!
 
-NB: **URL** constant in `webapp/srs/scripts/app.js` defines API url (by default it's `http://localhost:8080`)
+### Heroku deployment example
+```
+git checkout heroku
+./mvnw clean install
+heroku plugins:install heroku-cli-deploy
+heroku deploy:jar api/target/social-network-api-1.0.0-SNAPSHOT.jar --app social-network-spring
+heroku deploy:war webapp/target/social-network-web-1.0.0-SNAPSHOT.war --app social-network-angularjs
+```

@@ -25,6 +25,7 @@
     </properties>
 
     <build>
+        <finalName>social-network-web-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>${project.build.directory}/dist</directory>

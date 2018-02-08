@@ -1,7 +1,6 @@
 logging:
   level:
-    org.springframework.web.client.RestTemplate: debug
-    org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+    org.springframework.web: debug
     org.apache.http: debug
 
 spring:

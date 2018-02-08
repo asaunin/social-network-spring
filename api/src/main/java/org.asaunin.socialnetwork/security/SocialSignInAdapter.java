@@ -1,5 +1,6 @@
 package org.asaunin.socialnetwork.security;
 
+import org.asaunin.socialnetwork.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +32,6 @@ public class SocialSignInAdapter implements SignInAdapter {
             null,
             user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        return "/#/profile";
+        return Constants.WEB_URL + "/#/profile";
     }
 }

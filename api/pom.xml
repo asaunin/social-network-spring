@@ -108,7 +108,7 @@
     </dependencies>
 
     <build>
-        <finalName>social-network-spring</finalName>
+        <finalName>social-network-api-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

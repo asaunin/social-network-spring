@@ -1,7 +1,7 @@
 package org.asaunin.socialnetwork.config;
 
+import lombok.RequiredArgsConstructor;
 import org.asaunin.socialnetwork.security.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.Http401AuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,23 +18,22 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.asaunin.socialnetwork.config.Constants.*;
 
 @Configuration
 @EnableWebSecurity
-//@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER) // TODO: Enables h2 console - only for development environment
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
+                .antMatchers(HttpMethod.OPTIONS, "/**")
                 .antMatchers("/**/*.js")
                 .antMatchers("/**/*.ico")
                 .antMatchers("/**/*.css")
@@ -62,10 +61,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         // @formatter:off
         http
-            .httpBasic()
+            .cors()
                 .and()
             .csrf()
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
+            .httpBasic()
                 .and()
 			.authorizeRequests()
 				.antMatchers(swagger).permitAll()
@@ -74,14 +75,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET,"/api/login").permitAll()
 				.antMatchers(HttpMethod.POST,"/api/signUp").permitAll()
 				.antMatchers("/signin/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/api/**").authenticated()
 				.and()
 			.logout()
 				.logoutUrl("/api/logout")
                 .deleteCookies(REMEMBER_ME_COOKIE)
 				.permitAll()
 				.and()
-			.headers() // TODO: Enables h2 console - only for development environment
+            .headers()
 				.frameOptions()
 				.disable()
 				.and()
@@ -91,8 +92,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.and()
 			.exceptionHandling()
                 .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Access Denied"))
-				.and()
-            .cors()
 		;
 		// @formatter:on
     }
@@ -125,16 +124,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setMaxAge(1800L);
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("OPTIONS");
         source.registerCorsConfiguration("/**", config);
-
         return new CorsFilter(source);
     }
 

@@ -1,12 +1,19 @@
 var app = angular.module('socialNetwork', ['ngRoute', 'ngResource', 'ngCookies', 'ui.bootstrap', 'ngLetterAvatar']);
 
-app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
+app.config(['$routeProvider', '$httpProvider', '$sceDelegateProvider', 'URL',
+    function ($routeProvider, $httpProvider, $sceDelegateProvider, URL) {
 
     $httpProvider.interceptors.push('responseObserver');
-    $httpProvider.interceptors.push('XSRFInterceptor');
     $httpProvider.defaults.withCredentials = true;
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+    // Fix AngularJS bug
+    $sceDelegateProvider.resourceUrlWhitelist([
+        'self',
+        '^(?:http(?:s)?:\/\/)?(?:[^\.]+\.)?\(google|facebook)\.com(/.*)?$',
+        URL + "**"
+    ]);
 
     $routeProvider
         .when('/profile', {
@@ -78,18 +85,5 @@ app.factory('responseObserver', ['$rootScope', '$q', '$location', function ($roo
 
 }]);
 
-app.factory('XSRFInterceptor', ['$cookies', function ($cookies) {
-
-    return {
-        request: function (config) {
-            var token = $cookies.get('XSRF-TOKEN');
-            if (token) {
-                config.headers['X-XSRF-TOKEN'] = token;
-            }
-            return config;
-        }
-    };
-
-}]);
-
 app.constant('URL', 'http://localhost:8080');
+// app.constant('URL', 'https://social-network-spring.herokuapp.com');
