@@ -1,9 +1,13 @@
 package org.asaunin.socialnetwork.config;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.asaunin.socialnetwork.service.SocialConnectionSignUp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.social.UserIdSource;
@@ -16,6 +20,7 @@ import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
@@ -24,11 +29,29 @@ import java.lang.reflect.Modifier;
 @Configuration
 @EnableSocial
 @RequiredArgsConstructor
+@ConfigurationProperties("spring.social")
 public class SocialConfiguration implements SocialConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(SocialConfiguration.class);
 
     private final SocialConnectionSignUp connectionSignUp;
+
+    @Getter @Setter
+    @NestedConfigurationProperty
+    private SocialConnection facebook;
+
+    @Getter @Setter
+    @NestedConfigurationProperty
+    private SocialConnection google;
+
+    @Getter
+    @Setter
+    public static class SocialConnection {
+
+        private String clientId;
+        private String clientSecret;
+
+    }
 
     // TODO: 01.02.2018 Figure out how to fix FB API bio error with more elegant way
     @PostConstruct
@@ -61,13 +84,9 @@ public class SocialConfiguration implements SocialConfigurer {
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
         // Facebook configuration
-        String facebookClientId = null;
-        String facebookClientSecret = null;
-        try {
-            facebookClientId = environment.getProperty("spring.social.facebook.client-id");
-            facebookClientSecret = environment.getProperty("spring.social.facebook.client-secret");
-        } catch (Exception ignored) {}
-        if (facebookClientId != null && facebookClientSecret != null) {
+        final String facebookClientId = facebook.getClientId();
+        final String facebookClientSecret = facebook.getClientSecret();
+        if (!StringUtils.isEmpty(facebookClientId) && !StringUtils.isEmpty(facebookClientSecret)) {
             log.debug("Configuring FacebookConnectionFactory...");
             final FacebookConnectionFactory facebookConnectionFactory =
                     new FacebookConnectionFactory(facebookClientId, facebookClientSecret);
@@ -78,13 +97,9 @@ public class SocialConfiguration implements SocialConfigurer {
         }
 
         // Google configuration
-        String googleClientId = null;
-        String googleClientSecret = null;
-        try {
-            googleClientId = environment.getProperty("spring.social.google.client-id");
-            googleClientSecret = environment.getProperty("spring.social.google.client-secret");
-        } catch (Exception ignored) {}
-        if (googleClientId != null && googleClientSecret != null) {
+            final String googleClientId = google.getClientId();
+            final String googleClientSecret = google.getClientSecret();
+        if (!StringUtils.isEmpty(googleClientId) && !StringUtils.isEmpty(googleClientSecret)) {
             log.debug("Configuring GoogleConnectionFactory");
             final GoogleConnectionFactory googleConnectionFactory =
                     new GoogleConnectionFactory(googleClientId, googleClientSecret);

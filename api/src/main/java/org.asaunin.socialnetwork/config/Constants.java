@@ -2,9 +2,7 @@ package org.asaunin.socialnetwork.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,26 +29,26 @@ public final class Constants {
     static final String XSRF_TOKEN_COOKIE_NAME = "XSRF-TOKEN";
     static final String XSRF_TOKEN_HEADER_NAME = "X-XSRF-TOKEN";
 
-    @Autowired
-    private Constants(Environment environment) {
-        try {
-            API_URL = environment.getProperty("resources.api-url");
-            WEB_URL = environment.getProperty("resources.web-url");
-        } catch (Exception ignored) {}
-
-        if (API_URL != null) {
-            log.debug("Set API url: {}", API_URL);
+    @Value("${resources.api-url}")
+    public void setApiUrl(String path) {
+        if (path != null) {
+            log.debug("Set API url: {}", path);
         } else {
-            API_URL = "http://localhost:8080";
-            log.warn("API url is not configured. Set to the default one: {}", API_URL);
+            log.warn("API url is not configured. Set to the default one: {}", path);
         }
 
-        if (WEB_URL != null) {
-            log.debug("Set WEB url: {}", WEB_URL);
+        API_URL = path;
+    }
+
+    @Value("${resources.web-url}")
+    public void setWebUrl(String path) {
+        if (path != null) {
+            log.debug("Set WEB url: {}", path);
         } else {
-            WEB_URL = "http://localhost:8080";
-            log.warn("WEB url is not configured. Set to the default one: {}", WEB_URL);
+            log.warn("WEB url is not configured. Set to the default one: {}", path);
         }
+
+        WEB_URL = path;
     }
 
     @Value("${resources.avatar-folder}")
